@@ -3,7 +3,7 @@ Bundle-Description: Generated using Pax-Construct
 Bundle-SymbolicName: dk.sdu.mmmi.common
 Built-By: thoma
 Bundle-ManifestVersion: 2
-Bnd-LastModified: 1584441589573
+Bnd-LastModified: 1584441767045
 Import-Package: dk.sdu.mmmi.cbse.common.data,dk.sdu.mmmi.cbse.common.d
  ata.entityparts,dk.sdu.mmmi.cbse.common.events,dk.sdu.mmmi.cbse.commo
  n.services

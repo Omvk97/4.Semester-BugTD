@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dk.sdu.mmmi.cbse.common.data.entityparts;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
@@ -11,10 +6,6 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
-/**
- *
- * @author Alexander
- */
 public class MovingPart implements EntityPart {
 
     private float dx, dy;
@@ -36,7 +27,7 @@ public class MovingPart implements EntityPart {
     public float getDy() {
         return dy;
     }
-    
+
     public void setDeceleration(float deceleration) {
         this.deceleration = deceleration;
     }
@@ -48,7 +39,7 @@ public class MovingPart implements EntityPart {
     public void setMaxSpeed(float maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
-    
+
     public void setSpeed(float speed) {
         this.acceleration = speed;
         this.maxSpeed = speed;
@@ -108,16 +99,14 @@ public class MovingPart implements EntityPart {
         x += dx * dt;
         if (x > gameData.getDisplayWidth()) {
             x = 0;
-        }
-        else if (x < 0) {
+        } else if (x < 0) {
             x = gameData.getDisplayWidth();
         }
 
         y += dy * dt;
         if (y > gameData.getDisplayHeight()) {
             y = 0;
-        }
-        else if (y < 0) {
+        } else if (y < 0) {
             y = gameData.getDisplayHeight();
         }
 
