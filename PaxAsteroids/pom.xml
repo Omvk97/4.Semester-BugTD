@@ -52,12 +52,7 @@
         <module>provision</module>
         <module>OSGiCore</module>
         <module>OSGiCommon</module>
-        <module>OSGiEnemy</module>
         <module>OSGiLibGDX</module>
-    <module>OSGiPlayer</module>
-    <module>OSGiAsteroid</module>
-    <module>OSGiBullet</module>
-    <module>OSGiCollision</module>
   </modules>
 
     <build>
