@@ -1,3 +1,0 @@
-Bundle-SymbolicName: OSGiCollision
-Bundle-ActivationPolicy: lazy
-Service-Component: META-INF/entitypostprocessor.xml
