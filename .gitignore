@@ -26,3 +26,6 @@ hs_err_pid*
 /src/TEST/target/
 /bugtd/TEST/target/
 /osgi-bugtd/TEST/target/
+/BugTD-OSGi/OSGiCore/target/
+/BugTD-OSGi/OSGiCommon/target/
+/BugTD-OSGi/OSGiLibGDX/target/
