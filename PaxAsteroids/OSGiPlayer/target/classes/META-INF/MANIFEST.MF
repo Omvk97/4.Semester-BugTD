@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Bundle-Description: Generated using Pax-Construct
+Bundle-SymbolicName: OSGiPlayer
+Built-By: thoma
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1584441313265
+Bundle-ActivationPolicy: lazy
+Import-Package: dk.sdu.mmmi.cbse.common.data;version="1.0.0.SNAPSHOT",
+ dk.sdu.mmmi.cbse.common.data.entityparts;version="1.0.0.SNAPSHOT",dk.
+ sdu.mmmi.cbse.common.enemy;version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.
+ common.events;version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.player
+ ;version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.services;version="1
+ .0.0.SNAPSHOT",dk.sdu.mmmi.osgiplayer;version="1.0.0.SNAPSHOT"
+Service-Component: META-INF/entityprocessor.xml,META-INF/gameplugin.xm
+ l
+Tool: Bnd-0.0.255
+Export-Package: dk.sdu.mmmi.cbse.common.data.entityparts;uses:="dk.sdu
+ .mmmi.cbse.common.data";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.com
+ mon.data;uses:="dk.sdu.mmmi.cbse.common.data.entityparts,dk.sdu.mmmi.
+ cbse.common.events";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.
+ player;uses:="dk.sdu.mmmi.cbse.common.data";version="1.0.0.SNAPSHOT",
+ dk.sdu.mmmi.osgiplayer;uses:="dk.sdu.mmmi.cbse.common.data.entitypart
+ s,dk.sdu.mmmi.cbse.common.data,dk.sdu.mmmi.cbse.common.events,dk.sdu.
+ mmmi.cbse.common.services";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.
+ common.events;uses:="dk.sdu.mmmi.cbse.common.data";version="1.0.0.SNA
+ PSHOT",dk.sdu.mmmi.cbse.common.enemy;version="1.0.0.SNAPSHOT",dk.sdu.
+ mmmi.cbse.common.services;uses:="dk.sdu.mmmi.cbse.common.data";versio
+ n="1.0.0.SNAPSHOT"
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-Name: OSGiPlayer
+Private-Package: dk.sdu.mmmi.internal.*
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.8.0_191
+

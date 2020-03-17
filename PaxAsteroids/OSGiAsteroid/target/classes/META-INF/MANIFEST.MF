@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bundle-Description: Generated using Pax-Construct
+Bundle-SymbolicName: OSGiAsteroid
+Built-By: thoma
+Bundle-ManifestVersion: 2
+Bnd-LastModified: 1584441313867
+Bundle-ActivationPolicy: lazy
+Import-Package: dk.sdu.mmmi.cbse.common.data;version="1.0.0.SNAPSHOT",
+ dk.sdu.mmmi.cbse.common.data.entityparts;version="1.0.0.SNAPSHOT",dk.
+ sdu.mmmi.cbse.common.events;version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse
+ .common.services;version="1.0.0.SNAPSHOT",dk.sdu.mmmi.osgiasteroid;ve
+ rsion="1.0.0.SNAPSHOT"
+Service-Component: META-INF/entityprocessor.xml,META-INF/gameplugin.xm
+ l
+Tool: Bnd-0.0.255
+Export-Package: dk.sdu.mmmi.osgiasteroid;uses:="dk.sdu.mmmi.cbse.commo
+ n.data.entityparts,dk.sdu.mmmi.cbse.common.data,dk.sdu.mmmi.cbse.comm
+ on.services";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.data.en
+ tityparts;uses:="dk.sdu.mmmi.cbse.common.data";version="1.0.0.SNAPSHO
+ T",dk.sdu.mmmi.cbse.common.data;uses:="dk.sdu.mmmi.cbse.common.data.e
+ ntityparts,dk.sdu.mmmi.cbse.common.events";version="1.0.0.SNAPSHOT",d
+ k.sdu.mmmi.cbse.common.events;uses:="dk.sdu.mmmi.cbse.common.data";ve
+ rsion="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.services;uses:="dk.sdu
+ .mmmi.cbse.common.data";version="1.0.0.SNAPSHOT"
+Bundle-Version: 1.0.0.SNAPSHOT
+Bundle-Name: OSGiAsteroid
+Private-Package: dk.sdu.mmmi.internal.*
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.8.0_191
+
