@@ -6,6 +6,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commontower.Tower;
@@ -14,8 +15,8 @@ public class SingleDamageTowerPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        float x = gameData.getDisplayWidth() / 2;
-        float y = gameData.getDisplayHeight() / 2;
+        float x = 100;
+        float y = 100;
         float radians = 0;
         PositionPart pos = new PositionPart(x, y, radians);
 
@@ -28,8 +29,10 @@ public class SingleDamageTowerPlugin implements IGamePluginService {
         float range = 50;
         float speed = 10;
         WeaponPart wpn = new WeaponPart(damage, range, speed);
+        
+        SpritePart sprt = new SpritePart("basictower.png", 32, 32);
 
-        Tower tower = new Tower(pos, life, colli, wpn);
+        Tower tower = new Tower(pos, life, colli, wpn, sprt);
         world.addEntity(tower);
     }
 
