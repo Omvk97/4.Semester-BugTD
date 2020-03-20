@@ -55,6 +55,7 @@
         <module>OSGiLibGDX</module>
     <module>Tower</module>
     <module>CommonTower</module>
+        <module>DummyPlayer</module>
   </modules>
 
     <build>

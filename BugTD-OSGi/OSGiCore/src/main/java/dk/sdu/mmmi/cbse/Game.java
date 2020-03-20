@@ -2,18 +2,28 @@ package dk.sdu.mmmi.cbse;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.EntityPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.core.managers.GameInputProcessor;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,7 +36,8 @@ public class Game implements ApplicationListener {
     private static final List<IEntityProcessingService> entityProcessorList = new CopyOnWriteArrayList<>();
     private static final List<IGamePluginService> gamePluginList = new CopyOnWriteArrayList<>();
     private static List<IPostEntityProcessingService> postEntityProcessorList = new CopyOnWriteArrayList<>();
-
+    private AssetManager assetManager;
+    
     public Game() {
         init();
     }
@@ -42,6 +53,7 @@ public class Game implements ApplicationListener {
         gameData.setDisplayHeight(cfg.height);
 
         new LwjglApplication(this, cfg);
+        assetManager = new AssetManager();
     }
 
     @Override
@@ -53,8 +65,20 @@ public class Game implements ApplicationListener {
         sr = new ShapeRenderer();
 
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
-
+        
+        loadAssets();
     }
+    
+    public void loadAssets() {
+        for (Entity entity : world.getEntities()) {
+            SpritePart spritePart = entity.getPart(SpritePart.class);
+            if (spritePart != null) {
+                assetManager.load(spritePart.getSpritePath(), Texture.class);
+            }
+        }
+        assetManager.finishLoading();
+    }
+    
 
     @Override
     public void render() {
@@ -82,23 +106,26 @@ public class Game implements ApplicationListener {
     }
 
     private void draw() {
+        SpriteBatch spriteBatch = new SpriteBatch();
+        spriteBatch.begin();
         for (Entity entity : world.getEntities()) {
-            sr.setColor(1, 1, 1, 1);
-
-            sr.begin(ShapeRenderer.ShapeType.Line);
-
-            float[] shapex = entity.getShapeX();
-            float[] shapey = entity.getShapeY();
-
-            for (int i = 0, j = shapex.length - 1;
-                    i < shapex.length;
-                    j = i++) {
-
-                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+            SpritePart spritePart = entity.getPart(SpritePart.class);
+            PositionPart positionPart = entity.getPart(PositionPart.class);
+            if (spritePart != null && positionPart != null) {
+                drawSprite(spritePart, positionPart, spriteBatch);
             }
-
-            sr.end();
         }
+        spriteBatch.end();
+    }
+    
+    private void drawSprite(SpritePart spritePart, PositionPart positionPart, SpriteBatch spriteBatch){
+        Texture texture = assetManager.get(spritePart.getSpritePath(), Texture.class);
+        Sprite sprite = new Sprite(texture);
+        sprite.rotate((float) Math.toDegrees(positionPart.getRadians()));
+        sprite.setX(positionPart.getX());
+        sprite.setY(positionPart.getY());
+        sprite.setSize(spritePart.getWidth(), spritePart.getHeight());
+        sprite.draw(spriteBatch);
     }
 
     @Override
@@ -136,7 +163,6 @@ public class Game implements ApplicationListener {
     public void addGamePluginService(IGamePluginService plugin) {
         this.gamePluginList.add(plugin);
         plugin.start(gameData, world);
-
     }
 
     public void removeGamePluginService(IGamePluginService plugin) {
