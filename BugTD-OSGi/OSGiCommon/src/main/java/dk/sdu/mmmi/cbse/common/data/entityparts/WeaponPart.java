@@ -11,19 +11,27 @@ public class WeaponPart implements EntityPart {
     private float speed;
     // TODO: private Damagetype dt
 
+    float cooldown = 0;
+
     public WeaponPart(float damage, float range, float speed) {
         this.damage = damage;
         this.range = range;
         this.speed = speed;
     }
 
-    @Override
-    public void process(GameData gameData, Entity entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public void setTarget(Entity target) {
         this.target = target;
     }
 
+    @Override
+    public void process(GameData gameData, Entity entity) {
+        // Check whether the Weapon is ready to shoot or not
+        if (cooldown <= 0) {
+            cooldown = speed;   // Reset cooldown
+            LifePart lp = entity.getPart(LifePart.class);
+            lp.setLife(lp.getLife() - (int) damage);    // Damage entity
+        }
+
+        cooldown -= gameData.getDelta();    // Slowly decreasing the cooldown
+    }
 }

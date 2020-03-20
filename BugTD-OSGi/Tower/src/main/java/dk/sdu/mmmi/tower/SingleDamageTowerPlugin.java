@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.tower;
 
+import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
@@ -13,16 +14,29 @@ public class SingleDamageTowerPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        PositionPart p = new PositionPart(0, 0, 0);
-        LifePart l = new LifePart();
-        CollisionPart c = new CollisionPart();
-        WeaponPart w = new WeaponPart(10, 50, 10);
-        
-        Tower tower = new Tower(p, l, c, w);
+        float x = gameData.getDisplayWidth() / 2;
+        float y = gameData.getDisplayHeight() / 2;
+        float radians = 0;
+        PositionPart pos = new PositionPart(x, y, radians);
+
+        int hp = 100;
+        LifePart life = new LifePart(hp);
+
+        CollisionPart colli = new CollisionPart();
+
+        float damage = 10;
+        float range = 50;
+        float speed = 10;
+        WeaponPart wpn = new WeaponPart(damage, range, speed);
+
+        Tower tower = new Tower(pos, life, colli, wpn);
+        world.addEntity(tower);
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Entity tower : world.getEntities(Tower.class)) {
+            world.removeEntity(tower);
+        }
     }
 }
