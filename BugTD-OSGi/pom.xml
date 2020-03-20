@@ -54,6 +54,7 @@
         <module>OSGiCommon</module>
         <module>OSGiLibGDX</module>
     <module>Tower</module>
+    <module>CommonTower</module>
   </modules>
 
     <build>
