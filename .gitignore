@@ -29,12 +29,9 @@ hs_err_pid*
 /BugTD-OSGi/OSGiCore/target/
 /BugTD-OSGi/OSGiCommon/target/
 /BugTD-OSGi/OSGiLibGDX/target/
-<<<<<<< HEAD
 /BugTD-OSGI/runner
-=======
 /BugTD-OSGI/runner
 /BugTD-OSGi/CommonMap/target/
 /BugTD-OSGi/Map/target/
 /BugTD-OSGi/DummyPlayer/target/
 /BugTD-OSGi/target/
->>>>>>> 5e82b5a... Add Sprite system
