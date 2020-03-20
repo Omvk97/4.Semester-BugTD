@@ -30,3 +30,5 @@ hs_err_pid*
 /BugTD-OSGi/OSGiCommon/target/
 /BugTD-OSGi/OSGiLibGDX/target/
 /BugTD-OSGI/runner
+/BugTD-OSGi/CommonEnemy/target/
+/BugTD-OSGi/Enemy/target/

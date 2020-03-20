@@ -14,6 +14,8 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.core.managers.GameInputProcessor;
+import dk.sdu.mmmi.enemy.EnemyControlSystem;
+import dk.sdu.mmmi.enemy.GroundEnemy;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -50,6 +52,11 @@ public class Game implements ApplicationListener {
         cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
         cam.update();
 
+        IGamePluginService groundEnemyPlugin = new GroundEnemy();
+        IEntityProcessingService enemyProcess = new EnemyControlSystem();
+        
+        entityProcessorList.add(enemyProcess);
+        gamePluginList.add(groundEnemyPlugin);
         sr = new ShapeRenderer();
 
         Gdx.input.setInputProcessor(new GameInputProcessor(gameData));
