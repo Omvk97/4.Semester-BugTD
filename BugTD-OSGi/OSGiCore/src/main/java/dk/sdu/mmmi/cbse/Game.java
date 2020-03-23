@@ -118,6 +118,7 @@ public class Game implements ApplicationListener {
         for (Entity entity : world.getEntities()) {
             SpritePart spritePart = entity.getPart(SpritePart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
+          
             if (spritePart != null && positionPart != null) {
                 drawSprite(spritePart, positionPart, spriteBatch);
             }
@@ -133,6 +134,7 @@ public class Game implements ApplicationListener {
         sprite.setY(positionPart.getY());
         sprite.setSize(spritePart.getWidth(), spritePart.getHeight());
         sprite.draw(spriteBatch);
+        //System.out.println(assetManager.getAssetNames());
     }
 
     @Override
