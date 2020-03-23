@@ -5,9 +5,14 @@
  */
 package dk.sdu.mmmi.enemy;
 
+import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+import dk.sdu.mmmi.commonenemy.Enemy;
 
 /**
  *
@@ -17,12 +22,37 @@ public class FlyingEnemy implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Entity fEnemy = new Enemy();
+        //attributes
+        float speed;
+        float attackSpeed;
+        float damage;
+        float range;
+        float deacceleration = 10;
+        float acceleration = 200;
+        float maxSpeed = 300;
+        float rotationSpeed = 5;
+        float x = gameData.getDisplayWidth() / 3;
+        float y = gameData.getDisplayHeight() / 2;
+        float radians = 0;
+
+        
+        SpritePart sprite = new SpritePart("anty-boi-in-red.png", 32, 32);
+        fEnemy.add(sprite);
+
+        //Parts
+        MovingPart mov = new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed);
+        fEnemy.add(mov);
+        PositionPart pos  = new PositionPart(x, y, radians);
+        fEnemy.add(pos);
+        world.addEntity(fEnemy);
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Entity enemy : world.getEntities(Enemy.class)) {
+            world.removeEntity(enemy);
+        }
     }
     
 }

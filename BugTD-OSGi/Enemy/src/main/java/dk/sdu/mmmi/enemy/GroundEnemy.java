@@ -15,7 +15,6 @@ import dk.sdu.mmmi.commonenemy.Enemy;
  */
 public class GroundEnemy implements IGamePluginService {
 
-    private Entity groundEnemy;
 
     @Override
     public void start(GameData gameData, World world) {
@@ -33,8 +32,6 @@ public class GroundEnemy implements IGamePluginService {
         float y = gameData.getDisplayHeight() / 3;
         float radians = 0;
 
-        
-        System.out.println("Making sprite");
         SpritePart sprite = new SpritePart("one-anty-boi.png", 32, 32);
         gEnemy.add(sprite);
 
