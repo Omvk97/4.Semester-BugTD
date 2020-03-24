@@ -43,16 +43,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
                     walkable = false;
                 }
                 
-//                // Find x position of the tile to the left of the current one (if it exists)
-//                int precessorTilePositionX = (int) (j == 0 ? 0 : ((PositionPart) tiles[i][j - 1].getPart(PositionPart.class)).getX());
-//                // finx y position of the tile above the current one (if it exists)
-//                int precessorTilePositionY = (int) (i == 0 ? 0 : ((PositionPart) tiles[i - 1][j].getPart(PositionPart.class)).getY());
-//                
-//                int x = precessorTilePositionX + (walkable ? TileSizes.GRASS_WIDTH : TileSizes.DIRT_WIDTH);
-//                
-//                int y = precessorTilePositionY + (walkable ? TileSizes.GRASS_HEIGHT : TileSizes.DIRT_HEIGHT);
-                
-                SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE);
+                SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
                 
                 PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
                 Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
@@ -60,15 +51,6 @@ public class MapPlugin implements IGamePluginService, MapSPI {
                 world.addEntity(tile);
             }
         }
-        
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[0].length; j++) {
-                PositionPart test = tiles[i][j].getPart(PositionPart.class);
-                System.out.println(
-                        "J : " + j + " I : " + i + "\n" +
-                        "X : " + test.getX() + " Y : " + test.getY() + "\n");
-            }
-        }        
     }
 
     @Override
