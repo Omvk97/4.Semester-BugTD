@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>dk.sdu.mmmi</groupId>
+    <artifactId>BugTD</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <groupId>dk.sdu.mmmi.DummyPlayer.build</groupId>
+  <artifactId>deployment</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>DummyPlayer OSGi Bundle</name>
+  <description>Generated using Pax-Construct</description>
+  <properties>
+    <org.osgi.service.http.port>8080</org.osgi.service.http.port>
+    <org.osgi.service.http.port.secure>8443</org.osgi.service.http.port.secure>
+    <netbeans.installation>/Applications/NetBeans/Apache NetBeans 11.2.app/Contents/Resources/NetBeans/netbeans</netbeans.installation>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>dk.sdu.mmmi</groupId>
+      <artifactId>DummyPlayer</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>bundle</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <version>4.3.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>dk.sdu.mmmi.build</groupId>
+      <artifactId>OSGiCommon</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+  </repositories>
+  <profiles>
+    <profile>
+      <id>build-for-felix</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+            <executions>
+              <execution>
+                <id>compile</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <pathconvert property="plugins.jars" pathsep=":">
+                      <path refid="maven.runtime.classpath" />
+                      <map from="/Users/ngram/repositories/bugtd/BugTD-OSGi/DummyPlayer/target/classes" to="" />
+                    </pathconvert>
+                    <pathconvert property="bundles" pathsep=" ">
+                      <path path="${plugins.jars}" />
+                      <mapper>
+                        <chainedmapper>
+                          <flattenmapper />
+                          <globmapper casesensitive="no" from="*" to="file:modules/*" />
+                        </chainedmapper>
+                      </mapper>
+                    </pathconvert>
+                    <propertyfile file="/Users/ngram/repositories/bugtd/BugTD-OSGi/DummyPlayer/target/config.properties">
+                      <entry value="${bundles} file:modules/DummyPlayer-1.0-SNAPSHOT.jar" key="felix.auto.start" />
+                      <entry value="*" key="org.osgi.framework.bootdelegation" />
+                    </propertyfile>
+                    <copy file="${maven.dependency.org.apache.felix.org.apache.felix.main.jar.path}" tofile="/Users/ngram/repositories/bugtd/BugTD-OSGi/DummyPlayer/target/felix.jar" />
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.3</version>
+            <executions>
+              <execution>
+                <id>create-executable-jar</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <descriptors>
+                    <descriptor>/Users/ngram/repositories/bugtd/BugTD-OSGi/DummyPlayer/src/main/assembly/felix.xml</descriptor>
+                  </descriptors>
+                  <finalName>DummyPlayer-1.0-SNAPSHOT</finalName>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>org.apache.felix.main</artifactId>
+          <version>4.0.3</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>run-on-felix</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+            <configuration>
+              <target>
+                <property name="vm.args" value="" />
+                <pathconvert property="plugins.jars" pathsep=":">
+                  <path refid="maven.runtime.classpath" />
+                  <map from="/Users/ngram/repositories/bugtd/BugTD-OSGi/DummyPlayer/target/classes" to="" />
+                </pathconvert>
+                <makeurl property="urls" separator=" ">
+                  <path path="${plugins.jars}" />
+                  <path location="/Users/ngram/repositories/bugtd/BugTD-OSGi/DummyPlayer/target/DummyPlayer-1.0-SNAPSHOT.jar" />
+                </makeurl>
+                <propertyfile file="/Users/ngram/repositories/bugtd/BugTD-OSGi/DummyPlayer/target/run.properties">
+                  <entry value="${urls}" key="felix.auto.start" />
+                  <entry value="uninstall,install,update,start" key="felix.auto.deploy.action" />
+                  <entry value="/Users/ngram/repositories/bugtd/BugTD-OSGi/DummyPlayer/target/felix-cache" key="org.osgi.framework.storage" />
+                  <entry value="*" key="org.osgi.framework.bootdelegation" />
+                </propertyfile>
+                <makeurl file="/Users/ngram/repositories/bugtd/BugTD-OSGi/DummyPlayer/target/run.properties" property="run.properties.url" />
+                <java fork="true" jar="${maven.dependency.org.apache.felix.org.apache.felix.main.jar.path}">
+                  <sysproperty value="${run.properties.url}" key="felix.config.properties" />
+                  <jvmarg line="${vm.args}" />
+                </java>
+              </target>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>org.apache.felix.main</artifactId>
+          <version>4.0.3</version>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+</project>
