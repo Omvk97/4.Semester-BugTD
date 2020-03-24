@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dk.sdu.mmmi.enemy;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
@@ -11,6 +6,7 @@ import static dk.sdu.mmmi.cbse.common.data.GameKeys.LEFT;
 import static dk.sdu.mmmi.cbse.common.data.GameKeys.RIGHT;
 import static dk.sdu.mmmi.cbse.common.data.GameKeys.UP;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
@@ -24,7 +20,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        
         for(Entity enemy : world.getEntities(Enemy.class)){
             PositionPart p = enemy.getPart(PositionPart.class);
             MovingPart movingPart = enemy.getPart(MovingPart.class);
@@ -38,6 +33,10 @@ public class EnemyControlSystem implements IEntityProcessingService {
             p.process(gameData,enemy);
 
             updateShape(enemy);
+            
+            if(((LifePart) enemy.getPart(LifePart.class)).isDead()) {
+                world.removeEntity(enemy);
+            }
         }
     }
     

@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dk.sdu.mmmi.enemy;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
@@ -35,6 +31,7 @@ public class FlyingEnemy implements IGamePluginService {
         float x = gameData.getDisplayWidth() / 3;
         float y = gameData.getDisplayHeight() / 2;
         float radians = 0;
+        int life = 100;
         
 
         //Parts
@@ -46,6 +43,8 @@ public class FlyingEnemy implements IGamePluginService {
         fEnemy.add(mov);
         PositionPart pos  = new PositionPart(x, y, radians);
         fEnemy.add(pos);
+        LifePart lif = new LifePart(life);
+        fEnemy.add(lif);
         world.addEntity(fEnemy);
     }
 

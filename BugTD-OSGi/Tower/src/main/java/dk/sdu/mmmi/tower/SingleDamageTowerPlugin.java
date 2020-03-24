@@ -15,8 +15,8 @@ public class SingleDamageTowerPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        float x = 100;
-        float y = 100;
+        float x = 300;
+        float y = 300;
         float radians = 0;
         PositionPart pos = new PositionPart(x, y, radians);
 
@@ -27,7 +27,7 @@ public class SingleDamageTowerPlugin implements IGamePluginService {
 
         float damage = 10;
         float range = 50;
-        float speed = 10;
+        float speed = 1;
         WeaponPart wpn = new WeaponPart(damage, range, speed);
         
         SpritePart sprt = new SpritePart("basictower.png", 32, 32);
