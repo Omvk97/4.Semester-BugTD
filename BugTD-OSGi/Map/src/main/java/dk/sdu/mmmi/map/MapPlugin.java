@@ -52,7 +52,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 //                
 //                int y = precessorTilePositionY + (walkable ? TileSizes.GRASS_HEIGHT : TileSizes.DIRT_HEIGHT);
                 
-                SpritePart tileSpritePart = new SpritePart((walkable ? "grass.png" : "dirt.png"), TILE_SIZE, TILE_SIZE);
+                SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE);
                 
                 PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
                 Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
