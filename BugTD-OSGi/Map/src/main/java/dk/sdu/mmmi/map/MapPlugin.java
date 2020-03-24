@@ -8,6 +8,7 @@ package dk.sdu.mmmi.map;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
@@ -31,7 +32,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         
         // TODO - Make it so environment can have different sizes than path. The problem is that when environment is bigger, there should not be places as many environment tiles as path tiles
         // which means the length becomes very long.
-        
+        final int TILE_SIZE = 16;
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
                 
@@ -42,18 +43,19 @@ public class MapPlugin implements IGamePluginService, MapSPI {
                     walkable = false;
                 }
                 
-                // Find x position of the tile to the left of the current one (if it exists)
-                int precessorTilePositionX = (int) (j == 0 ? 0 : ((PositionPart) tiles[i][j - 1].getPart(PositionPart.class)).getX());
-                // finx y position of the tile above the current one (if it exists)
-                int precessorTilePositionY = (int) (i == 0 ? 0 : ((PositionPart) tiles[i - 1][j].getPart(PositionPart.class)).getY());
+//                // Find x position of the tile to the left of the current one (if it exists)
+//                int precessorTilePositionX = (int) (j == 0 ? 0 : ((PositionPart) tiles[i][j - 1].getPart(PositionPart.class)).getX());
+//                // finx y position of the tile above the current one (if it exists)
+//                int precessorTilePositionY = (int) (i == 0 ? 0 : ((PositionPart) tiles[i - 1][j].getPart(PositionPart.class)).getY());
+//                
+//                int x = precessorTilePositionX + (walkable ? TileSizes.GRASS_WIDTH : TileSizes.DIRT_WIDTH);
+//                
+//                int y = precessorTilePositionY + (walkable ? TileSizes.GRASS_HEIGHT : TileSizes.DIRT_HEIGHT);
                 
-                int x = precessorTilePositionX + (walkable ? TileSizes.DIRT_WIDTH : TileSizes.GRASS_WIDTH);
+                SpritePart tileSpritePart = new SpritePart((walkable ? "grass.png" : "dirt.png"), TILE_SIZE, TILE_SIZE);
                 
-                int y = precessorTilePositionY + (walkable ? TileSizes.DIRT_HEIGHT : TileSizes.GRASS_HEIGHT);
-                
-                
-                PositionPart tilePositionPart = new PositionPart(x, y, Math.PI / 2);
-                Tile tile = new Tile(walkable, tilePositionPart);
+                PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
+                Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
                 tiles[i][j] = tile;
                 world.addEntity(tile);
             }
@@ -63,8 +65,8 @@ public class MapPlugin implements IGamePluginService, MapSPI {
             for (int j = 0; j < tiles[0].length; j++) {
                 PositionPart test = tiles[i][j].getPart(PositionPart.class);
                 System.out.println(
-                        "I : " + i + " J : " + j + "\n" +
-                        "Y : " + test.getY() + " X : " + test.getX() + "\n");
+                        "J : " + j + " I : " + i + "\n" +
+                        "X : " + test.getX() + " Y : " + test.getY() + "\n");
             }
         }        
     }

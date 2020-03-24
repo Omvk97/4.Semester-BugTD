@@ -45,8 +45,8 @@ public class Game implements ApplicationListener {
     public void init() {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Asteroids";
-        cfg.width = 800;
-        cfg.height = 600;
+        cfg.width = 832;
+        cfg.height = 832;
         cfg.useGL30 = false;
         cfg.resizable = false;
         gameData.setDisplayWidth(cfg.width);
