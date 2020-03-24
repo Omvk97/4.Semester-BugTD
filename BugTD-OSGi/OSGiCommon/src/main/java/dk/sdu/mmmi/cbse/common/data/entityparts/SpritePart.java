@@ -12,11 +12,20 @@ public class SpritePart implements EntityPart {
     private String spritePath;
     private float width;
     private float height;
+    private int layer;
 
     public SpritePart(String spritePath, float width, float height){
         this.spritePath = spritePath;
         this.width = width;
         this.height = height;
+        this.layer = 0;
+    }
+    
+    public SpritePart(String spritePath, float width, float height, int layer){
+        this.spritePath = spritePath;
+        this.width = width;
+        this.height = height;
+        this.layer = layer;
     }
 
     public String getSpritePath() {
@@ -31,6 +40,10 @@ public class SpritePart implements EntityPart {
         return height;
     }
 
+    public int getLayer() {
+        return layer;
+    }
+   
     @Override
     public void process(GameData gameData, Entity entity) {
     }

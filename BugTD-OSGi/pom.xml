@@ -54,6 +54,8 @@
         <module>OSGiCommon</module>
         <module>OSGiLibGDX</module>
         <module>DummyPlayer</module>
+        <module>CommonMap</module>
+        <module>Map</module>
   </modules>
 
     <build>

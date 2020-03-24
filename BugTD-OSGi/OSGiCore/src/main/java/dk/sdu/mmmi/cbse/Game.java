@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,15 +14,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.data.entityparts.EntityPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.mmmi.cbse.core.managers.GameInputProcessor;
-import java.io.InputStream;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -45,8 +43,8 @@ public class Game implements ApplicationListener {
     public void init() {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Asteroids";
-        cfg.width = 800;
-        cfg.height = 600;
+        cfg.width = 832;
+        cfg.height = 832;
         cfg.useGL30 = false;
         cfg.resizable = false;
         gameData.setDisplayWidth(cfg.width);
@@ -108,12 +106,33 @@ public class Game implements ApplicationListener {
     private void draw() {
         SpriteBatch spriteBatch = new SpriteBatch();
         spriteBatch.begin();
+        
+        ArrayList<Entity> entitiesToDraw = new ArrayList<>();
+        
+        // Populate list
         for (Entity entity : world.getEntities()) {
             SpritePart spritePart = entity.getPart(SpritePart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
             if (spritePart != null && positionPart != null) {
-                drawSprite(spritePart, positionPart, spriteBatch);
+                entitiesToDraw.add(entity);
             }
+        }
+        
+        // Sort by layer
+        entitiesToDraw.sort(new Comparator<Entity>() {
+            @Override
+            public int compare(Entity e1, Entity e2) {
+                SpritePart spritePart1 = e1.getPart(SpritePart.class);
+                SpritePart spritePart2 = e2.getPart(SpritePart.class);
+                return spritePart1.getLayer() - spritePart2.getLayer();
+            }
+        });
+        
+        // Draw
+        for (Entity entity : entitiesToDraw) {
+            SpritePart spritePart = entity.getPart(SpritePart.class);
+            PositionPart positionPart = entity.getPart(PositionPart.class);
+            drawSprite(spritePart, positionPart, spriteBatch);
         }
         spriteBatch.end();
     }

@@ -24,7 +24,7 @@ public class DummyPlayerPlugin implements IGamePluginService {
     public void start(GameData gameData, World world) {
         try {
             dp = new DummyPlayer();
-            dp.add(new SpritePart("wasp.png", 32, 32));
+            dp.add(new SpritePart("wasp.png", 16, 16, 5));
             dp.add(new PositionPart(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2, 0));
             world.addEntity(dp);
         } catch (Exception e) {
