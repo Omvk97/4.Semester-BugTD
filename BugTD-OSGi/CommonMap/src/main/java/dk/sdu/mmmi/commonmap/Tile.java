@@ -6,6 +6,7 @@
 package dk.sdu.mmmi.commonmap;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 
 /**
  *
@@ -14,9 +15,14 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 public class Tile extends Entity {
     
     private boolean walkable;
+    private PositionPart positionPart;
+    
 
-    public Tile(boolean walkable) {
+    public Tile(boolean walkable, PositionPart positionPart) {
         this.walkable = walkable;
+        
+        add(positionPart);
+        this.positionPart = positionPart;
     }
 
     public boolean isWalkable() {
