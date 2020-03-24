@@ -36,3 +36,5 @@ hs_err_pid*
 /BugTD-OSGi/Map/target/
 /BugTD-OSGi/DummyPlayer/target/
 /BugTD-OSGi/target/
+/BugTD-OSGi/CommonEnemy/target/
+/BugTD-OSGi/Enemy/target/

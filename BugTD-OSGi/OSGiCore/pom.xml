@@ -39,5 +39,10 @@
             <artifactId>OSGiLibGDX</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi</groupId>
+            <artifactId>Enemy</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

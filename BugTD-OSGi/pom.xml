@@ -56,6 +56,8 @@
     <module>Tower</module>
     <module>CommonTower</module>
         <module>DummyPlayer</module>
+    <module>CommonEnemy</module>
+    <module>Enemy</module>
   </modules>
 
     <build>
