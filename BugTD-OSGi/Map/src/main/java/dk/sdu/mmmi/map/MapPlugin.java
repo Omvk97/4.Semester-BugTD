@@ -5,6 +5,7 @@
  */
 package dk.sdu.mmmi.map;
 
+import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
@@ -54,7 +55,9 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     @Override
     public void stop(GameData gameData, World world) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Entity tile : world.getEntities(Tile.class)) {
+            world.removeEntity(tile);
+        }
     }
 
     @Override
@@ -64,7 +67,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     @Override
     public Tile[][] getTiles() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return tiles;
     }
     
 }

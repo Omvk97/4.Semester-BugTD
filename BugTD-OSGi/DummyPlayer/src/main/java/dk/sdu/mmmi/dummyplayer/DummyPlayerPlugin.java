@@ -10,7 +10,6 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import java.io.File;
 
 /**
  *
@@ -19,7 +18,7 @@ import java.io.File;
 public class DummyPlayerPlugin implements IGamePluginService {
 
     DummyPlayer dp;
-    
+       
     @Override
     public void start(GameData gameData, World world) {
         try {
@@ -34,6 +33,6 @@ public class DummyPlayerPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world) {
-    }
-    
+        
+    }   
 }
