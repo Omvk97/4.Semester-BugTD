@@ -7,9 +7,9 @@ public class PositionPart implements EntityPart {
 
     private float x;
     private float y;
-    private float radians;
+    private double radians;
 
-    public PositionPart(float x, float y, float radians) {
+    public PositionPart(float x, float y, double radians) {
         this.x = x;
         this.y = y;
         this.radians = radians;
@@ -23,7 +23,7 @@ public class PositionPart implements EntityPart {
         return y;
     }
 
-    public float getRadians() {
+    public double getRadians() {
         return radians;
     }
 
@@ -40,7 +40,7 @@ public class PositionPart implements EntityPart {
         this.y = newY;
     }
 
-    public void setRadians(float radians) {
+    public void setRadians(double radians) {
         this.radians = radians;
     }
 
