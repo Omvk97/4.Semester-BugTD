@@ -5,6 +5,8 @@
  */
 package dk.sdu.mmmi.commonmap;
 
+import dk.sdu.mmmi.cbse.common.data.Entity;
+
 /**
  *
  * @author oliver
@@ -12,8 +14,9 @@ package dk.sdu.mmmi.commonmap;
 public interface MapSPI {
     
     Tile[][] getTiles();
-    
+    Tile getClosestTile(float x, float y);
+    Tile getTileXAndY(Tile t);
+    Tile getTileEntityIsOn(Entity e);
+
     void loadFile(String filepath);
-    
-    
 }
