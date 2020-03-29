@@ -13,7 +13,7 @@ import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 public class DummyPlayerPlugin implements IGamePluginService {
 
     DummyPlayer dp;
-    
+       
     @Override
     public void start(GameData gameData, World world) {
         try {
@@ -28,6 +28,6 @@ public class DummyPlayerPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world) {
-    }
-    
+        
+    }   
 }
