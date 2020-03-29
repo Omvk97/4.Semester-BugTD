@@ -30,7 +30,10 @@ public class SingleDamageTowerPlugin implements IGamePluginService {
         float speed = 1;
         WeaponPart wpn = new WeaponPart(damage, range, speed);
         
-        SpritePart sprt = new SpritePart("basictower.png", 32, 32);
+        int width = 32;
+        int height = 32;
+        int layer = 1;
+        SpritePart sprt = new SpritePart("basictower.png", width, height, layer);
 
         Tower tower = new Tower(pos, life, colli, wpn, sprt);
         world.addEntity(tower);
