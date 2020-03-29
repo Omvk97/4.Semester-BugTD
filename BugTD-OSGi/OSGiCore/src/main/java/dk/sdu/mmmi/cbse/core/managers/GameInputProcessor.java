@@ -71,10 +71,19 @@ public class GameInputProcessor extends InputAdapter {
         }
         return true;
     }
-    
+
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button){
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        screenY = gameData.getDisplayHeight() - screenY;    // The y-value needs to be reversed for unknown reason
         gameData.addEvent(new ClickEvent(null, screenX, screenY));
+        return true;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        screenY = gameData.getDisplayHeight() - screenY;    // The y-value needs to be reversed for unknown reason
+        gameData.setMouseX(screenX);
+        gameData.setMouseY(screenY);
         return true;
     }
 }

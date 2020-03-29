@@ -22,12 +22,15 @@ import java.util.List;
 public class TowerControlSystem implements IEntityProcessingService {
 
     private MapSPI map;
+    private String previewID;
 
     @Override
     public void process(GameData gameData, World world) {
-        
+
+        showTowerPlacementPreview(gameData, world);
+
         createNewTowers(gameData, world);
-        
+
         for (Entity tower : world.getEntities(Tower.class)) {
             PositionPart towerPosPart = tower.getPart(PositionPart.class);
             Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
@@ -40,7 +43,7 @@ public class TowerControlSystem implements IEntityProcessingService {
             }
         }
     }
-    
+
     private void createNewTowers(GameData gameData, World world) {
         List<Event> eventsToDelete = new ArrayList<>();
         for (Event event : gameData.getEvents()) {
@@ -51,19 +54,23 @@ public class TowerControlSystem implements IEntityProcessingService {
 
             // Calculate placement of new Tower
             int clickX = ((ClickEvent) event).getX();
-            int clickY = gameData.getDisplayHeight() - ((ClickEvent) event).getY();  // The y-value needs to be reversed for unknown reason
+            int clickY = ((ClickEvent) event).getY();
             clickX = roundDown(clickX, TileSizes.GRASS_WIDTH);
             clickY = roundDown(clickY, TileSizes.GRASS_WIDTH);
-            Tower tower = createNewTower(world, clickX, clickY);
+            Tower tower = createNewTower(clickX, clickY);
 
             // Retrieve the Tiles on which the new Tower shall be placed
             Tile[] tiles = new Tile[4];
             int numberFromLeft = clickX / TileSizes.GRASS_WIDTH;
             int numberFromBottom = clickY / TileSizes.GRASS_WIDTH;
-            tiles[0] = map.getTiles()[numberFromLeft][numberFromBottom];
-            tiles[1] = map.getTiles()[numberFromLeft + 1][numberFromBottom];
-            tiles[2] = map.getTiles()[numberFromLeft][numberFromBottom + 1];
-            tiles[3] = map.getTiles()[numberFromLeft + 1][numberFromBottom + 1];
+            try {
+                tiles[0] = map.getTiles()[numberFromLeft][numberFromBottom];
+                tiles[1] = map.getTiles()[numberFromLeft + 1][numberFromBottom];
+                tiles[2] = map.getTiles()[numberFromLeft][numberFromBottom + 1];
+                tiles[3] = map.getTiles()[numberFromLeft + 1][numberFromBottom + 1];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                continue;   // Continue the for-loop as the placement is illegal
+            }
 
             // Check each Tile for its availability
             boolean illegalTowerPlacement = false;
@@ -117,7 +124,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
-    private Tower createNewTower(World world, int xpos, int ypos) {
+    private Tower createNewTower(int xpos, int ypos) {
         float x = xpos;
         float y = ypos;
         float radians = 0;
@@ -143,5 +150,18 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     public void setMapSPI(MapSPI spi) {
         this.map = spi;
+    }
+
+    private void showTowerPlacementPreview(GameData gameData, World world) {
+        if (previewID == null) {
+            Entity towerPreview = createNewTower(0, 0);
+            world.addEntity(towerPreview);
+            previewID = towerPreview.getID();
+        }
+        
+        Entity towerPreview = world.getEntity(previewID);
+        PositionPart posPart = towerPreview.getPart(PositionPart.class);
+        posPart.setX(gameData.getMouseX());
+        posPart.setY(gameData.getMouseY());
     }
 }
