@@ -3,6 +3,7 @@ package dk.sdu.mmmi.enemy;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
@@ -30,6 +31,7 @@ public class GroundEnemy implements IGamePluginService {
         float x = gameData.getDisplayWidth() / 2;
         float y = gameData.getDisplayHeight() / 3;
         float radians = 0;
+        int life = 100;
 
         //Parts
         SpritePart sprite = new SpritePart("one-anty-boi.png", 32, 32);
@@ -40,6 +42,8 @@ public class GroundEnemy implements IGamePluginService {
         gEnemy.add(mov);
         PositionPart pos = new PositionPart(x, y, radians);
         gEnemy.add(pos);
+        LifePart lif = new LifePart(life);
+        gEnemy.add(lif);
         world.addEntity(gEnemy);
 
     }

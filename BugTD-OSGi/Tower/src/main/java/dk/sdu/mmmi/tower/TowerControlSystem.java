@@ -6,6 +6,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commontower.Tower;
 
 public class TowerControlSystem implements IEntityProcessingService {
@@ -18,7 +19,9 @@ public class TowerControlSystem implements IEntityProcessingService {
             if (target != null) {
                 WeaponPart weapon = tower.getPart(WeaponPart.class);
                 weapon.setTarget(target);
-                weapon.process(gameData, target);   // Dont really know what to use as arguments
+                if (distance(towerPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
+                    weapon.process(gameData, target);   // Dont really know what to use as arguments   
+                }
             }
         }
     }
@@ -27,14 +30,14 @@ public class TowerControlSystem implements IEntityProcessingService {
         float currentMinDistance = Float.MAX_VALUE;
         Entity closestEnemy = null;
 
-//        for (Entity enemy : world.getEntities(Enemy.class)) {
-//            PositionPart enemyPosPart = enemy.getPart(PositionPart.class);
-//            float distance = distance(towerPosPart, enemyPosPart);
-//            if (distance < currentMinDistance) {
-//                currentMinDistance = distance;
-//                closestEnemy = enemy;
-//            }
-//        }
+        for (Entity enemy : world.getEntities(Enemy.class)) {
+            PositionPart enemyPosPart = enemy.getPart(PositionPart.class);
+            float distance = distance(towerPosPart, enemyPosPart);
+            if (distance < currentMinDistance) {
+                currentMinDistance = distance;
+                closestEnemy = enemy;
+            }
+        }
         return closestEnemy;
     }
 

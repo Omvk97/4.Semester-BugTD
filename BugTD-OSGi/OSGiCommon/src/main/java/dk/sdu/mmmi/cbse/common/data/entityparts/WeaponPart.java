@@ -23,6 +23,10 @@ public class WeaponPart implements EntityPart {
         this.target = target;
     }
 
+    public float getRange() {
+        return range;
+    }
+
     @Override
     public void process(GameData gameData, Entity entity) {
         // Check whether the Weapon is ready to shoot or not
@@ -30,6 +34,8 @@ public class WeaponPart implements EntityPart {
             cooldown = speed;   // Reset cooldown
             LifePart lp = entity.getPart(LifePart.class);
             lp.setLife(lp.getLife() - (int) damage);    // Damage entity
+            lp.process(gameData, entity);
+            System.out.println("Damaged enemy: " + lp.getLife());
         }
 
         cooldown -= gameData.getDelta();    // Slowly decreasing the cooldown

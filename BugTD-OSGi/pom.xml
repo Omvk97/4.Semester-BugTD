@@ -53,11 +53,13 @@
         <module>OSGiCore</module>
         <module>OSGiCommon</module>
         <module>OSGiLibGDX</module>
-    <module>Tower</module>
-    <module>CommonTower</module>
+        <module>Tower</module>
+        <module>CommonTower</module>
         <module>DummyPlayer</module>
-    <module>CommonEnemy</module>
-    <module>Enemy</module>
+        <module>CommonEnemy</module>
+        <module>Enemy</module>
+        <module>CommonMap</module>
+        <module>Map</module>
   </modules>
 
     <build>
