@@ -12,11 +12,14 @@ import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonenemy.Enemy;
+import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commontower.Tower;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TowerControlSystem implements IEntityProcessingService {
+
+    private MapSPI mapspi;
 
     @Override
     public void process(GameData gameData, World world) {
@@ -26,12 +29,18 @@ public class TowerControlSystem implements IEntityProcessingService {
             if (!(event instanceof ClickEvent)) {
                 continue;
             }
-            
+
             int clickX = ((ClickEvent) event).getX();
             int clickY = gameData.getDisplayHeight() - ((ClickEvent) event).getY();  // The y-value needs to be reversed for unknown reason
-            
+
+            clickX = roundDown(clickX,16);
+            clickY = roundDown(clickY,16);
             
             createNewTower(world, clickX, clickY);
+//            System.out.println(clickX);
+//            System.out.println(clickY);
+
+            eventsToDelete.add(event);
         }
         gameData.getEvents().removeAll(eventsToDelete);
 
@@ -47,6 +56,19 @@ public class TowerControlSystem implements IEntityProcessingService {
                 }
             }
         }
+        // System.out.println(mapspi.getTiles()[10][10].getX());
+    }
+
+    public void setMapSPI(MapSPI spi) {
+        this.mapspi = spi;
+        System.out.println("does it work?");
+    }
+
+    int roundDown(double number, double place) {
+        double result = number / place;
+        result = Math.floor(result);
+        result *= place;
+        return (int) result;
     }
 
     private Entity calculateClosestEnemy(World world, PositionPart towerPosPart) {
@@ -73,7 +95,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         float dy = (float) towerPosPart.getY() - (float) enemyPosPart.getY();
         return (float) Math.sqrt(dx * dx + dy * dy);
     }
-    
+
     private void createNewTower(World world, int xpos, int ypos) {
         float x = xpos;
         float y = ypos;
@@ -89,7 +111,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         float range = 50;
         float speed = 1;
         WeaponPart wpn = new WeaponPart(damage, range, speed);
-        
+
         int width = 32;
         int height = 32;
         int layer = 1;

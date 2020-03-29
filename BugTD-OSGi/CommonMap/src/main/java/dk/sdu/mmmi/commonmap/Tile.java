@@ -19,6 +19,9 @@ public class Tile extends Entity {
     private PositionPart positionPart;
     private SpritePart spritePart;
     
+    private Entity occupant;
+    
+
     public Tile(boolean walkable, SpritePart spritePart, PositionPart positionPart) {
         this.walkable = walkable;
         add(spritePart);
@@ -27,6 +30,14 @@ public class Tile extends Entity {
         this.positionPart = positionPart;
     }
 
+    public Entity getOccupant(){
+        return occupant;
+    }
+    
+    public void setOccupant(Entity occupant){
+        this.occupant = occupant;
+    }
+    
     public boolean isWalkable() {
         return walkable;
     }
@@ -42,5 +53,6 @@ public class Tile extends Entity {
     public float getY() {
         return this.positionPart.getY();
     }
+    
     
 }

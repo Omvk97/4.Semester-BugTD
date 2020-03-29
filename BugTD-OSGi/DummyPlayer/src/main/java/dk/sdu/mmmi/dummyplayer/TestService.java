@@ -20,7 +20,7 @@ public class TestService implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        System.out.println(mapSPI.getTiles()[0][0].isWalkable());
+//        System.out.println(mapSPI.getTiles()[0][0].isWalkable());
     }
     
     public void setMapSPI(MapSPI map) {
