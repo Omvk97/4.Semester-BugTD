@@ -5,8 +5,10 @@
  */
 package dk.sdu.mmmi.map;
 
+import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
@@ -42,19 +44,21 @@ public class MapPlugin implements IGamePluginService, MapSPI {
                     walkable = false;
                 }
                 
-                SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
+                //SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
                 
-                PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
-                Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
-                tiles[i][j] = tile;
-                world.addEntity(tile);
+                //PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
+                //Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
+                //tiles[i][j] = tile;
+                //world.addEntity(tile);
             }
         }
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (Entity tile : world.getEntities(Tile.class)) {
+            world.removeEntity(tile);
+        }
     }
 
     @Override
@@ -64,6 +68,21 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     @Override
     public Tile[][] getTiles() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Tile getClosestTile(float f, float f1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Tile getTileXAndY(Tile tile) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Tile getTileEntityIsOn(Entity entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
