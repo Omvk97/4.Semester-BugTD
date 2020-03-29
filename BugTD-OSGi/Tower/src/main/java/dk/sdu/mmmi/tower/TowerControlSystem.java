@@ -13,38 +13,21 @@ import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
+import dk.sdu.mmmi.commonmap.Tile;
+import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commontower.Tower;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TowerControlSystem implements IEntityProcessingService {
 
-    private MapSPI mapspi;
+    private MapSPI map;
 
     @Override
     public void process(GameData gameData, World world) {
-        // Creating new Tower with ClickEvent
-        List<Event> eventsToDelete = new ArrayList<>();
-        for (Event event : gameData.getEvents()) {
-            if (!(event instanceof ClickEvent)) {
-                continue;
-            }
-
-            int clickX = ((ClickEvent) event).getX();
-            int clickY = gameData.getDisplayHeight() - ((ClickEvent) event).getY();  // The y-value needs to be reversed for unknown reason
-
-            clickX = roundDown(clickX,16);
-            clickY = roundDown(clickY,16);
-            
-            createNewTower(world, clickX, clickY);
-//            System.out.println(clickX);
-//            System.out.println(clickY);
-
-            eventsToDelete.add(event);
-        }
-        gameData.getEvents().removeAll(eventsToDelete);
-
-        // Processing existing Towers
+        
+        createNewTowers(gameData, world);
+        
         for (Entity tower : world.getEntities(Tower.class)) {
             PositionPart towerPosPart = tower.getPart(PositionPart.class);
             Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
@@ -56,12 +39,50 @@ public class TowerControlSystem implements IEntityProcessingService {
                 }
             }
         }
-        // System.out.println(mapspi.getTiles()[10][10].getX());
     }
+    
+    private void createNewTowers(GameData gameData, World world) {
+        List<Event> eventsToDelete = new ArrayList<>();
+        for (Event event : gameData.getEvents()) {
+            if (!(event instanceof ClickEvent)) {
+                continue;
+            }
+            eventsToDelete.add(event);
 
-    public void setMapSPI(MapSPI spi) {
-        this.mapspi = spi;
-        System.out.println("does it work?");
+            // Calculate placement of new Tower
+            int clickX = ((ClickEvent) event).getX();
+            int clickY = gameData.getDisplayHeight() - ((ClickEvent) event).getY();  // The y-value needs to be reversed for unknown reason
+            clickX = roundDown(clickX, TileSizes.GRASS_WIDTH);
+            clickY = roundDown(clickY, TileSizes.GRASS_WIDTH);
+            Tower tower = createNewTower(world, clickX, clickY);
+
+            // Retrieve the Tiles on which the new Tower shall be placed
+            Tile[] tiles = new Tile[4];
+            int numberFromLeft = clickX / TileSizes.GRASS_WIDTH;
+            int numberFromBottom = clickY / TileSizes.GRASS_WIDTH;
+            tiles[0] = map.getTiles()[numberFromLeft][numberFromBottom];
+            tiles[1] = map.getTiles()[numberFromLeft + 1][numberFromBottom];
+            tiles[2] = map.getTiles()[numberFromLeft][numberFromBottom + 1];
+            tiles[3] = map.getTiles()[numberFromLeft + 1][numberFromBottom + 1];
+
+            // Check each Tile for its availability
+            boolean illegalTowerPlacement = false;
+            for (Tile tile : tiles) {
+                if (tile.getOccupant() != null) {
+                    illegalTowerPlacement = true;
+                    break;
+                }
+            }
+
+            //Assign Tower as occupant for each Tile
+            if (!illegalTowerPlacement) {
+                for (Tile tile : tiles) {
+                    tile.setOccupant(tower);
+                }
+                world.addEntity(tower);
+            }
+        }
+        gameData.getEvents().removeAll(eventsToDelete);
     }
 
     int roundDown(double number, double place) {
@@ -96,7 +117,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
-    private void createNewTower(World world, int xpos, int ypos) {
+    private Tower createNewTower(World world, int xpos, int ypos) {
         float x = xpos;
         float y = ypos;
         float radians = 0;
@@ -117,7 +138,10 @@ public class TowerControlSystem implements IEntityProcessingService {
         int layer = 1;
         SpritePart sprt = new SpritePart("basictower.png", width, height, layer);
 
-        Tower tower = new Tower(pos, life, colli, wpn, sprt);
-        world.addEntity(tower);
+        return new Tower(pos, life, colli, wpn, sprt);
+    }
+
+    public void setMapSPI(MapSPI spi) {
+        this.map = spi;
     }
 }
