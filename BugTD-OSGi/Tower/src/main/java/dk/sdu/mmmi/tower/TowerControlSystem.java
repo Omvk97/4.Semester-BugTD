@@ -59,30 +59,9 @@ public class TowerControlSystem implements IEntityProcessingService {
             clickY = roundDown(clickY, TileSizes.GRASS_WIDTH);
             Tower tower = createNewTower(clickX, clickY);
 
-            // Retrieve the Tiles on which the new Tower shall be placed
-            Tile[] tiles = new Tile[4];
-            int numberFromLeft = clickX / TileSizes.GRASS_WIDTH;
-            int numberFromBottom = clickY / TileSizes.GRASS_WIDTH;
-            try {
-                tiles[0] = map.getTiles()[numberFromLeft][numberFromBottom];
-                tiles[1] = map.getTiles()[numberFromLeft + 1][numberFromBottom];
-                tiles[2] = map.getTiles()[numberFromLeft][numberFromBottom + 1];
-                tiles[3] = map.getTiles()[numberFromLeft + 1][numberFromBottom + 1];
-            } catch (ArrayIndexOutOfBoundsException e) {
-                continue;   // Continue the for-loop as the placement is illegal
-            }
-
-            // Check each Tile for its availability
-            boolean illegalTowerPlacement = false;
-            for (Tile tile : tiles) {
-                if (tile.getOccupant() != null) {
-                    illegalTowerPlacement = true;
-                    break;
-                }
-            }
-
             //Assign Tower as occupant for each Tile
-            if (!illegalTowerPlacement) {
+            Tile[] tiles = new Tile[4];
+            if (isLegalPlacement(tiles, clickX, clickY)) {
                 for (Tile tile : tiles) {
                     tile.setOccupant(tower);
                 }
@@ -97,6 +76,27 @@ public class TowerControlSystem implements IEntityProcessingService {
         result = Math.floor(result);
         result *= place;
         return (int) result;
+    }
+
+    private boolean isLegalPlacement(Tile[] tiles, int x, int y) {
+        int numberFromLeft = x / TileSizes.GRASS_WIDTH;
+        int numberFromBottom = y / TileSizes.GRASS_WIDTH;
+        try {
+            tiles[0] = map.getTiles()[numberFromLeft][numberFromBottom];
+            tiles[1] = map.getTiles()[numberFromLeft + 1][numberFromBottom];
+            tiles[2] = map.getTiles()[numberFromLeft][numberFromBottom + 1];
+            tiles[3] = map.getTiles()[numberFromLeft + 1][numberFromBottom + 1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;   // Return illegal as the placement is out of bounds
+        }
+
+        // Check each Tile for its availability
+        for (Tile tile : tiles) {
+            if (tile.getOccupant() != null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Entity calculateClosestEnemy(World world, PositionPart towerPosPart) {
@@ -143,7 +143,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         int width = 32;
         int height = 32;
         int layer = 1;
-        SpritePart sprt = new SpritePart("basictower.png", width, height, layer);
+        SpritePart sprt = new SpritePart(SingleDamageTowerPlugin.BASIC_TOWER_PATH, width, height, layer);
 
         return new Tower(pos, life, colli, wpn, sprt);
     }
@@ -153,15 +153,32 @@ public class TowerControlSystem implements IEntityProcessingService {
     }
 
     private void showTowerPlacementPreview(GameData gameData, World world) {
+        // Create the preview entity for the first time
         if (previewID == null) {
-            Entity towerPreview = createNewTower(0, 0);
+            Entity towerPreview = new Entity();
+            towerPreview.add(new PositionPart(0, 0, 0));
+            towerPreview.add(new SpritePart(SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH, 32, 32, 2));
             world.addEntity(towerPreview);
             previewID = towerPreview.getID();
         }
-        
+
+        // Calculate placement of preview
         Entity towerPreview = world.getEntity(previewID);
         PositionPart posPart = towerPreview.getPart(PositionPart.class);
-        posPart.setX(gameData.getMouseX());
-        posPart.setY(gameData.getMouseY());
+        int x = roundDown(gameData.getMouseX(), TileSizes.GRASS_WIDTH);
+        int y = roundDown(gameData.getMouseY(), TileSizes.GRASS_WIDTH);
+        posPart.setX(x);
+        posPart.setY(y);
+
+        // Set preview sprite according to legalness of placement
+        Tile[] tiles = new Tile[4];
+        String spritePath;
+        if (isLegalPlacement(tiles, x, y)) {
+            spritePath = SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH;
+        } else {
+            spritePath = SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_ILLEGAL_PATH;
+        }
+        towerPreview.remove(SpritePart.class);
+        towerPreview.add(new SpritePart(spritePath, 32, 32, 2, 75));
     }
 }
