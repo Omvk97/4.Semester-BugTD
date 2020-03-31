@@ -18,6 +18,7 @@ import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TowerControlSystem implements IEntityProcessingService {
@@ -47,12 +48,7 @@ public class TowerControlSystem implements IEntityProcessingService {
             clickY = roundDown(clickY, TileSizes.GRASS_WIDTH);
             Tower tower = createNewTower(clickX, clickY);
 
-            //Assign Tower as occupant for each Tile
-            Tile[] tiles = new Tile[4];
-            if (isLegalPlacement(tiles, clickX, clickY)) {
-                for (Tile tile : tiles) {
-                    tile.setOccupant(tower);
-                }
+            if (isLegalPlacement(tower)) {
                 world.addEntity(tower);
             }
         }
@@ -66,21 +62,15 @@ public class TowerControlSystem implements IEntityProcessingService {
         return (int) result;
     }
 
-    private boolean isLegalPlacement(Tile[] tiles, int x, int y) {
-        int numberFromLeft = x / TileSizes.GRASS_WIDTH;
-        int numberFromBottom = y / TileSizes.GRASS_WIDTH;
-        try {
-            tiles[0] = map.getTiles()[numberFromLeft][numberFromBottom];
-            tiles[1] = map.getTiles()[numberFromLeft + 1][numberFromBottom];
-            tiles[2] = map.getTiles()[numberFromLeft][numberFromBottom + 1];
-            tiles[3] = map.getTiles()[numberFromLeft + 1][numberFromBottom + 1];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return false;   // Return illegal as the placement is out of bounds
+    private boolean isLegalPlacement(Entity e) {
+        List<Tile> tiles = map.getTilesEntityIsOn(e);
+        
+        if (tiles.size() < 4) {
+            return false;
         }
-
-        // Check each Tile for its availability
+        
         for (Tile tile : tiles) {
-            if (tile.getOccupant() != null || !tile.isWalkable()) {
+            if (map.checkIfTileIsOccupied(tile, Arrays.asList(preview)) || !tile.isWalkable()) {
                 return false;
             }
         }
@@ -159,9 +149,8 @@ public class TowerControlSystem implements IEntityProcessingService {
         posPart.setY(y);
 
         // Set preview sprite according to legalness of placement
-        Tile[] tiles = new Tile[4];
         String spritePath;
-        if (isLegalPlacement(tiles, x, y)) {
+        if (isLegalPlacement(preview)) {
             spritePath = SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH;
         } else {
             spritePath = SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_ILLEGAL_PATH;
