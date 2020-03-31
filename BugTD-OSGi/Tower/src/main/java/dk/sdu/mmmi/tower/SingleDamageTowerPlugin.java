@@ -6,6 +6,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commontower.Tower;
+import dk.sdu.mmmi.commontower.TowerPreview;
 
 public class SingleDamageTowerPlugin implements IGamePluginService {
     
@@ -38,6 +39,9 @@ public class SingleDamageTowerPlugin implements IGamePluginService {
     public void stop(GameData gameData, World world) {
         for (Entity tower : world.getEntities(Tower.class)) {
             world.removeEntity(tower);
+        }
+        for (Entity preview : world.getEntities(TowerPreview.class)) {
+            world.removeEntity(preview);
         }
     }
 }

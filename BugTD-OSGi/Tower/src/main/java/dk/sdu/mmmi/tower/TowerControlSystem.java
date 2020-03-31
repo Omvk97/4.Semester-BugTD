@@ -16,13 +16,14 @@ import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commontower.Tower;
+import dk.sdu.mmmi.commontower.TowerPreview;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TowerControlSystem implements IEntityProcessingService {
 
     private MapSPI map;
-    private String previewID;
+    private TowerPreview preview;
 
     @Override
     public void process(GameData gameData, World world) {
@@ -141,17 +142,17 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     private void showTowerPlacementPreview(GameData gameData, World world) {
         // Create the preview entity for the first time
-        if (previewID == null) {
-            Entity towerPreview = new Entity();
-            towerPreview.add(new PositionPart(0, 0, 0));
-            towerPreview.add(new SpritePart(SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH, 32, 32, 2));
+        if (preview == null) {
+            TowerPreview towerPreview = new TowerPreview(
+                    new PositionPart(0, 0, 0),
+                    new SpritePart(SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH, 32, 32, 2)
+            );
             world.addEntity(towerPreview);
-            previewID = towerPreview.getID();
+            preview = towerPreview;
         }
 
         // Calculate placement of preview
-        Entity towerPreview = world.getEntity(previewID);
-        PositionPart posPart = towerPreview.getPart(PositionPart.class);
+        PositionPart posPart = preview.getPart(PositionPart.class);
         int x = roundDown(gameData.getMouseX(), TileSizes.GRASS_WIDTH);
         int y = roundDown(gameData.getMouseY(), TileSizes.GRASS_WIDTH);
         posPart.setX(x);
@@ -165,8 +166,8 @@ public class TowerControlSystem implements IEntityProcessingService {
         } else {
             spritePath = SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_ILLEGAL_PATH;
         }
-        towerPreview.remove(SpritePart.class);
-        towerPreview.add(new SpritePart(spritePath, 32, 32, 2, 75));
+        preview.remove(SpritePart.class);
+        preview.add(new SpritePart(spritePath, 32, 32, 2, 75));
     }
 
     private void attackEnemies(GameData gameData, World world) {
