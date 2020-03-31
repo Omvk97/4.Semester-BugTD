@@ -120,12 +120,6 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     }
 
     @Override
-    public Tile getClosestTile(float x, float y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        
-    }
-
-    @Override
     public Tile getTileXAndY(Tile tile) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
