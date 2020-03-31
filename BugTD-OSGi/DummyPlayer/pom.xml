@@ -32,6 +32,12 @@
             <artifactId>OSGiCommonMap</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.build</groupId>
+            <artifactId>OSGiCommonMap</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
