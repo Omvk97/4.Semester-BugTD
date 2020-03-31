@@ -26,22 +26,9 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-
         showTowerPlacementPreview(gameData, world);
-
         createNewTowers(gameData, world);
-
-        for (Entity tower : world.getEntities(Tower.class)) {
-            PositionPart towerPosPart = tower.getPart(PositionPart.class);
-            Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
-            if (target != null) {
-                WeaponPart weapon = tower.getPart(WeaponPart.class);
-                weapon.setTarget(target);
-                if (distance(towerPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
-                    weapon.process(gameData, target);   // Dont really know what to use as arguments   
-                }
-            }
-        }
+        attackEnemies(gameData, world);
     }
 
     private void createNewTowers(GameData gameData, World world) {
@@ -92,7 +79,7 @@ public class TowerControlSystem implements IEntityProcessingService {
 
         // Check each Tile for its availability
         for (Tile tile : tiles) {
-            if (tile.getOccupant() != null) {
+            if (tile.getOccupant() != null || !tile.isWalkable()) {
                 return false;
             }
         }
@@ -180,5 +167,19 @@ public class TowerControlSystem implements IEntityProcessingService {
         }
         towerPreview.remove(SpritePart.class);
         towerPreview.add(new SpritePart(spritePath, 32, 32, 2, 75));
+    }
+
+    private void attackEnemies(GameData gameData, World world) {
+        for (Entity tower : world.getEntities(Tower.class)) {
+            PositionPart towerPosPart = tower.getPart(PositionPart.class);
+            Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
+            if (target != null) {
+                WeaponPart weapon = tower.getPart(WeaponPart.class);
+                weapon.setTarget(target);
+                if (distance(towerPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
+                    weapon.process(gameData, target);   // Dont really know what to use as arguments   
+                }
+            }
+        }
     }
 }
