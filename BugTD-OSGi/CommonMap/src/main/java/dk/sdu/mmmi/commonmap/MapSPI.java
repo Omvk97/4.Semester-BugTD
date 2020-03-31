@@ -7,6 +7,8 @@ package dk.sdu.mmmi.commonmap;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author oliver
@@ -15,8 +17,8 @@ public interface MapSPI {
     
     Tile[][] getTiles();
     Tile getClosestTile(float x, float y);
+    ArrayList<Tile> getTilesEntityIsOn(Entity e);
     Tile getTileXAndY(Tile t);
-    Tile getTileEntityIsOn(Entity e);
     boolean CheckIfTileIsOccupied(Tile t);
 
     void loadFile(String filepath);
