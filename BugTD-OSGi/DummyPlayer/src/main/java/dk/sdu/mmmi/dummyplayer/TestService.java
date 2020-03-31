@@ -5,10 +5,14 @@
  */
 package dk.sdu.mmmi.dummyplayer;
 
+import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonmap.MapSPI;
+import dk.sdu.mmmi.commonmap.Tile;
 
 /**
  *
@@ -20,7 +24,11 @@ public class TestService implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-//        System.out.println(mapSPI.getTiles()[0][0].isWalkable());
+        for (Entity e : world.getEntities(DummyPlayer.class)) {
+            PositionPart p = e.getPart(PositionPart.class);
+            SpritePart s = e.getPart(SpritePart.class);
+            System.out.format("Dummy player is colliding with %d tiles\n", mapSPI.getTilesEntityIsOn(e).size());
+        }
     }
     
     public void setMapSPI(MapSPI map) {

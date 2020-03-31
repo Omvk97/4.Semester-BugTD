@@ -49,7 +49,7 @@ public class Tile extends Entity {
     public float getX() {
         return this.positionPart.getX();
     }
-
+    
     public float getY() {
         return this.positionPart.getY();
     }

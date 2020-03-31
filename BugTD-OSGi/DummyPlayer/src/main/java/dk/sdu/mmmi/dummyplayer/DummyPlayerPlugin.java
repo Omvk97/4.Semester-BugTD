@@ -5,6 +5,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+import dk.sdu.mmmi.commonmap.MapSPI;
 
 /**
  *
@@ -16,10 +17,11 @@ public class DummyPlayerPlugin implements IGamePluginService {
        
     @Override
     public void start(GameData gameData, World world) {
+        
         try {
             dp = new DummyPlayer();
             dp.add(new SpritePart("wasp.png", 16, 16, 5));
-            dp.add(new PositionPart(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2, 0));
+            dp.add(new PositionPart(1, 1, 0));
             world.addEntity(dp);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -29,5 +31,5 @@ public class DummyPlayerPlugin implements IGamePluginService {
     @Override
     public void stop(GameData gameData, World world) {
         
-    }   
+    }
 }
