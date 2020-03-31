@@ -116,6 +116,6 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     }
 
     private boolean collidesOnAxis(float start1, float end1, float start2, float end2) {
-        return (start1 <= end2 && end1 >= start2);
+        return (start1 < end2 && end1 >= start2);
     }
 }
