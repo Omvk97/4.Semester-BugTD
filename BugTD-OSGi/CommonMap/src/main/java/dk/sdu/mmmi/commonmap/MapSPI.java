@@ -17,6 +17,7 @@ public interface MapSPI {
     Tile getClosestTile(float x, float y);
     Tile getTileXAndY(Tile t);
     Tile getTileEntityIsOn(Entity e);
+    boolean CheckIfTileIsOccupied(Tile t);
 
     void loadFile(String filepath);
 }

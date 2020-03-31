@@ -10,6 +10,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+import dk.sdu.mmmi.commonmap.MapSPI;
 
 /**
  *
@@ -21,6 +22,7 @@ public class DummyPlayerPlugin implements IGamePluginService {
        
     @Override
     public void start(GameData gameData, World world) {
+        
         try {
             dp = new DummyPlayer();
             dp.add(new SpritePart("wasp.png", 16, 16, 5));
@@ -34,5 +36,5 @@ public class DummyPlayerPlugin implements IGamePluginService {
     @Override
     public void stop(GameData gameData, World world) {
         
-    }   
+    }
 }
