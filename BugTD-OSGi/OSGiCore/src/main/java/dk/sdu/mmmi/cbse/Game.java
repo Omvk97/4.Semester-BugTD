@@ -91,9 +91,7 @@ public class Game implements ApplicationListener {
                 textureAtlas = new TextureAtlas(Gdx.files.internal(animationPart.getAtlasPath()));
                 animation = new Animation(1f / 15f, textureAtlas.getRegions());
             }
-        }
-        System.out.println(textureAtlas.getRegions().toString());
-        
+        }     
     }
 
     public void loadAssets() {
@@ -143,7 +141,7 @@ public class Game implements ApplicationListener {
         for (Entity entity : world.getEntities()) {
             AnimationPart animationPart = entity.getPart(AnimationPart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
-            System.out.println(textureAtlas.getRegions());
+           // System.out.println(textureAtlas.getRegions());
             
             if (animationPart != null && positionPart != null) {
                 entitiesToAnimate.add(entity);

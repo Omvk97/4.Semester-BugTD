@@ -48,5 +48,4 @@ public class EnemyControlSystem implements IEntityProcessingService {
             animPart.setAtlasPath("texturesprites/enemy/enemyleft.atlas");
         }
     }
-    
 }
