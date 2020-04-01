@@ -27,7 +27,7 @@ public class WeaponPart implements EntityPart {
     public float getRange() {
         return range;
     }
-    public boolean setAttackingStatus(boolean attacking) {
+    public void setAttackingStatus(boolean attacking) {
         this.isAttacking = attacking;
     }
 
