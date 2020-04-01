@@ -34,5 +34,13 @@ public class Tile extends Entity {
     public void setWalkable(boolean walkable) {
         this.walkable = walkable;
     }
+
+    public float getX() {
+        return this.positionPart.getX();
+    }
+    
+    public float getY() {
+        return this.positionPart.getY();
+    }
     
 }

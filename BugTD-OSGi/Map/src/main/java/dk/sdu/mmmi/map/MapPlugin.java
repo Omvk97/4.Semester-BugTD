@@ -15,6 +15,8 @@ import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author oliver
@@ -68,6 +70,58 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     @Override
     public Tile[][] getTiles() {
+        return tiles;
+    }
+
+    @Override
+    public Tile getClosestTile(float x, float y) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Tile> getTilesEntityIsOn(Entity entity) {
+        ArrayList<Tile> overlappingTiles = new ArrayList<>();
+
+        for (int i = 0; i < tiles.length; i ++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile tile = tiles[i][j];
+                if (collides(entity, tile)) {
+                    overlappingTiles.add(tile);
+                }
+            }
+        }
+        return overlappingTiles;
+    }
+
+    private boolean collides(Entity e1, Entity e2) {
+        PositionPart p1 = e1.getPart(PositionPart.class);
+        SpritePart s1 = e1.getPart(SpritePart.class);
+        float x = p1.getX();
+        float y = p1.getY();
+        float width = s1.getWidth();
+        float height = s1.getHeight();
+
+        PositionPart p2 = e2.getPart(PositionPart.class);
+        SpritePart s2 = e2.getPart(SpritePart.class);
+        float otherX = p2.getX();
+        float otherY = p2.getY();
+        float otherWidth = s2.getWidth();
+        float otherHeight = s2.getHeight();
+
+        if (collidesOnAxis(x, x + width, otherX, otherX + otherWidth)
+            && collidesOnAxis(y, y + height, otherY, otherY + otherHeight)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean collidesOnAxis(float start1, float end1, float start2, float end2) {
+        return (start1 <= end2 && end1 > start2);
+    }
+
+    @Override
+    public Tile getTileXAndY(Tile tile) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -85,5 +139,11 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     public Tile getTileEntityIsOn(Entity entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public boolean CheckIfTileIsOccupied(Tile t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }
