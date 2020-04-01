@@ -19,40 +19,51 @@ import java.util.stream.Collectors;
  *
  * @author oliver
  */
-public class TileRouteFinder {
-    private Graph<MapTile> tilesGraph;
-
-    private RouteFinder<MapTile> routeFinder;
+public class TileRouteFinder<T extends Tile> {
+    
     private MapSPI map;
 
-    public void test(Tile[][] mapTiles) throws Exception {
-        Set<MapTile> tiles = new HashSet<MapTile>();
-        Map<String, Set<String>> connections = getConnections();
-        for (int i = 0; i < mapTiles.length; i++) {
-            for (int j = 0; j < mapTiles[i].length; j++) {
-                Tile tile = mapTiles[i][j];
-                tiles.add(new MapTile(tile.getID(), tile.getX(), tile.getY()));
+    public TileRouteFinder(MapSPI map) {
+        this.map = map;
+    }
+    
+    private Graph<MapTile> mapTilesGraph;
+
+    private RouteFinder<MapTile> routeFinder;
+    
+    public void test(Tile[][] tiles, T startTile, T goalTile) throws Exception {
+        Set<MapTile> mapTiles = new HashSet<MapTile>();
+        
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile tile = tiles[i][j];
+                mapTiles.add(new MapTile(tile.getID(), tile.getX(), tile.getY()));
             }
         }
         
-        tilesGraph = new Graph<>(tiles, connections);
-        routeFinder = new RouteFinder<>(tilesGraph, new TilePathCostScorer(), new QueenHeuristicScorer());
+        Map<String, Set<String>> connections = getConnections(tiles);
+
+        
+        mapTilesGraph = new Graph<>(mapTiles, connections);
+        routeFinder = new RouteFinder<>(mapTilesGraph, new TilePathCostScorer(), new QueenHeuristicScorer());
         
         // TODO - Insert enemy position and queen position from tiles
-        List<MapTile> route = routeFinder.findRoute(tilesGraph.getNode("1"), tilesGraph.getNode("7"));
- 
+        List<MapTile> route = routeFinder.findRoute(mapTilesGraph.getNode(startTile.getID()), mapTilesGraph.getNode(goalTile.getID()));
         System.out.println(route.stream().map(MapTile::getPosition).collect(Collectors.toList()));
     }
 
-    private Map<String, Set<String>> getConnections(Tile tile, Tile[][] mapTiles) {
+    private Map<String, Set<String>> getConnections(Tile[][] tiles) {
+        
         HashMap<String, Set<String>> connections = new HashMap<>();
-        for (int y = 0; y < mapTiles.length; y++) {
-            for (int x = 0; x < mapTiles[y].length; x++) {
+        
+        for (int y = 0; y < tiles.length; y++) {
+            for (int x = 0; x < tiles[y].length; x++) {
+                Tile tile = tiles[y][x];
                 HashSet neighbors = new HashSet<String>();
                 for (Direction direction : Direction.values()) {
                     try {
                         Tile neighbor = map.getTileInDirection(tile, direction);
-                        neighbors.add(neighbor);
+                        neighbors.add(neighbor.getID());
                     } catch (ArrayIndexOutOfBoundsException e) {
                         // Don't add
                     }
@@ -61,9 +72,5 @@ public class TileRouteFinder {
             }
         }
         return connections;
-    }
-
-    public void setMap(MapSPI map) {
-        this.map = map;
     }
 }

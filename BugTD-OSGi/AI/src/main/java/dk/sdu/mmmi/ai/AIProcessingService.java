@@ -34,15 +34,16 @@ public class AIProcessingService implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         if (counter == 0) {
-            TileRouteFinder test = new TileRouteFinder();
+            TileRouteFinder test = new TileRouteFinder(mapSPI);
             
             try {
-                test.test(mapSPI.getTiles());
+                test.test(mapSPI.getTiles(), mapSPI.getTiles()[0][0], mapSPI.getTiles()[5][5]);
             } catch (Exception ex) {
                 Logger.getLogger(AIProcessingService.class.getName()).log(Level.SEVERE, null, ex);
             }
             counter++;
         }
+        
         Set<Enemy> enemiesToCalculate = new HashSet<Enemy>(); // Set to avoid duplicates if enemy is both spwaning and tower is placed at the same time
         // Enemy Spawned event listener
         for (Event event : gameData.getEvents(EnemySpawnedEvent.class)) {

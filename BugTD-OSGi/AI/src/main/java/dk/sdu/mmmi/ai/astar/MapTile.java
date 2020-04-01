@@ -5,6 +5,9 @@
  */
 package dk.sdu.mmmi.ai.astar;
 
+import dk.sdu.mmmi.ai.astar.undergroundexample.Station;
+import java.util.StringJoiner;
+
 /**
  *
  * @author oliver
@@ -43,5 +46,11 @@ public class MapTile implements GraphNode{
     
     public String getPosition() {
         return "(" + x + ";" + y + ")";
+    }
+    
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", MapTile.class.getSimpleName() + "[", "]").add("id='" + id + "'")
+            .add("x='" + x + "'").add("y=" + y).toString();
     }
 }
