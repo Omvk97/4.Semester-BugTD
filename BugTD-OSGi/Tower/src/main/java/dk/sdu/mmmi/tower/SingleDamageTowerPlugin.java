@@ -23,7 +23,7 @@ public class SingleDamageTowerPlugin implements IGamePluginService {
         int hp = 100;
         LifePart life = new LifePart(hp);
 
-        CollisionPart colli = new CollisionPart();
+        CollisionPart colli = new CollisionPart(32, 32);
 
         float damage = 10;
         float range = 50;
