@@ -8,6 +8,7 @@ package dk.sdu.mmmi.map;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
@@ -48,7 +49,9 @@ public class MapPlugin implements IGamePluginService, MapSPI {
                 SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
                 
                 PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
+                CollisionPart collisionPart = new CollisionPart(TILE_SIZE, TILE_SIZE);
                 Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
+                tile.add(collisionPart);
                 tiles[i][j] = tile;
                 world.addEntity(tile);
             }
@@ -84,7 +87,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         for (int i = 0; i < tiles.length; i ++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 Tile tile = tiles[i][j];
-                if (collides(entity, tile)) {
+                if (CollisionPart.collides(entity, tile)) {
                     overlappingTiles.add(tile);
                 }
             }
@@ -92,32 +95,6 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         return overlappingTiles;
     }
 
-    private boolean collides(Entity e1, Entity e2) {
-        PositionPart p1 = e1.getPart(PositionPart.class);
-        SpritePart s1 = e1.getPart(SpritePart.class);
-        float x = p1.getX();
-        float y = p1.getY();
-        float width = s1.getWidth();
-        float height = s1.getHeight();
-
-        PositionPart p2 = e2.getPart(PositionPart.class);
-        SpritePart s2 = e2.getPart(SpritePart.class);
-        float otherX = p2.getX();
-        float otherY = p2.getY();
-        float otherWidth = s2.getWidth();
-        float otherHeight = s2.getHeight();
-
-        if (collidesOnAxis(x, x + width, otherX, otherX + otherWidth)
-            && collidesOnAxis(y, y + height, otherY, otherY + otherHeight)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean collidesOnAxis(float start1, float end1, float start2, float end2) {
-        return (start1 <= end2 && end1 > start2);
-    }
 
     @Override
     public Tile getTileXAndY(Tile tile) {
