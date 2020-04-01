@@ -20,6 +20,7 @@ public interface MapSPI {
     ArrayList<Tile> getTilesEntityIsOn(Entity e);
     Tile getTileXAndY(Tile t);
     boolean CheckIfTileIsOccupied(Tile t);
+    Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException;
 
     void loadFile(String filepath);
 }

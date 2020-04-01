@@ -11,9 +11,11 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
+import dk.sdu.mmmi.commonmap.Direction;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 
+import javax.swing.text.Position;
 import java.util.ArrayList;
 
 /**
@@ -129,5 +131,24 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    @Override
+    public Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException {
+        final int TILE_SIZE = 16; // TODO: Fix hardcoded
+        PositionPart positionpart = tile.getPart(PositionPart.class);
+        int x = (int) positionpart.getX() / TILE_SIZE;
+        int y = (int) positionpart.getY() / TILE_SIZE;
+        if (direction == Direction.UP) {
+            return tiles[y-1][x];
+        }
+        if (direction == Direction.RIGHT) {
+            return tiles[y][x+1];
+        }
+        if (direction == Direction.DOWN) {
+            return tiles[y+1][x];
+        }
+        if (direction == Direction.LEFT) {
+            return tiles[y][x-1];
+        }
+        throw new ArrayIndexOutOfBoundsException("Yolo");
+    }
 }
