@@ -5,6 +5,7 @@
  */
 package dk.sdu.mmmi.ai;
 
+import dk.sdu.mmmi.ai.astar.undergroundexample.RouteFinderIntegrationTest;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
@@ -17,7 +18,7 @@ public class AIPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world) {
-        
+        System.out.println("WHAAT");
     }
 
     @Override
