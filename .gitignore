@@ -45,3 +45,5 @@ hs_err_pid*
 
 /BugTD-OSGi/.idea
 *.iml
+/BugTD-OSGi/CommonAI/target/
+/BugTD-OSGi/AI/target/
