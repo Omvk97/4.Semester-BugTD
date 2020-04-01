@@ -134,31 +134,6 @@ public class Game implements ApplicationListener {
     }
 
     private void draw() {
-        loadAnimations();
-        ArrayList<Entity> entitiesToAnimate = new ArrayList<>();
-
-        // Populate list
-        for (Entity entity : world.getEntities()) {
-            AnimationPart animationPart = entity.getPart(AnimationPart.class);
-            PositionPart positionPart = entity.getPart(PositionPart.class);
-           // System.out.println(textureAtlas.getRegions());
-            
-            if (animationPart != null && positionPart != null) {
-                entitiesToAnimate.add(entity);
-            }
-        }
-
-        // Draw
-        for (Entity entity : entitiesToAnimate) {
-            AnimationPart animationPart = entity.getPart(AnimationPart.class);
-            PositionPart positionPart = entity.getPart(PositionPart.class);
-            
-            drawAnimation(animationPart, positionPart);
-        }
-
-        
-        
-
         ArrayList<Entity> entitiesToDraw = new ArrayList<>();
 
         // Populate list
@@ -189,6 +164,33 @@ public class Game implements ApplicationListener {
             drawSprite(spritePart, positionPart);
             
         }
+        
+        
+        loadAnimations();
+        ArrayList<Entity> entitiesToAnimate = new ArrayList<>();
+       
+
+        // Populate list
+        for (Entity entity : world.getEntities()) {
+            AnimationPart animationPart = entity.getPart(AnimationPart.class);
+            PositionPart positionPart = entity.getPart(PositionPart.class);
+           // System.out.println(textureAtlas.getRegions());
+            
+            if (animationPart != null && positionPart != null) {
+                entitiesToAnimate.add(entity);
+            }
+        }
+        
+         
+
+        // Draw
+        for (Entity entity : entitiesToAnimate) {
+            AnimationPart animationPart = entity.getPart(AnimationPart.class);
+            PositionPart positionPart = entity.getPart(PositionPart.class);
+            
+            drawAnimation(animationPart, positionPart);
+        }
+        
     }
 
     private void drawAnimation(AnimationPart anima, PositionPart pos) {
@@ -226,7 +228,8 @@ public class Game implements ApplicationListener {
     public void dispose() {
         batch.dispose();
         textureAtlas.dispose();
-        batch2.dispose();
+        
+         batch2.dispose();
     }
 
     public void addEntityProcessingService(IEntityProcessingService eps) {

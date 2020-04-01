@@ -10,7 +10,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commonenemy.Enemy;
-import java.util.ArrayList;
 
 public class GroundEnemy implements IGamePluginService {
 
@@ -33,7 +32,7 @@ public class GroundEnemy implements IGamePluginService {
         int life = 100;
 
         //Parts
-        AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32);
+        AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32, 0);
         gEnemy.add(anm);
 
         //SpritePart sprite = new SpritePart("enemy/enemyup/up_01.png", 32, 32);
@@ -50,6 +49,8 @@ public class GroundEnemy implements IGamePluginService {
 
     }
 
+    
+    
     @Override
     public void stop(GameData gameData, World world) {
         for (Entity enemy : world.getEntities(Enemy.class)) {

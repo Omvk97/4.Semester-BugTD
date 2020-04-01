@@ -46,12 +46,12 @@ public class MapPlugin implements IGamePluginService, MapSPI {
                     walkable = false;
                 }
                 
-                //SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
+                SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
                 
-                //PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
-                //Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
-                //tiles[i][j] = tile;
-                //world.addEntity(tile);
+                PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
+                Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
+                tiles[i][j] = tile;
+                world.addEntity(tile);
             }
         }
     }
@@ -95,14 +95,14 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     private boolean collides(Entity e1, Entity e2) {
         PositionPart p1 = e1.getPart(PositionPart.class);
-        SpritePart s1 = e1.getPart(SpritePart.class);
+        AnimationPart s1 = e1.getPart(AnimationPart.class);
         float x = p1.getX();
         float y = p1.getY();
         float width = s1.getWidth();
         float height = s1.getHeight();
 
         PositionPart p2 = e2.getPart(PositionPart.class);
-        SpritePart s2 = e2.getPart(SpritePart.class);
+        AnimationPart s2 = e2.getPart(AnimationPart.class);
         float otherX = p2.getX();
         float otherY = p2.getY();
         float otherWidth = s2.getWidth();
@@ -125,20 +125,6 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Tile getClosestTile(float f, float f1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Tile getTileXAndY(Tile tile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Tile getTileEntityIsOn(Entity entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     @Override
     public boolean CheckIfTileIsOccupied(Tile t) {
