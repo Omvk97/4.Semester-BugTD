@@ -60,6 +60,8 @@
         <module>Enemy</module>
         <module>CommonMap</module>
         <module>Map</module>
+    <module>AI</module>
+    <module>CommonAI</module>
   </modules>
 
     <build>

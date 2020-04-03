@@ -16,6 +16,8 @@ public interface MapSPI {
     Tile getTileXAndY(Tile t);
 
     boolean checkIfTileIsOccupied(Tile t, List<Entity> ignoreThese);
+    
+    Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException;
 
     void loadFile(String filepath);
 }
