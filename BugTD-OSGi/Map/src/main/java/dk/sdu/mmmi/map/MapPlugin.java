@@ -95,7 +95,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         for (int i = tileNumberFromLeft; i < tileNumberFromLeft + entityWidthInTiles; i++) {
             for (int j = tileNumberFromBottom; j < tileNumberFromBottom + entityHeightInTiles; j++) {
                 try {
-                    overlappingTiles.add(tiles[i][j]);
+                    overlappingTiles.add(tiles[j][i]);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // Do nothing
                 }
