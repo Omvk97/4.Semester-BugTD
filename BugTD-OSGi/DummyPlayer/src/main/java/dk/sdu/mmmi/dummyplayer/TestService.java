@@ -29,11 +29,13 @@ public class TestService implements IEntityProcessingService {
             
           //  SpritePart s = e.getPart(SpritePart.class);
             // System.out.format("Dummy player is colliding with %d tiles\n", mapSPI.getTilesEntityIsOn(e).size());
+            SpritePart s = e.getPart(SpritePart.class);
+//            System.out.format("Dummy player is colliding with %d tiles\n", mapSPI.getTilesEntityIsOn(e).size());
         }
     }
     
     public void setMapSPI(MapSPI map) {
-        System.out.println("Am i called?");
+//        System.out.println("Am i called?");
         this.mapSPI = map;
     }
     

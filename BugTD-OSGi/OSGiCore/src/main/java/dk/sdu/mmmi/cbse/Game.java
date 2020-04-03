@@ -206,6 +206,7 @@ public class Game implements ApplicationListener {
         sprite.rotate((float) Math.toDegrees(positionPart.getRadians()));
         sprite.setX(positionPart.getX());
         sprite.setY(positionPart.getY());
+        sprite.setAlpha(spritePart.getAlpha());
         sprite.setSize(spritePart.getWidth(), spritePart.getHeight());
         sprite.draw(batch2);
         batch2.end();

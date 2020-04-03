@@ -8,19 +8,24 @@ public class SpritePart implements EntityPart {
     private float width;
     private float height;
     private int layer;
+    private int alpha; // I think this ranges from 1 to 255 (from less to more transparent) (NOT ZERO!)
 
     public SpritePart(String spritePath, float width, float height){
         this.spritePath = spritePath;
         this.width = width;
         this.height = height;
         this.layer = 0;
+        this.alpha = 1;
     }
     
     public SpritePart(String spritePath, float width, float height, int layer){
-        this.spritePath = spritePath;
-        this.width = width;
-        this.height = height;
+        this(spritePath, width, height);
         this.layer = layer;
+    }
+    
+    public SpritePart(String spritePath, float width, float height, int layer, int alpha){
+        this(spritePath, width, height, layer);
+        this.alpha = alpha;
     }
 
     public String getSpritePath() {
@@ -38,7 +43,11 @@ public class SpritePart implements EntityPart {
     public int getLayer() {
         return layer;
     }
-   
+
+    public int getAlpha() {
+        return alpha;
+    }
+    
     @Override
     public void process(GameData gameData, Entity entity) {
     }
