@@ -11,7 +11,7 @@ public class MovingPart implements EntityPart {
     private float dx, dy;
     private float deceleration, acceleration;
     private float maxSpeed, rotationSpeed;
-    private boolean left, right, up;
+    private boolean left, right, up, down;
 
     public MovingPart(float deceleration, float acceleration, float maxSpeed, float rotationSpeed) {
         this.deceleration = deceleration;
@@ -61,6 +61,10 @@ public class MovingPart implements EntityPart {
         this.up = up;
     }
 
+    public void setDown(boolean down) {
+        this.down = down;
+    }
+
     @Override
     public void process(GameData gameData, Entity entity) {
         PositionPart positionPart = entity.getPart(PositionPart.class);
@@ -71,17 +75,19 @@ public class MovingPart implements EntityPart {
 
         // turning
         if (left) {
-            radians += rotationSpeed * dt;
+            dx -= 5;
         }
 
         if (right) {
-            radians -= rotationSpeed * dt;
+            dx += 5;
+        }
+        if (down) {
+            dy -= 5;
         }
 
         // accelerating            
         if (up) {
-            dx += cos(radians) * acceleration * dt;
-            dy += sin(radians) * acceleration * dt;
+            dy += 5;
         }
 
         // deccelerating

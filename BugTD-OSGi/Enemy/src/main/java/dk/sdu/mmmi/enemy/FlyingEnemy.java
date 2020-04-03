@@ -3,6 +3,7 @@ package dk.sdu.mmmi.enemy;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
@@ -24,19 +25,21 @@ public class FlyingEnemy implements IGamePluginService {
         float damage = 10;
         float range = 50;
         float speed = 10;
-        float deacceleration = 10;
+        float deacceleration = 100;
         float acceleration = 200;
         float maxSpeed = 300;
         float rotationSpeed = 5;
         float x = gameData.getDisplayWidth() / 3;
         float y = gameData.getDisplayHeight() / 2;
-        float radians = 0;
-        int life = 100;
+        float radians = 3.1415f / 2;
+        int life = 5;
         
-
+//Parts
+        AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32);
+        fEnemy.add(anm);
         //Parts
-        SpritePart sprite = new SpritePart("anty-boi-in-red.png", 32, 32);
-        fEnemy.add(sprite);
+        //SpritePart sprite = new SpritePart("enemy/enemyright/right_01.png", 32, 32);
+        //fEnemy.add(sprite);
         WeaponPart wpn = new WeaponPart(damage, range, speed);
         fEnemy.add(wpn);
         MovingPart mov = new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed);

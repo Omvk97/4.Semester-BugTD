@@ -26,8 +26,9 @@ public class TestService implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity e : world.getEntities(DummyPlayer.class)) {
             PositionPart p = e.getPart(PositionPart.class);
-            SpritePart s = e.getPart(SpritePart.class);
-            System.out.format("Dummy player is colliding with %d tiles\n", mapSPI.getTilesEntityIsOn(e).size());
+            
+          //  SpritePart s = e.getPart(SpritePart.class);
+            // System.out.format("Dummy player is colliding with %d tiles\n", mapSPI.getTilesEntityIsOn(e).size());
         }
     }
     
