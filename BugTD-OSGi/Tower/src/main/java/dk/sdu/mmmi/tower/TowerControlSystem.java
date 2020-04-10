@@ -64,11 +64,11 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     private boolean isLegalPlacement(Entity e) {
         List<Tile> tiles = map.getTilesEntityIsOn(e);
-        
+
         if (tiles.size() < 4) {
             return false;
         }
-        
+
         for (Tile tile : tiles) {
             if (map.checkIfTileIsOccupied(tile, Arrays.asList(preview)) || !tile.isWalkable()) {
                 return false;
@@ -100,6 +100,16 @@ public class TowerControlSystem implements IEntityProcessingService {
         float dx = (float) towerPosPart.getX() - (float) enemyPosPart.getX();
         float dy = (float) towerPosPart.getY() - (float) enemyPosPart.getY();
         return (float) Math.sqrt(dx * dx + dy * dy);
+    }
+
+    private float rotation(PositionPart towerPosPart, PositionPart enemyPosPart) {
+        float dx = (float) towerPosPart.getX() - (float) enemyPosPart.getX();
+        float dy = (float) towerPosPart.getY() - (float) enemyPosPart.getY();
+        if (dx < 0) {
+            return (float) -(Math.PI - (Math.atan(dy / dx) + Math.PI / 2));
+        } else {
+            return (float) (Math.atan(dy / dx) + Math.PI / 2);
+        }
     }
 
     private Tower createNewTower(int xpos, int ypos) {
@@ -166,9 +176,13 @@ public class TowerControlSystem implements IEntityProcessingService {
             if (target != null) {
                 WeaponPart weapon = tower.getPart(WeaponPart.class);
                 weapon.setTarget(target);
-                if (distance(towerPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
+                float distance = distance(towerPosPart, target.getPart(PositionPart.class));
+                if (distance < weapon.getRange()) {
                     weapon.process(gameData, target);   // Dont really know what to use as arguments   
                 }
+
+                // Calculate tower rotation
+                towerPosPart.setRadians(rotation(towerPosPart, target.getPart(PositionPart.class)));
             }
         }
     }
