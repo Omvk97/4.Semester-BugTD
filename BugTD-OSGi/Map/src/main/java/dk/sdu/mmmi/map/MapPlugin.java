@@ -4,7 +4,6 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
@@ -13,7 +12,6 @@ import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
 
-import javax.swing.text.Position;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,7 +124,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         }
         return false;
     }
-    
+
     @Override
     public Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException {
         final int TILE_SIZE = 16; // TODO: Fix hardcoded
@@ -134,18 +132,36 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         int x = (int) positionpart.getX() / TILE_SIZE;
         int y = (int) positionpart.getY() / TILE_SIZE;
         if (direction == Direction.UP) {
-            return tiles[y-1][x];
+            return tiles[y - 1][x];
         }
         if (direction == Direction.RIGHT) {
-            return tiles[y][x+1];
+            return tiles[y][x + 1];
         }
         if (direction == Direction.DOWN) {
-            return tiles[y+1][x];
+            return tiles[y + 1][x];
         }
         if (direction == Direction.LEFT) {
-            return tiles[y][x-1];
+            return tiles[y][x - 1];
         }
         throw new ArrayIndexOutOfBoundsException("Yolo");
     }
-}
 
+    @Override
+    public void fitEntityToMap(Entity e) {
+        PositionPart pos = e.getPart(PositionPart.class);
+        pos.setX(roundDown(pos.getX(), TileSizes.GRASS_WIDTH));
+        pos.setY(roundDown(pos.getY(), TileSizes.GRASS_HEIGHT));
+    }
+
+    private int roundDown(double number, double place) {
+        double result = number / place;
+        result = Math.floor(result);
+        result *= place;
+        return (int) result;
+    }
+
+    @Override
+    public Tile getQueenPlacement() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+}
