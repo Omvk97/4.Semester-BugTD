@@ -15,6 +15,7 @@ import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
+import dk.sdu.mmmi.commontower.Queen;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
 import java.util.ArrayList;
@@ -149,7 +150,10 @@ public class TowerControlSystem implements IEntityProcessingService {
     }
 
     private void attackEnemies(GameData gameData, World world) {
-        for (Entity tower : world.getEntities(Tower.class)) {
+        List<Entity> towers = world.getEntities(Tower.class);
+        towers.addAll(world.getEntities(Queen.class));
+        
+        for (Entity tower : towers) {
             PositionPart towerPosPart = tower.getPart(PositionPart.class);
             Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
             if (target != null) {

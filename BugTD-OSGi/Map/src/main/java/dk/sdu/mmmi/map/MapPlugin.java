@@ -11,6 +11,7 @@ import dk.sdu.mmmi.commonmap.Direction;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
+import dk.sdu.mmmi.commontower.Queen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,10 +159,5 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         result = Math.floor(result);
         result *= place;
         return (int) result;
-    }
-
-    @Override
-    public Tile getQueenPlacement() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
