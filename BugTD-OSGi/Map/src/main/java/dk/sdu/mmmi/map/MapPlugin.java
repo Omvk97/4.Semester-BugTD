@@ -15,7 +15,6 @@ import dk.sdu.mmmi.commonmap.Direction;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 
-import javax.swing.text.Position;
 import java.util.ArrayList;
 
 /**
@@ -23,32 +22,31 @@ import java.util.ArrayList;
  * @author oliver
  */
 public class MapPlugin implements IGamePluginService, MapSPI {
-    
+
     private Tile[][] tiles;
-    
+
     @Override
     public void start(GameData gameData, World world) {
         // 52 rows length, 52 wide. Grass tiles are bigger in size and should therefore not take up as much space.
         tiles = new Tile[52][52];
-        
+
         // The first three tiles and the last three tiles will be tiles with grass (environment)
         int rowsWithGrassInSides = 3;
-        
-        // TODO - Make it so environment can have different sizes than path. The problem is that when environment is bigger, there should not be places as many environment tiles as path tiles
-        // which means the length becomes very long.
+
         final int TILE_SIZE = 16;
+        // TODO - Walkable fix
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[0].length; j++) {
-                
+
                 boolean walkable = true;
-                
+
                 // Determine if tile is environment or path tile
                 if (j <= rowsWithGrassInSides - 1 || j >= tiles[0].length - rowsWithGrassInSides) {
                     walkable = false;
                 }
-                
+
                 SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
-                
+
                 PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
                 Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
                 tiles[i][j] = tile;
@@ -83,7 +81,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     public ArrayList<Tile> getTilesEntityIsOn(Entity entity) {
         ArrayList<Tile> overlappingTiles = new ArrayList<>();
 
-        for (int i = 0; i < tiles.length; i ++) {
+        for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
                 Tile tile = tiles[i][j];
                 if (collides(entity, tile)) {
@@ -110,7 +108,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         float otherHeight = s2.getHeight();
 
         if (collidesOnAxis(x, x + width, otherX, otherX + otherWidth)
-            && collidesOnAxis(y, y + height, otherY, otherY + otherHeight)) {
+                && collidesOnAxis(y, y + height, otherY, otherY + otherHeight)) {
             return true;
         }
 
@@ -125,7 +123,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     public Tile getTileXAndY(Tile tile) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public boolean CheckIfTileIsOccupied(Tile t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -138,16 +136,16 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         int x = (int) positionpart.getX() / TILE_SIZE;
         int y = (int) positionpart.getY() / TILE_SIZE;
         if (direction == Direction.UP) {
-            return tiles[y-1][x];
+            return tiles[y - 1][x];
         }
         if (direction == Direction.RIGHT) {
-            return tiles[y][x+1];
+            return tiles[y][x + 1];
         }
         if (direction == Direction.DOWN) {
-            return tiles[y+1][x];
+            return tiles[y + 1][x];
         }
         if (direction == Direction.LEFT) {
-            return tiles[y][x-1];
+            return tiles[y][x - 1];
         }
         throw new ArrayIndexOutOfBoundsException("Yolo");
     }

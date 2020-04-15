@@ -62,6 +62,7 @@ public class TileRouteFinder<T extends Tile> {
                 HashSet neighbors = new HashSet<String>();
                 for (Direction direction : Direction.values()) {
                     try {
+                        // TODO - Check if neighbors is a tower
                         Tile neighbor = map.getTileInDirection(tile, direction);
                         neighbors.add(neighbor.getID());
                     } catch (ArrayIndexOutOfBoundsException e) {
