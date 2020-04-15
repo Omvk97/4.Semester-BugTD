@@ -9,6 +9,7 @@ public class WeaponPart implements EntityPart {
     private float damage;
     private float range;
     private float speed;
+    private boolean isAttacking = false;
     // TODO: private Damagetype dt
 
     float cooldown = 0;
@@ -26,7 +27,13 @@ public class WeaponPart implements EntityPart {
     public float getRange() {
         return range;
     }
+    public void setAttackingStatus(boolean attacking) {
+        this.isAttacking = attacking;
+    }
 
+    public boolean getAttackingStatus() {
+        return this.isAttacking;
+    }
     @Override
     public void process(GameData gameData, Entity entity) {
         // Check whether the Weapon is ready to shoot or not

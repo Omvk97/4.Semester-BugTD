@@ -1,25 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dk.sdu.mmmi.commonmap;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- * @author oliver
- */
 public interface MapSPI {
-    
+
     Tile[][] getTiles();
+
     Tile getClosestTile(float x, float y);
+
     ArrayList<Tile> getTilesEntityIsOn(Entity e);
+
     Tile getTileXAndY(Tile t);
-    boolean CheckIfTileIsOccupied(Tile t);
+
+    boolean checkIfTileIsOccupied(Tile t, List<Entity> ignoreThese);
+    
     Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException;
 
     void loadFile(String filepath);
