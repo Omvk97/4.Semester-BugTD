@@ -5,22 +5,20 @@
  */
 package dk.sdu.mmmi.ai.astar;
 
-import dk.sdu.mmmi.ai.astar.undergroundexample.Station;
+import dk.sdu.mmmi.commonmap.Tile;
 import java.util.StringJoiner;
 
 /**
  *
  * @author oliver
  */
-public class MapTile implements GraphNode{
+public class MapTile implements GraphNode {
     private String id;
-    private float x;
-    private float y;
+    private Tile tile;
 
-    public MapTile(String id, float x, float y) {
+    public MapTile(String id, Tile tile) {
         this.id = id;
-        this.x = x;
-        this.y = y;
+        this.tile = tile;
     }
     
     @Override
@@ -29,28 +27,24 @@ public class MapTile implements GraphNode{
     }
 
     public float getX() {
-        return x;
-    }
-
-    public void setX(float x) {
-        this.x = x;
+        return tile.getX();
     }
 
     public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
+        return tile.getY();
     }
     
     public String getPosition() {
-        return "(" + x + ";" + y + ")";
+        return "(" + getX() + ";" + getY() + ")";
+    }
+
+    public Tile getTile() {
+        return tile;
     }
     
     @Override
     public String toString() {
         return new StringJoiner(", ", MapTile.class.getSimpleName() + "[", "]").add("id='" + id + "'")
-            .add("x='" + x + "'").add("y=" + y).toString();
+            .add("x='" + getX() + "'").add("y=" + getY()).toString();
     }
 }

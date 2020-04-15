@@ -4,7 +4,6 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
@@ -126,6 +125,28 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         }
         return false;
     }
+    
+    @Override
+    public <E extends Entity> boolean checkIfTileIsOccupied(Tile t, Class<E>... ignoreTheseClasses) {
+        for (Entity entity : world.getEntities()) {
+            boolean entityShouldBeIgnored = false;
+            for (Class<E> entityType : ignoreTheseClasses) {
+                if (entityType.equals(entity.getClass())) {
+                    entityShouldBeIgnored = true;
+                }
+            }
+            
+            if (entity instanceof Tile || entityShouldBeIgnored) {
+                continue;
+            }
+
+            if (getTilesEntityIsOn(entity).contains(t)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     
     @Override
     public Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException {

@@ -1,3 +1,5 @@
+package dk.sdu.mmmi.commonai;
+
 
 import dk.sdu.mmmi.commonmap.Tile;
 

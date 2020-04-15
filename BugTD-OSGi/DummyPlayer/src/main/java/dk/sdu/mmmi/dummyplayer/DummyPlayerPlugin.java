@@ -25,7 +25,7 @@ public class DummyPlayerPlugin implements IGamePluginService {
             dp.add(new PositionPart(1, 1, 0));
             dp.add(new CollisionPart(16, 16));
             dp.add(new LifePart(100));
-            world.addEntity(dp);
+            // world.addEntity(dp);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

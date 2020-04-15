@@ -15,8 +15,7 @@ import dk.sdu.mmmi.commontower.Tower;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
-   
-    @Override
+   @Override
     public void process(GameData gameData, World world) {
         for(Entity enemy : world.getEntities(Enemy.class)){
             PositionPart p = enemy.getPart(PositionPart.class);
