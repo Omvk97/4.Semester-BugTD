@@ -19,6 +19,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
+import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
@@ -59,7 +60,7 @@ public class Game implements ApplicationListener {
         cfg.resizable = false;
         gameData.setDisplayWidth(cfg.width);
         gameData.setDisplayHeight(cfg.height);
-        
+
         new LwjglApplication(this, cfg);
     }
 
@@ -91,11 +92,11 @@ public class Game implements ApplicationListener {
                 textureAtlas = new TextureAtlas(Gdx.files.internal(animationPart.getAtlasPath()));
                 animation = new Animation(1f / 15f, textureAtlas.getRegions());
             }
-        }     
+        }
     }
 
     public void loadAssets() {
-        
+
         for (Entity entity : world.getEntities()) {
             SpritePart spritePart = entity.getPart(SpritePart.class);
             if (spritePart != null) {
@@ -103,7 +104,7 @@ public class Game implements ApplicationListener {
                 Game.assetManager.update();
             }
         }
-         Game.assetManager.finishLoading();
+        Game.assetManager.finishLoading();
 
     }
 
@@ -116,7 +117,7 @@ public class Game implements ApplicationListener {
 
         gameData.setDelta(Gdx.graphics.getDeltaTime());
         gameData.getKeys().update();
-        
+
         update();
         draw();
     }
@@ -130,6 +131,11 @@ public class Game implements ApplicationListener {
         // Post Update
         for (IPostEntityProcessingService postEntityProcessorService : postEntityProcessorList) {
             postEntityProcessorService.process(gameData, world);
+        }
+
+        // Is this the right place to put the game over check?
+        if (!gameData.getEvents(GameOverEvent.class).isEmpty()) {
+            // TODO: Show some UI that informs the user that the game is over
         }
     }
 
@@ -160,37 +166,33 @@ public class Game implements ApplicationListener {
         for (Entity entity : entitiesToDraw) {
             SpritePart spritePart = entity.getPart(SpritePart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
-            
+
             drawSprite(spritePart, positionPart);
-            
+
         }
-        
-        
+
         loadAnimations();
         ArrayList<Entity> entitiesToAnimate = new ArrayList<>();
-       
 
         // Populate list
         for (Entity entity : world.getEntities()) {
             AnimationPart animationPart = entity.getPart(AnimationPart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
-           // System.out.println(textureAtlas.getRegions());
-            
+            // System.out.println(textureAtlas.getRegions());
+
             if (animationPart != null && positionPart != null) {
                 entitiesToAnimate.add(entity);
             }
         }
-        
-         
 
         // Draw
         for (Entity entity : entitiesToAnimate) {
             AnimationPart animationPart = entity.getPart(AnimationPart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
-            
+
             drawAnimation(animationPart, positionPart);
         }
-        
+
     }
 
     private void drawAnimation(AnimationPart anima, PositionPart pos) {
@@ -210,7 +212,7 @@ public class Game implements ApplicationListener {
         sprite.setSize(spritePart.getWidth(), spritePart.getHeight());
         sprite.draw(batch2);
         batch2.end();
-        
+
     }
 
     @Override
@@ -229,8 +231,8 @@ public class Game implements ApplicationListener {
     public void dispose() {
         batch.dispose();
         textureAtlas.dispose();
-        
-         batch2.dispose();
+
+        batch2.dispose();
     }
 
     public void addEntityProcessingService(IEntityProcessingService eps) {

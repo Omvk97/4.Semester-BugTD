@@ -11,7 +11,6 @@ import dk.sdu.mmmi.commonmap.Direction;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
-import dk.sdu.mmmi.commontower.Queen;
 
 import java.util.ArrayList;
 import java.util.List;
