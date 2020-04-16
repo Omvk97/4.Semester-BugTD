@@ -33,7 +33,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             
             moveEnemy(enemy, p, movingPart, animationPart);
            
-            System.out.println("Enemy X = " + p.getX() + " Y = " + p.getY());
+           // System.out.println("Enemy X = " + p.getX() + " Y = " + p.getY());
             setAnimation(enemy, gameData, animationPart);
             
             movingPart.process(gameData,enemy);

@@ -8,6 +8,7 @@ import org.osgi.framework.BundleContext;
 public class Activator implements BundleActivator {
 
     public void start(BundleContext context) throws Exception {
+        System.out.println("EnemySpawner loadet");
         EnemySpawner enemySpawner = new EnemySpawner();
         context.registerService(IEntityProcessingService.class, enemySpawner, null);
     }
