@@ -22,9 +22,9 @@ public class GroundEnemy implements IGamePluginService {
         float damage = 10;
         float range = 50;
         float speed = 10;
-        float deacceleration = 100;
-        float acceleration = 200;
-        float maxSpeed = 300;
+        float deacceleration = 280;
+        float acceleration = 210;
+        float maxSpeed = 150;
         float rotationSpeed = 5;
         float x = gameData.getDisplayWidth() / 2;
         float y = 700;
