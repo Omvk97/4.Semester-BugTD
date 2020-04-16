@@ -14,16 +14,20 @@ import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
 
 import javax.swing.text.Position;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class MapPlugin implements IGamePluginService, MapSPI {
 
     private Tile[][] tiles;
     private World world;
+    private MapData mapData;
 
     @Override
     public void start(GameData gameData, World world) {
+        readFile();
         this.world = world;
 
         // 52 rows length, 52 wide. Grass tiles are bigger in size and should therefore not take up as much space.
@@ -97,7 +101,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         for (int i = tileNumberFromLeft; i < tileNumberFromLeft + entityWidthInTiles; i++) {
             for (int j = tileNumberFromBottom; j < tileNumberFromBottom + entityHeightInTiles; j++) {
                 try {
-                    overlappingTiles.add(tiles[j][i]);
+                    overlappingTiles.add(mapData.getTiles().get(j).get(i));
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // Do nothing
                 }
@@ -126,7 +130,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         }
         return false;
     }
-    
+
     @Override
     public Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException {
         final int TILE_SIZE = 16; // TODO: Fix hardcoded
@@ -147,5 +151,16 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         }
         throw new ArrayIndexOutOfBoundsException("Yolo");
     }
+
+    private void readFile() {
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        try (Scanner sc = new Scanner(new InputStreamReader(classLoader.getResource("/levels/level01.buggydata").openStream()))) {
+            mapData = new MapData(sc);
+        } catch (Exception ex) {
+            System.out.println("Exception caught while reading file");
+            System.out.println(ex);
+        }
+    }
+
 }
 
