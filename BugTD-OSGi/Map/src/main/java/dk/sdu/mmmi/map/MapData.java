@@ -6,18 +6,19 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.commonmap.Tile;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MapData {
-    private ArrayList<ArrayList<Tile>> tiles = new ArrayList<>();
-    private final int TILE_SIZE = 16;
+    private Tile[][] tiles;
+    public static final int TILE_SIZE = 16;
 
     public MapData(Scanner sc) {
         initFromScanner(sc);
     }
 
-    public ArrayList<ArrayList<Tile>> getTiles() {
+    public Tile[][] getTiles() {
         return tiles;
     }
 
@@ -52,8 +53,8 @@ public class MapData {
     }
 
     public void addTilesToWorld(World world) {
-        for (int i = 0; i < tiles.size(); i++) {
-            ArrayList<Tile> row =tiles.get(i);
+        for (int i = 0; i < tiles.length; i++) {
+            Tile[] row = tiles[i];
             for (Tile tile : row) {
                 world.addEntity(tile);
             }
@@ -64,15 +65,21 @@ public class MapData {
         try (Scanner sc = new Scanner(dataChunk)) {
             switch (currentType) {
                 case Map:
-                    int i = 0;
+                    ArrayList<String> lines = new ArrayList<>();
                     while (sc.hasNextLine()) {
                         String nextLine = sc.nextLine();
                         if (nextLine.length() < 1) continue;
-                        String[] chars = nextLine.split("");
-                        ArrayList<Tile> row = new ArrayList<>();
-                        for (int j = 0; j < chars.length; j++) {
-                            int current = Integer.parseInt(chars[i]);
+                        lines.add(nextLine);
+                    }
+                    tiles = new Tile[lines.size()][];
+                    int y = 0;
+                    for (String nextLine : lines) {
+                        char[] chars = nextLine.toCharArray();
 
+                        Tile[] row = new Tile[chars.length];
+
+                        for (int x = 0; x < chars.length; x++) {
+                            int current = Character.getNumericValue(chars[x]);
                             boolean walkable = false;
                             SpritePart tileSpritePart = null;
 
@@ -82,19 +89,16 @@ public class MapData {
                             } else if (current == TileType.Dirt.getNumVal()) {
                                 tileSpritePart = new SpritePart("map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
                             }
-
-                            PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
+                            PositionPart tilePositionPart = new PositionPart(x * TILE_SIZE, y * TILE_SIZE, Math.PI / 2);
                             CollisionPart collisionPart = new CollisionPart(TILE_SIZE, TILE_SIZE);
                             Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
                             tile.add(collisionPart);
-                            row.add(tile);
+                            row[x] = tile;
                         }
-                        tiles.add(row);
-                        i++;
+                        tiles[y] = row;
+                        y++;
                     }
                 case Enemies:
-                    System.out.println("Enemies");
-                    System.out.println(dataChunk);
                     break;
                 case Default:
                     return;
