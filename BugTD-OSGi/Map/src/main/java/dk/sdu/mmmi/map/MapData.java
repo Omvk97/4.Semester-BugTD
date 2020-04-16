@@ -4,22 +4,47 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
+import dk.sdu.mmmi.commonmap.MapWave;
 import dk.sdu.mmmi.commonmap.Tile;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MapData {
     private Tile[][] tiles;
-    public static final int TILE_SIZE = 16;
+    private ArrayList<MapWave> waves;
+    private int tileSize = 16;
 
-    public MapData(Scanner sc) {
+    public MapData(int tileSize) {
+        this.tileSize = tileSize;
+        tiles = new Tile[0][0];
+        waves = new ArrayList<>();
+    }
+
+    public MapData(int tileSize, Scanner sc) {
+        this(tileSize);
         initFromScanner(sc);
     }
 
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+    public ArrayList<MapWave> getWaves() {
+        return waves;
+    }
+
+    public int getTileSize() {
+        return tileSize;
+    }
+
+    public void addTilesToWorld(World world) {
+        for (int i = 0; i < tiles.length; i++) {
+            Tile[] row = tiles[i];
+            for (Tile tile : row) {
+                world.addEntity(tile);
+            }
+        }
     }
 
     private void initFromScanner(Scanner sc) {
@@ -29,9 +54,10 @@ public class MapData {
         while (sc.hasNextLine()) {
 
             String nextLine = sc.nextLine();
+            if (nextLine.length() == 0) continue;
 
             // New section in data
-            if (nextLine.contains("@")) {
+            if (nextLine.charAt(0) == '@') {
                 // Process previous data
                 if (dataChunk.length() > 0) {
                     processDataChunk(dataChunk, currentType);
@@ -46,60 +72,28 @@ public class MapData {
                 }
 
             } else {
-                if (nextLine.length() == 0) continue;
                 dataChunk += nextLine + "\n";
-            }
-        }
-    }
-
-    public void addTilesToWorld(World world) {
-        for (int i = 0; i < tiles.length; i++) {
-            Tile[] row = tiles[i];
-            for (Tile tile : row) {
-                world.addEntity(tile);
             }
         }
     }
 
     private void processDataChunk(String dataChunk, DataType currentType) {
         try (Scanner sc = new Scanner(dataChunk)) {
+
+            ArrayList<String> lines = new ArrayList<>();
+
+            while (sc.hasNextLine()) {
+                String nextLine = sc.nextLine();
+                if (nextLine.length() < 1) continue;
+                lines.add(nextLine);
+            }
+
             switch (currentType) {
                 case Map:
-                    ArrayList<String> lines = new ArrayList<>();
-                    while (sc.hasNextLine()) {
-                        String nextLine = sc.nextLine();
-                        if (nextLine.length() < 1) continue;
-                        lines.add(nextLine);
-                    }
-                    tiles = new Tile[lines.size()][];
-                    int y = 0;
-                    for (String nextLine : lines) {
-                        char[] chars = nextLine.toCharArray();
-
-                        Tile[] row = new Tile[chars.length];
-
-                        //TODO: Map loads upside down due to way the LibGDX renders coordinates.
-                        for (int x = 0; x < chars.length; x++) {
-                            int current = Character.getNumericValue(chars[x]);
-                            boolean walkable = false;
-                            SpritePart tileSpritePart = null;
-
-                            if (current == TileType.Grass.getNumVal()) {
-                                tileSpritePart = new SpritePart("map/grass_16x16.png", TILE_SIZE, TILE_SIZE, 0);
-                                walkable = true;
-                            } else if (current == TileType.Dirt.getNumVal()) {
-                                tileSpritePart = new SpritePart("map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
-                            }
-                            PositionPart tilePositionPart = new PositionPart(x * TILE_SIZE, y * TILE_SIZE, Math.PI / 2);
-                            CollisionPart collisionPart = new CollisionPart(TILE_SIZE, TILE_SIZE);
-                            Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
-                            tile.add(collisionPart);
-                            row[x] = tile;
-                        }
-                        tiles[y] = row;
-                        y++;
-                    }
-                case Enemies:
+                    processMapChunk(lines);
+                    break;
+                case Waves:
+                    processWavesChunk(lines);
                     break;
                 case Default:
                     return;
@@ -109,14 +103,59 @@ public class MapData {
         }
     }
 
-    enum DataType {
+    private void processWavesChunk(ArrayList<String> lines) {
+        int waveNumber = 0;
+        for (String line : lines) {
+            waveNumber++;
+            String[] splitLine = line.split("\\*");
+            String enemyType = splitLine[0];
+            int enemyCount = Integer.parseInt(splitLine[1]);
+            MapWave wave = new MapWave(enemyType, enemyCount, waveNumber);
+            System.out.println(wave);
+            waves.add(wave);
+
+        }
+    }
+
+    private void processMapChunk(ArrayList<String> lines) {
+        tiles = new Tile[lines.size()][];
+        int y = 0;
+        for (String nextLine : lines) {
+            char[] chars = nextLine.toCharArray();
+
+            Tile[] row = new Tile[chars.length];
+
+            //TODO: Map loads upside down due to way the LibGDX renders coordinates.
+            for (int x = 0; x < chars.length; x++) {
+                int current = Character.getNumericValue(chars[x]);
+                boolean walkable = false;
+                SpritePart tileSpritePart = null;
+
+                if (current == TileType.Grass.getNumVal()) {
+                    tileSpritePart = new SpritePart("map/grass_16x16.png", tileSize, tileSize, 0);
+                    walkable = true;
+                } else if (current == TileType.Dirt.getNumVal()) {
+                    tileSpritePart = new SpritePart("map/dirt_16x16.png", tileSize, tileSize, 0);
+                }
+                PositionPart tilePositionPart = new PositionPart(x * tileSize, y * tileSize, Math.PI / 2);
+                CollisionPart collisionPart = new CollisionPart(tileSize, tileSize);
+                Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
+                tile.add(collisionPart);
+                row[x] = tile;
+            }
+            tiles[y] = row;
+            y++;
+        }
+    }
+
+    private enum DataType {
         Default,
         Map,
-        Enemies,
+        Waves,
         End
     }
 
-    public enum TileType {
+    private enum TileType {
         Grass(0), Dirt(1);
 
         private int numVal;

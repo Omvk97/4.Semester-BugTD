@@ -6,10 +6,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import dk.sdu.mmmi.commonmap.Direction;
-import dk.sdu.mmmi.commonmap.MapSPI;
-import dk.sdu.mmmi.commonmap.Tile;
-import dk.sdu.mmmi.commonmap.TileSizes;
+import dk.sdu.mmmi.commonmap.*;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -24,8 +21,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     @Override
     public void start(GameData gameData, World world) {
         this.world = world;
-        initMapDataFromFile("/levels/level01.buggydata");
-        mapData.addTilesToWorld(world);
+        loadFile("/levels/level01.buggydata");
     }
 
     @Override
@@ -37,7 +33,19 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     @Override
     public void loadFile(String filepath) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        try (Scanner sc = new Scanner(new InputStreamReader(classLoader.getResource(filepath).openStream()))) {
+            mapData = new MapData(16, sc);
+            mapData.addTilesToWorld(world);
+        } catch (Exception ex) {
+            System.out.println("Exception caught while reading map file [" + filepath + "]");
+            System.out.println(ex);
+        }
+    }
+
+    @Override
+    public ArrayList<MapWave> getMapWaves() {
+        return mapData.getWaves();
     }
 
     @Override
@@ -60,10 +68,10 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         }
 
         ArrayList<Tile> overlappingTiles = new ArrayList<>();
-        int tileNumberFromLeft = (int) posPart.getX() / TileSizes.GRASS_WIDTH;
-        int tileNumberFromBottom = (int) posPart.getY() / TileSizes.GRASS_WIDTH;
-        int entityWidthInTiles = (int) spritePart.getWidth() / TileSizes.GRASS_WIDTH;
-        int entityHeightInTiles = (int) spritePart.getHeight() / TileSizes.GRASS_WIDTH;
+        int tileNumberFromLeft = (int) posPart.getX() / mapData.getTileSize();
+        int tileNumberFromBottom = (int) posPart.getY() / mapData.getTileSize();
+        int entityWidthInTiles = (int) spritePart.getWidth() / mapData.getTileSize();
+        int entityHeightInTiles = (int) spritePart.getHeight() / mapData.getTileSize();
 
         Tile[][] tiles = mapData.getTiles();
 
@@ -105,8 +113,8 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         Tile[][] tiles = mapData.getTiles();
 
         PositionPart positionpart = tile.getPart(PositionPart.class);
-        int x = (int) positionpart.getX() / MapData.TILE_SIZE;
-        int y = (int) positionpart.getY() / MapData.TILE_SIZE;
+        int x = (int) positionpart.getX() / mapData.getTileSize();
+        int y = (int) positionpart.getY() / mapData.getTileSize();
         if (direction == Direction.UP) {
             return tiles[y-1][x];
         }
@@ -121,16 +129,5 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         }
         throw new ArrayIndexOutOfBoundsException("Yolo");
     }
-
-    private void initMapDataFromFile(String path) {
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        try (Scanner sc = new Scanner(new InputStreamReader(classLoader.getResource(path).openStream()))) {
-            mapData = new MapData(sc);
-        } catch (Exception ex) {
-            System.out.println("Exception caught while reading file");
-            System.out.println(ex);
-        }
-    }
-
 }
 
