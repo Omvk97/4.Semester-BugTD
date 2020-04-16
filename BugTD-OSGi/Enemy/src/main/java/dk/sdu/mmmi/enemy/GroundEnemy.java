@@ -27,7 +27,7 @@ public class GroundEnemy implements IGamePluginService {
         float maxSpeed = 300;
         float rotationSpeed = 5;
         float x = gameData.getDisplayWidth() / 2;
-        float y = gameData.getDisplayHeight() / 3;
+        float y = 700;
         float radians = 3.1415f / 2;
         int life = 100;
 
