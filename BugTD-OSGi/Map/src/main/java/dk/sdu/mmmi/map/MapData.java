@@ -78,6 +78,7 @@ public class MapData {
 
                         Tile[] row = new Tile[chars.length];
 
+                        //TODO: Map loads upside down due to way the LibGDX renders coordinates.
                         for (int x = 0; x < chars.length; x++) {
                             int current = Character.getNumericValue(chars[x]);
                             boolean walkable = false;
