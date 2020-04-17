@@ -14,7 +14,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
-import dk.sdu.mmmi.cbse.core.managers.GameInputProcessor;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -28,7 +27,23 @@ public class Game implements ApplicationListener {
     private static final List<IEntityProcessingService> entityProcessorList = new CopyOnWriteArrayList<>();
     private static final List<IGamePluginService> gamePluginList = new CopyOnWriteArrayList<>();
     private static List<IPostEntityProcessingService> postEntityProcessorList = new CopyOnWriteArrayList<>();
+    private static Game instance = null;
 
+    public Game() {
+        instance = this;
+    }
+
+    public static Game getInstance() {
+        return instance;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public GameData getGameData() {
+        return gameData;
+    }
 
     private void update() {
         // Update

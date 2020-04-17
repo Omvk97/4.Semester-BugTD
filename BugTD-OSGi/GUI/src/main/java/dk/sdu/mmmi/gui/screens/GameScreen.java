@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import dk.sdu.mmmi.cbse.Game;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -23,8 +24,6 @@ import java.util.Comparator;
 public class GameScreen implements Screen {
 
     Stage stage;
-    GameData gameData;
-    World world;
     private float elapsedTime = 0f;
     SpriteBatch batch;
     SpriteBatch batch2;
@@ -32,10 +31,8 @@ public class GameScreen implements Screen {
     private Animation animation;
     private TextureAtlas textureAtlas;
 
-    public GameScreen(GameData gameData, World world) {
+    public GameScreen() {
         stage = new Stage();
-        this.gameData = gameData;
-        this.world = world;
         stage = new Stage();
         batch = new SpriteBatch();
         batch2 = new SpriteBatch();
@@ -55,8 +52,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        gameData.setDelta(Gdx.graphics.getDeltaTime());
-        gameData.getKeys().update();
+        Game.getInstance().getGameData().setDelta(Gdx.graphics.getDeltaTime());
+        Game.getInstance().getGameData().getKeys().update();
         draw();
     }
 
@@ -66,7 +63,7 @@ public class GameScreen implements Screen {
         ArrayList<Entity> entitiesToDraw = new ArrayList<>();
 
         // Populate list
-        for (Entity entity : world.getEntities()) {
+        for (Entity entity : Game.getInstance().getWorld().getEntities()) {
             SpritePart spritePart = entity.getPart(SpritePart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
 
@@ -99,7 +96,7 @@ public class GameScreen implements Screen {
 
 
         // Populate list
-        for (Entity entity : world.getEntities()) {
+        for (Entity entity : Game.getInstance().getWorld().getEntities()) {
             AnimationPart animationPart = entity.getPart(AnimationPart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
             // System.out.println(textureAtlas.getRegions());
@@ -142,7 +139,7 @@ public class GameScreen implements Screen {
     }
 
     public void loadAnimations() {
-        for (Entity entity : world.getEntities()) {
+        for (Entity entity : Game.getInstance().getWorld().getEntities()) {
             AnimationPart animationPart = entity.getPart(AnimationPart.class);
             if (animationPart != null) {
                 textureAtlas = new TextureAtlas(Gdx.files.internal(animationPart.getAtlasPath()));
@@ -153,7 +150,7 @@ public class GameScreen implements Screen {
 
     public void loadAssets() {
 
-        for (Entity entity : world.getEntities()) {
+        for (Entity entity : Game.getInstance().getWorld().getEntities()) {
             SpritePart spritePart = entity.getPart(SpritePart.class);
             if (spritePart != null) {
                 GameScreen.assetManager.load(spritePart.getSpritePath(), Texture.class);
