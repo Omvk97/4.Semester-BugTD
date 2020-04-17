@@ -12,8 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import dk.sdu.mmmi.cbse.Game;
 import dk.sdu.mmmi.cbse.common.data.Entity;
-import dk.sdu.mmmi.cbse.common.data.GameData;
-import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
@@ -25,8 +23,8 @@ public class GameScreen implements Screen {
 
     Stage stage;
     private float elapsedTime = 0f;
-    SpriteBatch batch;
-    SpriteBatch batch2;
+    SpriteBatch spriteBatch;
+    SpriteBatch animationBatch;
     private static final AssetManager assetManager = new AssetManager();
     private Animation animation;
     private TextureAtlas textureAtlas;
@@ -34,8 +32,8 @@ public class GameScreen implements Screen {
     public GameScreen() {
         stage = new Stage();
         stage = new Stage();
-        batch = new SpriteBatch();
-        batch2 = new SpriteBatch();
+        spriteBatch = new SpriteBatch();
+        animationBatch = new SpriteBatch();
         loadAssets();
         loadAnimations();
     }
@@ -119,13 +117,13 @@ public class GameScreen implements Screen {
     }
 
     private void drawAnimation(AnimationPart anima, PositionPart pos) {
-        batch.begin();
-        batch.draw(animation.getKeyFrame(elapsedTime, true), pos.getX(), pos.getY());
-        batch.end();
+        spriteBatch.begin();
+        spriteBatch.draw(animation.getKeyFrame(elapsedTime, true), pos.getX(), pos.getY());
+        spriteBatch.end();
     }
 
     private void drawSprite(SpritePart spritePart, PositionPart positionPart) {
-        batch2.begin();
+        animationBatch.begin();
         Texture texture = assetManager.get(spritePart.getSpritePath(), Texture.class);
         Sprite sprite = new Sprite(texture);
         sprite.rotate((float) Math.toDegrees(positionPart.getRadians()));
@@ -133,8 +131,8 @@ public class GameScreen implements Screen {
         sprite.setY(positionPart.getY());
         sprite.setAlpha(spritePart.getAlpha());
         sprite.setSize(spritePart.getWidth(), spritePart.getHeight());
-        sprite.draw(batch2);
-        batch2.end();
+        sprite.draw(animationBatch);
+        animationBatch.end();
 
     }
 
@@ -184,8 +182,8 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        batch.dispose();
-        batch2.dispose();
+        spriteBatch.dispose();
+        animationBatch.dispose();
         textureAtlas.dispose();
     }
 }
