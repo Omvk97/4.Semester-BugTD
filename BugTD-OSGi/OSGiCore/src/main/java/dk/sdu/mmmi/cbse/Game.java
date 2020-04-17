@@ -47,9 +47,6 @@ public class Game {
 
     public void update() {
 
-        System.out.println(gameData.getDisplayHeight());
-        System.out.println(gameData.getDisplayWidth());
-        System.out.println();
         // Update
         for (IEntityProcessingService entityProcessorService : entityProcessorList) {
             entityProcessorService.process(gameData, world);
