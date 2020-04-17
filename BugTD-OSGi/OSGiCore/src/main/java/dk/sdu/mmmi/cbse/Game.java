@@ -19,7 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Game implements ApplicationListener {
+public class Game {
 
 
     private final GameData gameData = new GameData();
@@ -46,6 +46,10 @@ public class Game implements ApplicationListener {
     }
 
     private void update() {
+
+        System.out.println(gameData.getDisplayHeight());
+        System.out.println(gameData.getDisplayWidth());
+        System.out.println();
         // Update
         for (IEntityProcessingService entityProcessorService : entityProcessorList) {
             entityProcessorService.process(gameData, world);
@@ -55,36 +59,6 @@ public class Game implements ApplicationListener {
         for (IPostEntityProcessingService postEntityProcessorService : postEntityProcessorList) {
             postEntityProcessorService.process(gameData, world);
         }
-    }
-
-    @Override
-    public void create() {
-        // IGamePluginService groundEnemyPlugin = new GroundEnemy();
-        // IEntityProcessingService enemyProcess = new EnemyControlSystem();
-        // entityProcessorList.add(enemyProcess);
-        // gamePluginList.add(groundEnemyPlugin);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void render() {
-        update();
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void dispose() {
-
     }
 
     public void addEntityProcessingService(IEntityProcessingService eps) {
