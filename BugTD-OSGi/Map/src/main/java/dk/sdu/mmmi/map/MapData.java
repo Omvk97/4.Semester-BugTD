@@ -156,7 +156,7 @@ public class MapData {
     }
 
     private enum TileType {
-        Grass(0), Dirt(1);
+        Grass(1), Dirt(0);
 
         private int numVal;
 
