@@ -45,7 +45,7 @@ public class Game {
         return gameData;
     }
 
-    private void update() {
+    public void update() {
 
         System.out.println(gameData.getDisplayHeight());
         System.out.println(gameData.getDisplayWidth());

@@ -3,7 +3,7 @@ Bundle-Description: Generated using Pax-Construct
 Bundle-SymbolicName: GUI
 Built-By: ngram
 Bundle-ManifestVersion: 2
-Bnd-LastModified: 1587108793037
+Bnd-LastModified: 1587110016129
 Bundle-ActivationPolicy: lazy
 Import-Package: com.badlogic.gdx,com.badlogic.gdx.assets,com.badlogic.
  gdx.backends.lwjgl,com.badlogic.gdx.files,com.badlogic.gdx.graphics,c
@@ -30,11 +30,11 @@ Export-Package: dk.sdu.mmmi.cbse;uses:="dk.sdu.mmmi.cbse.common.data.e
  .badlogic.gdx.scenes.scene2d.ui,com.badlogic.gdx.utils.viewport,dk.sd
  u.mmmi.cbse.gui.components,com.badlogic.gdx,com.badlogic.gdx.scenes.s
  cene2d.utils,com.badlogic.gdx.scenes.scene2d,com.badlogic.gdx.graphic
- s";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui;uses:="dk.sdu.mmmi.gui.sc
- reens,dk.sdu.mmmi.cbse,dk.sdu.mmmi.cbse.common.data.entityparts,dk.sd
- u.mmmi.gui.input,dk.sdu.mmmi.cbse.common.data,com.badlogic.gdx.backen
- ds.lwjgl,com.badlogic.gdx,dk.sdu.mmmi.cbse.common.services,com.badlog
- ic.gdx.graphics";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui.input;uses:
+ s";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui;uses:="dk.sdu.mmmi.cbse,d
+ k.sdu.mmmi.gui.input,dk.sdu.mmmi.cbse.common.data,com.badlogic.gdx.ba
+ ckends.lwjgl,com.badlogic.gdx,com.badlogic.gdx.graphics,dk.sdu.mmmi.g
+ ui.screens,dk.sdu.mmmi.cbse.common.data.entityparts,dk.sdu.mmmi.cbse.
+ common.services";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui.input;uses:
  ="dk.sdu.mmmi.cbse.common.data,com.badlogic.gdx,dk.sdu.mmmi.cbse.comm
  on.events";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.data;uses
  :="dk.sdu.mmmi.cbse.common.data.entityparts,dk.sdu.mmmi.cbse.common.e
