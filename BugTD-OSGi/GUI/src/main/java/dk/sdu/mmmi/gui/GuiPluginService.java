@@ -17,15 +17,18 @@ public class GuiPluginService extends com.badlogic.gdx.Game implements IGamePlug
     private static OrthographicCamera cam;
     public static GuiPluginService instance = null;
 
-    public void init() {
+    public void init(GameData gameData) {
+
+        System.out.println("Init GUI MANAGER");
+
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "BugTD";
         cfg.width = 832;
         cfg.height = 832;
         cfg.useGL30 = false;
         cfg.resizable = false;
-        Game.getInstance().getGameData().setDisplayWidth(cfg.width);
-        Game.getInstance().getGameData().setDisplayHeight(cfg.height);
+        gameData.setDisplayWidth(cfg.width);
+        gameData.setDisplayHeight(cfg.height);
         instance = this;
 
         new LwjglApplication(this, cfg);
@@ -50,12 +53,13 @@ public class GuiPluginService extends com.badlogic.gdx.Game implements IGamePlug
 
     @Override
     public void render() {
+        Game.getInstance().update(); //TODO: Should this be in render?
         super.render();
     }
 
     @Override
     public void start(GameData gameData, World world) {
-        init();
+        init(gameData);
     }
 
     @Override
