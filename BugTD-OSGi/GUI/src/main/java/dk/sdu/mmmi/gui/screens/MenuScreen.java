@@ -12,10 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import dk.sdu.mmmi.cbse.Game;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.gui.GuiPluginService;
 import dk.sdu.mmmi.gui.components.LabelFactory;
 import dk.sdu.mmmi.gui.components.TextButtonFactory;
+import dk.sdu.mmmi.gui.input.GameInputProcessor;
 
 public class MenuScreen implements Screen {
 
@@ -59,6 +61,7 @@ public class MenuScreen implements Screen {
                 GuiPluginService.getInstance().startGame();
             }
         });
+
     }
 
     @Override

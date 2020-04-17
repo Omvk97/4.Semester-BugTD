@@ -47,7 +47,6 @@ public class GuiPluginService extends com.badlogic.gdx.Game implements IGamePlug
         cam = new OrthographicCamera(Game.getInstance().getGameData().getDisplayWidth(), Game.getInstance().getGameData().getDisplayHeight());
         cam.translate(Game.getInstance().getGameData().getDisplayWidth() / 2, Game.getInstance().getGameData().getDisplayHeight() / 2);
         cam.update();
-        Gdx.input.setInputProcessor(new GameInputProcessor(Game.getInstance().getGameData()));
         this.setScreen(new MenuScreen());
     }
 

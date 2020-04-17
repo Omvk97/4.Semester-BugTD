@@ -3,7 +3,7 @@ Bundle-Description: Generated using Pax-Construct
 Bundle-SymbolicName: GUI
 Built-By: ngram
 Bundle-ManifestVersion: 2
-Bnd-LastModified: 1587110016129
+Bnd-LastModified: 1587110625162
 Bundle-ActivationPolicy: lazy
 Import-Package: com.badlogic.gdx,com.badlogic.gdx.assets,com.badlogic.
  gdx.backends.lwjgl,com.badlogic.gdx.files,com.badlogic.gdx.graphics,c
@@ -30,23 +30,23 @@ Export-Package: dk.sdu.mmmi.cbse;uses:="dk.sdu.mmmi.cbse.common.data.e
  .badlogic.gdx.scenes.scene2d.ui,com.badlogic.gdx.utils.viewport,dk.sd
  u.mmmi.cbse.gui.components,com.badlogic.gdx,com.badlogic.gdx.scenes.s
  cene2d.utils,com.badlogic.gdx.scenes.scene2d,com.badlogic.gdx.graphic
- s";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui;uses:="dk.sdu.mmmi.cbse,d
- k.sdu.mmmi.gui.input,dk.sdu.mmmi.cbse.common.data,com.badlogic.gdx.ba
- ckends.lwjgl,com.badlogic.gdx,com.badlogic.gdx.graphics,dk.sdu.mmmi.g
- ui.screens,dk.sdu.mmmi.cbse.common.data.entityparts,dk.sdu.mmmi.cbse.
- common.services";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui.input;uses:
- ="dk.sdu.mmmi.cbse.common.data,com.badlogic.gdx,dk.sdu.mmmi.cbse.comm
- on.events";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.data;uses
- :="dk.sdu.mmmi.cbse.common.data.entityparts,dk.sdu.mmmi.cbse.common.e
- vents";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui.components;uses:="com
- .badlogic.gdx.scenes.scene2d.ui,com.badlogic.gdx.graphics.g2d,com.bad
- logic.gdx.graphics";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.
- events;uses:="dk.sdu.mmmi.cbse.common.data";version="1.0.0.SNAPSHOT",
- dk.sdu.mmmi.commonenemy;uses:="org.osgi.framework,dk.sdu.mmmi.cbse.co
- mmon.data";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui.screens;uses:="dk
- .sdu.mmmi.cbse,dk.sdu.mmmi.gui,com.badlogic.gdx.scenes.scene2d.ui,dk.
+ s";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui;uses:="dk.sdu.mmmi.gui.sc
+ reens,dk.sdu.mmmi.cbse,dk.sdu.mmmi.cbse.common.data.entityparts,dk.sd
+ u.mmmi.cbse.common.data,com.badlogic.gdx.backends.lwjgl,com.badlogic.
+ gdx,dk.sdu.mmmi.cbse.common.services,com.badlogic.gdx.graphics";versi
+ on="1.0.0.SNAPSHOT",dk.sdu.mmmi.gui.input;uses:="dk.sdu.mmmi.cbse.com
+ mon.data,com.badlogic.gdx,dk.sdu.mmmi.cbse.common.events";version="1.
+ 0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.data;uses:="dk.sdu.mmmi.cbse.co
+ mmon.data.entityparts,dk.sdu.mmmi.cbse.common.events";version="1.0.0.
+ SNAPSHOT",dk.sdu.mmmi.gui.components;uses:="com.badlogic.gdx.scenes.s
+ cene2d.ui,com.badlogic.gdx.graphics.g2d,com.badlogic.gdx.graphics";ve
+ rsion="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.events;uses:="dk.sdu.m
+ mmi.cbse.common.data";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.commonenem
+ y;uses:="org.osgi.framework,dk.sdu.mmmi.cbse.common.data";version="1.
+ 0.0.SNAPSHOT",dk.sdu.mmmi.gui.screens;uses:="dk.sdu.mmmi.cbse,dk.sdu.
+ mmmi.gui,com.badlogic.gdx.scenes.scene2d.ui,dk.sdu.mmmi.gui.input,dk.
  sdu.mmmi.cbse.common.data,dk.sdu.mmmi.gui.components,com.badlogic.gdx
- .graphics.g2d,com.badlogic.gdx,com.badlogic.gdx.scenes.scene2d.utils,
+ ,com.badlogic.gdx.graphics.g2d,com.badlogic.gdx.scenes.scene2d.utils,
  com.badlogic.gdx.graphics,com.badlogic.gdx.assets,com.badlogic.gdx.ut
  ils,com.badlogic.gdx.utils.viewport,dk.sdu.mmmi.cbse.common.data.enti
  typarts,com.badlogic.gdx.files,com.badlogic.gdx.scenes.scene2d";versi

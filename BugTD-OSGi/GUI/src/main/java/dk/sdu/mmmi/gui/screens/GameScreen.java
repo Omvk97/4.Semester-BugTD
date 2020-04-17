@@ -15,6 +15,7 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
+import dk.sdu.mmmi.gui.input.GameInputProcessor;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -40,7 +41,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(new GameInputProcessor(Game.getInstance().getGameData()));
     }
 
     @Override
