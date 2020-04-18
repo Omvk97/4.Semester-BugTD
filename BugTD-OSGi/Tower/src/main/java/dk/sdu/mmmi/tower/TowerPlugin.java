@@ -5,8 +5,6 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import dk.sdu.mmmi.commonmap.MapSPI;
-import dk.sdu.mmmi.commontower.Queen;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
 
@@ -15,9 +13,6 @@ public class TowerPlugin implements IGamePluginService {
     public final static String BASIC_TOWER_PATH = "towers/basictower.png";
     public final static String BASIC_TOWER_PREVIEW_LEGAL_PATH = "towers/basictower_preview_legal.png";
     public final static String BASIC_TOWER_PREVIEW_ILLEGAL_PATH = "towers/basictower_preview_illegal.png";
-
-    private MapSPI map;
-    private Queen queen;
 
     @Override
     public void start(GameData gameData, World world) {
@@ -46,9 +41,6 @@ public class TowerPlugin implements IGamePluginService {
         }
         for (Entity preview : world.getEntities(TowerPreview.class)) {
             world.removeEntity(preview);
-        }
-        for (Entity queen : world.getEntities(Queen.class)) {
-            world.removeEntity(queen);
         }
     }
 }
