@@ -10,13 +10,11 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
-import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
-import dk.sdu.mmmi.commontower.Queen;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
 import java.util.ArrayList;
@@ -33,7 +31,6 @@ public class TowerControlSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         showTowerPlacementPreview(gameData, world);
         createNewTowers(gameData, world);
-        checkOnQueen(gameData, world);
         attackEnemies(gameData, world);
     }
 
@@ -153,10 +150,7 @@ public class TowerControlSystem implements IEntityProcessingService {
     }
 
     private void attackEnemies(GameData gameData, World world) {
-        List<Entity> towers = world.getEntities(Tower.class);
-        towers.add(queen);
-        
-        for (Entity tower : towers) {
+        for (Entity tower : world.getEntities(Tower.class)) {
             PositionPart towerPosPart = tower.getPart(PositionPart.class);
             Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
             if (target != null) {
@@ -166,16 +160,6 @@ public class TowerControlSystem implements IEntityProcessingService {
                     weapon.process(gameData, target);   // Dont really know what to use as arguments   
                 }
             }
-        }
-    }
-
-    private void checkOnQueen(GameData gameData, World world) {
-        if (queen == null) {
-            queen = world.getEntities(Queen.class).get(0);
-        }
-        
-        if (((LifePart)queen.getPart(LifePart.class)).isDead()) {
-            gameData.addEvent(new GameOverEvent(queen));
         }
     }
 }
