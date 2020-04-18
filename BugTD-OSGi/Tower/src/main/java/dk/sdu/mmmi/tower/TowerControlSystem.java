@@ -25,7 +25,6 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     private MapSPI map;
     private Entity preview;
-    private Entity queen;
 
     @Override
     public void process(GameData gameData, World world) {
