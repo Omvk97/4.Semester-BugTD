@@ -16,8 +16,8 @@ public class EnemySpawner implements IEntityProcessingService {
 
     private int totalEnemysInWorld = 0;
     private int targetEnemyCount = 0;
-    private float timeDelay = 30f;
     private float lastSpawn = 0f;
+    private float spawnTime = 2f;
     private int currentWaveNumber = 1;
     private String enemyType;
     private MapWave currentWave = null; 
@@ -25,29 +25,30 @@ public class EnemySpawner implements IEntityProcessingService {
     private ArrayList<MapWave> waves = new ArrayList<>(); 
     
     
-    
     @Override
     public void process(GameData gameData, World world) {
         updateWaveInfo();
         getEnemyAmountInWorld(world);
-     
+        lastSpawn = lastSpawn + gameData.getDelta();
          
         if (totalEnemysInWorld < targetEnemyCount) {
-            if (lastSpawn > timeDelay) {
+            if (lastSpawn > spawnTime) {
+                System.out.println("I spawned");
                 if ("Ground".equals(enemyType)) {
                 GroundEnemy.createGroundEnemy(gameData, world);
                 }
                 else if ("Flying".equals(enemyType)) {
                 FlyingEnemy.createFlyingEnemy(gameData, world);
                 }
-                
-                
+
                 lastSpawn = 0f;
             }
-            lastSpawn = lastSpawn + 0.5f;
+            System.out.println("last spawn = " + lastSpawn);
         }
     }
     
+    
+    //Counts the amount of enemies in the world, and updates the total.
     private void getEnemyAmountInWorld(World world) {
         int enemiesInWorld = 0;
         for(Entity enemy : world.getEntities(Enemy.class)){
@@ -56,6 +57,7 @@ public class EnemySpawner implements IEntityProcessingService {
         totalEnemysInWorld = enemiesInWorld;
     }
     
+    // Gets all info from the MapWave and updates the variables.
     private void updateWaveInfo() {
         currentWave = waves.get(currentWaveNumber - 1);
         targetEnemyCount = currentWave.getEnemyAmount();
