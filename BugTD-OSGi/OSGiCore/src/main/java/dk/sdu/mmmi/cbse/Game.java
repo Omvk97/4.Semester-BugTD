@@ -33,6 +33,24 @@ public class Game {
     public GameData getGameData() {
         return gameData;
     }
+    
+    public void restart(List<IGamePluginService> ignoreThese) {
+        // Stop all
+        for (IGamePluginService plugin : gamePluginList) {
+            if (ignoreThese.contains(plugin)) {
+                continue;
+            }
+            plugin.stop(gameData, world);
+        }
+        
+        // Start all
+        for (IGamePluginService plugin : gamePluginList) {
+            if (ignoreThese.contains(plugin)) {
+                continue;
+            }
+            plugin.start(gameData, world);
+        }
+    }
 
     public void update() {
 

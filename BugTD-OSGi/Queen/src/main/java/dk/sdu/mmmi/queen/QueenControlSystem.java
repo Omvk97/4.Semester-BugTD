@@ -19,7 +19,7 @@ public class QueenControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        if (queen == null) {
+        if (queen == null || !world.getEntities(Queen.class).contains(queen)) {
             queen = (Queen) world.getEntities(Queen.class).get(0);
             map.fitEntityToMap(queen);
         }

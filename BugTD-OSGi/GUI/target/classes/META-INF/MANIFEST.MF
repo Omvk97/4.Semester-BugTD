@@ -3,7 +3,7 @@ Bundle-Description: Generated using Pax-Construct
 Bundle-SymbolicName: GUI
 Built-By: thoma
 Bundle-ManifestVersion: 2
-Bnd-LastModified: 1587574075188
+Bnd-LastModified: 1587577294104
 Bundle-ActivationPolicy: lazy
 Import-Package: com.badlogic.gdx,com.badlogic.gdx.assets,com.badlogic.
  gdx.backends.lwjgl,com.badlogic.gdx.files,com.badlogic.gdx.graphics,c
@@ -38,22 +38,22 @@ Export-Package: dk.sdu.mmmi.cbse;uses:="dk.sdu.mmmi.cbse.common.data,d
  g.osgi.framework,dk.sdu.mmmi.cbse.common.data";version="1.0.0.SNAPSHO
  T",dk.sdu.mmmi.gui.screens;uses:="dk.sdu.mmmi.gui,dk.sdu.mmmi.cbse,co
  m.badlogic.gdx.scenes.scene2d.ui,dk.sdu.mmmi.gui.input,dk.sdu.mmmi.cb
- se.common.data,dk.sdu.mmmi.gui.components,com.badlogic.gdx,com.badlog
- ic.gdx.graphics.g2d,dk.sdu.mmmi.cbse.common.events,com.badlogic.gdx.s
+ se.common.data,dk.sdu.mmmi.gui.components,com.badlogic.gdx.graphics.g
+ 2d,com.badlogic.gdx,dk.sdu.mmmi.cbse.common.events,com.badlogic.gdx.s
  cenes.scene2d.utils,com.badlogic.gdx.graphics,com.badlogic.gdx.assets
  ,com.badlogic.gdx.utils,com.badlogic.gdx.utils.viewport,dk.sdu.mmmi.c
- bse.common.data.entityparts,com.badlogic.gdx.files,com.badlogic.gdx.s
- cenes.scene2d";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.data.
- entityparts;uses:="dk.sdu.mmmi.cbse.common.data";version="1.0.0.SNAPS
- HOT",dk.sdu.mmmi.enemy;uses:="org.osgi.framework,dk.sdu.mmmi.commonen
- emy,dk.sdu.mmmi.cbse.common.data.entityparts,dk.sdu.mmmi.cbse.common.
- data,dk.sdu.mmmi.commontower,dk.sdu.mmmi.cbse.common.services";versio
- n="1.0.0.SNAPSHOT",dk.sdu.mmmi.commonmap;uses:="dk.sdu.mmmi.cbse.comm
- on.data.entityparts,dk.sdu.mmmi.cbse.common.data";version="1.0.0.SNAP
- SHOT",dk.sdu.mmmi.commontower;uses:="dk.sdu.mmmi.cbse.common.data.ent
- ityparts,dk.sdu.mmmi.cbse.common.data";version="1.0.0.SNAPSHOT",dk.sd
- u.mmmi.cbse.common.services;uses:="dk.sdu.mmmi.cbse.common.data";vers
- ion="1.0.0.SNAPSHOT"
+ bse.common.data.entityparts,com.badlogic.gdx.files,dk.sdu.mmmi.cbse.c
+ ommon.services,com.badlogic.gdx.scenes.scene2d";version="1.0.0.SNAPSH
+ OT",dk.sdu.mmmi.cbse.common.data.entityparts;uses:="dk.sdu.mmmi.cbse.
+ common.data";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.enemy;uses:="org.os
+ gi.framework,dk.sdu.mmmi.commonenemy,dk.sdu.mmmi.cbse.common.data.ent
+ ityparts,dk.sdu.mmmi.cbse.common.data,dk.sdu.mmmi.commontower,dk.sdu.
+ mmmi.cbse.common.services";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.commo
+ nmap;uses:="dk.sdu.mmmi.cbse.common.data.entityparts,dk.sdu.mmmi.cbse
+ .common.data";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.commontower;uses:=
+ "dk.sdu.mmmi.cbse.common.data.entityparts,dk.sdu.mmmi.cbse.common.dat
+ a";version="1.0.0.SNAPSHOT",dk.sdu.mmmi.cbse.common.services;uses:="d
+ k.sdu.mmmi.cbse.common.data";version="1.0.0.SNAPSHOT"
 Bundle-Version: 1.0.0.SNAPSHOT
 Bundle-Name: GUI
 Private-Package: dk.sdu.mmmi.internal.*

@@ -41,8 +41,6 @@ public class TowerControlSystem implements IEntityProcessingService {
                 continue;
             }
             
-            gameData.addEvent(new GameOverEvent(preview));
-            
             eventsToDelete.add(event);
 
             // Calculate placement of new Tower
@@ -128,7 +126,7 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     private void showTowerPlacementPreview(GameData gameData, World world) {
         // Create the preview entity for the first time
-        if (preview == null) {
+        if (preview == null || world.getEntities(TowerPreview.class).isEmpty()) {
             TowerPreview towerPreview = new TowerPreview(
                     new PositionPart(0, 0, 0),
                     new SpritePart(TowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH, 2 * TileSizes.GRASS_WIDTH, 2 * TileSizes.GRASS_WIDTH, 2, 75)
