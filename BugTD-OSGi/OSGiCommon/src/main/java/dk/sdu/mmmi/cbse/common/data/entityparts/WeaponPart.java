@@ -23,6 +23,10 @@ public class WeaponPart implements EntityPart {
     public void setTarget(Entity target) {
         this.target = target;
     }
+    
+    public Entity getTarget(){
+        return target;
+    }
 
     public float getRange() {
         return range;
