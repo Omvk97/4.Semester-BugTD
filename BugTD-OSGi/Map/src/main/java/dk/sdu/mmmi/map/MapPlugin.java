@@ -7,52 +7,22 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import dk.sdu.mmmi.commonmap.Direction;
-import dk.sdu.mmmi.commonmap.MapSPI;
-import dk.sdu.mmmi.commonmap.Tile;
-import dk.sdu.mmmi.commonmap.TileSizes;
+import dk.sdu.mmmi.commonmap.*;
 
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class MapPlugin implements IGamePluginService, MapSPI {
 
-    private Tile[][] tiles;
     private World world;
+    private MapData mapData;
 
     @Override
     public void start(GameData gameData, World world) {
         this.world = world;
-
-        // 52 rows length, 52 wide. Grass tiles are bigger in size and should therefore not take up as much space.
-        tiles = new Tile[52][52];
-
-        // The first three tiles and the last three tiles will be tiles with grass (environment)
-        int rowsWithGrassInSides = 3;
-
-        // TODO - Make it so environment can have different sizes than path. The problem is that when environment is bigger, there should not be places as many environment tiles as path tiles
-        // which means the length becomes very long.
-        final int TILE_SIZE = 16;
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[0].length; j++) {
-
-                boolean walkable = true;
-
-                // Determine if tile is environment or path tile
-                if (j <= rowsWithGrassInSides - 1 || j >= tiles[0].length - rowsWithGrassInSides) {
-                    walkable = false;
-                }
-
-                SpritePart tileSpritePart = new SpritePart(walkable ? "map/grass_16x16.png" : "map/dirt_16x16.png", TILE_SIZE, TILE_SIZE, 0);
-
-                PositionPart tilePositionPart = new PositionPart(j * TILE_SIZE, i * TILE_SIZE, Math.PI / 2);
-                CollisionPart collisionPart = new CollisionPart(TILE_SIZE, TILE_SIZE);
-                Tile tile = new Tile(walkable, tileSpritePart, tilePositionPart);
-                tile.add(collisionPart);
-                tiles[i][j] = tile;
-                world.addEntity(tile);
-            }
-        }
+        loadFile("/levels/level01.buggydata");
     }
 
     @Override
@@ -64,12 +34,24 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     @Override
     public void loadFile(String filepath) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        try (Scanner sc = new Scanner(new InputStreamReader(classLoader.getResource(filepath).openStream()))) {
+            mapData = new MapData(16, sc);
+            mapData.addTilesToWorld(world);
+        } catch (Exception ex) {
+            System.out.println("Exception caught while reading map file [" + filepath + "]");
+            System.out.println(ex);
+        }
+    }
+
+    @Override
+    public ArrayList<MapWave> getMapWaves() {
+        return mapData.getWaves();
     }
 
     @Override
     public Tile[][] getTiles() {
-        return tiles;
+        return mapData.getTiles();
     }
 
     @Override
@@ -87,10 +69,12 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         }
 
         ArrayList<Tile> overlappingTiles = new ArrayList<>();
-        int tileNumberFromLeft = (int) posPart.getX() / TileSizes.GRASS_WIDTH;
-        int tileNumberFromBottom = (int) posPart.getY() / TileSizes.GRASS_WIDTH;
-        int entityWidthInTiles = (int) spritePart.getWidth() / TileSizes.GRASS_WIDTH;
-        int entityHeightInTiles = (int) spritePart.getHeight() / TileSizes.GRASS_WIDTH;
+        int tileNumberFromLeft = (int) posPart.getX() / mapData.getTileSize();
+        int tileNumberFromBottom = (int) posPart.getY() / mapData.getTileSize();
+        int entityWidthInTiles = (int) spritePart.getWidth() / mapData.getTileSize();
+        int entityHeightInTiles = (int) spritePart.getHeight() / mapData.getTileSize();
+
+        Tile[][] tiles = mapData.getTiles();
 
         for (int i = tileNumberFromLeft; i < tileNumberFromLeft + entityWidthInTiles; i++) {
             for (int j = tileNumberFromBottom; j < tileNumberFromBottom + entityHeightInTiles; j++) {
@@ -127,10 +111,11 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     @Override
     public Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException {
-        final int TILE_SIZE = 16; // TODO: Fix hardcoded
+        Tile[][] tiles = mapData.getTiles();
+
         PositionPart positionpart = tile.getPart(PositionPart.class);
-        int x = (int) positionpart.getX() / TILE_SIZE;
-        int y = (int) positionpart.getY() / TILE_SIZE;
+        int x = (int) positionpart.getX() / mapData.getTileSize();
+        int y = (int) positionpart.getY() / mapData.getTileSize();
         if (direction == Direction.UP) {
             return tiles[y - 1][x];
         }

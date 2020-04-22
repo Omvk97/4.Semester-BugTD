@@ -22,4 +22,6 @@ public interface MapSPI {
     void loadFile(String filepath);
     
     void fitEntityToMap(Entity e);
+
+    ArrayList<MapWave> getMapWaves();
 }

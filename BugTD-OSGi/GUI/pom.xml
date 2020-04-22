@@ -12,10 +12,10 @@
         <bundle.namespace>dk.sdu.mmmi</bundle.namespace>
     </properties>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>OSGiMap</artifactId>
+    <artifactId>GUI</artifactId>
     <packaging>bundle</packaging>
-    <name>OSGiMap</name>
-    <dependencies>    
+    <name>GUI</name>
+    <dependencies>
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
@@ -37,9 +37,14 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>OSGiLibGDX</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>OSGiCore</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
