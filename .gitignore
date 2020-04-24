@@ -48,3 +48,5 @@ hs_err_pid*
 /BugTD-OSGi/CommonAI/target/
 /BugTD-OSGi/AI/target/
 /BugTD-OSGi/poms/target/
+/BugTD-OSGi/CommonEnemyOSGI/target/
+/BugTD-OSGi/EnemyOSGI/target/
