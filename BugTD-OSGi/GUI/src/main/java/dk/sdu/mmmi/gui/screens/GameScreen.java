@@ -56,6 +56,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        draw();
         Game.getInstance().getGameData().setDelta(Gdx.graphics.getDeltaTime());
         Game.getInstance().getGameData().getKeys().update();
         Game.getInstance().update(); //TODO: Should this be in render? From Thomas: Yes I think it fits here inside the GameScreen's render method
@@ -67,7 +68,6 @@ public class GameScreen implements Screen {
             }
             GuiPluginService.getInstance().setScreen(new MenuScreen());
         }
-        draw();
     }
 
     private void draw() {
