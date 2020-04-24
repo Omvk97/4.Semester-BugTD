@@ -1,4 +1,4 @@
-package dk.sdu.mmmi.gui.input;
+package dk.sdu.mmmi.cbse.core.managers;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
