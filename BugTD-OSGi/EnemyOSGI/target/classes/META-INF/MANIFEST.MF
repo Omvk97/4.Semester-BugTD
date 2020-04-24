@@ -1,0 +1,36 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1587717113388
+Build-Jdk: 1.8.0_241
+Built-By: ngram
+Bundle-ActivationPolicy: lazy
+Bundle-Description: Generated using Pax-Construct
+Bundle-ManifestVersion: 2
+Bundle-Name: Enemy
+Bundle-SymbolicName: Enemy
+Bundle-Version: 1.0.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Export-Package: dk.sdu.mmmi.cbse.common.data;version="1.0.0.SNAPSHOT";us
+ es:="dk.sdu.mmmi.cbse.common.data.entityparts,dk.sdu.mmmi.cbse.common.e
+ vents",dk.sdu.mmmi.cbse.common.data.entityparts;version="1.0.0.SNAPSHOT
+ ";uses:="dk.sdu.mmmi.cbse.common.data",dk.sdu.mmmi.cbse.common.events;v
+ ersion="1.0.0.SNAPSHOT";uses:="dk.sdu.mmmi.cbse.common.data",dk.sdu.mmm
+ i.cbse.common.services;version="1.0.0.SNAPSHOT";uses:="dk.sdu.mmmi.cbse
+ .common.data",dk.sdu.mmmi.commonai.events;version="1.0.0.SNAPSHOT";uses
+ :="dk.sdu.mmmi.cbse.common.events,dk.sdu.mmmi.commonenemy,dk.sdu.mmmi.c
+ ommontower",dk.sdu.mmmi.commonenemy;version="1.0.0.SNAPSHOT";uses:="dk.
+ sdu.mmmi.cbse.common.data,dk.sdu.mmmi.cbse.common.data.entityparts",dk.
+ sdu.mmmi.commonmap;version="1.0.0.SNAPSHOT";uses:="dk.sdu.mmmi.cbse.com
+ mon.data,dk.sdu.mmmi.cbse.common.data.entityparts",dk.sdu.mmmi.commonto
+ wer;version="1.0.0.SNAPSHOT";uses:="dk.sdu.mmmi.cbse.common.data,dk.sdu
+ .mmmi.cbse.common.data.entityparts",dk.sdu.mmmi.enemy;version="1.0.0.SN
+ APSHOT";uses:="dk.sdu.mmmi.cbse.common.data,dk.sdu.mmmi.cbse.common.ser
+ vices,dk.sdu.mmmi.commonenemy"
+Import-Package: dk.sdu.mmmi.cbse.common.data;version="[1.0,2)",dk.sdu.mm
+ mi.cbse.common.data.entityparts;version="[1.0,2)",dk.sdu.mmmi.cbse.comm
+ on.events;version="[1.0,2)",dk.sdu.mmmi.cbse.common.services;version="[
+ 1.0,2)",dk.sdu.mmmi.commonai.events;version="[1.0,2)",dk.sdu.mmmi.commo
+ nenemy;version="[1.0,2)",dk.sdu.mmmi.commontower;version="[1.0,2)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Service-Component: META-INF/controlsystem.xml,META-INF/flyingenemyplugin
+ .xml,META-INF/groundenemy.xml
+Tool: Bnd-4.2.0.201903051501
