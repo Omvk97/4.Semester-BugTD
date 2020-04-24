@@ -1,3 +1,0 @@
-Bundle-SymbolicName: OSGIEnemySpawner
-Bundle-ActivationPolicy: lazy
-Service-Component: META-INF/spawnerprocessor.xml

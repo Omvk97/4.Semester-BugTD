@@ -10,7 +10,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
-import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
@@ -25,7 +24,7 @@ import java.util.List;
 public class TowerControlSystem implements IEntityProcessingService {
 
     private MapSPI map;
-    private Entity preview;
+    private TowerPreview preview;
 
     @Override
     public void process(GameData gameData, World world) {
@@ -40,14 +39,14 @@ public class TowerControlSystem implements IEntityProcessingService {
             if (!(event instanceof ClickEvent)) {
                 continue;
             }
-            
             eventsToDelete.add(event);
 
             // Calculate placement of new Tower
             int clickX = ((ClickEvent) event).getX();
             int clickY = ((ClickEvent) event).getY();
+            clickX = roundDown(clickX, TileSizes.GRASS_WIDTH);
+            clickY = roundDown(clickY, TileSizes.GRASS_WIDTH);
             Tower tower = createNewTower(clickX, clickY);
-            map.fitEntityToMap(tower);
 
             if (isLegalPlacement(tower)) {
                 world.addEntity(tower);
@@ -56,13 +55,20 @@ public class TowerControlSystem implements IEntityProcessingService {
         gameData.getEvents().removeAll(eventsToDelete);
     }
 
+    int roundDown(double number, double place) {
+        double result = number / place;
+        result = Math.floor(result);
+        result *= place;
+        return (int) result;
+    }
+
     private boolean isLegalPlacement(Entity e) {
         List<Tile> tiles = map.getTilesEntityIsOn(e);
-
+        
         if (tiles.size() < 4) {
             return false;
         }
-
+        
         for (Tile tile : tiles) {
             if (map.checkIfTileIsOccupied(tile, Arrays.asList(preview)) || !tile.isWalkable()) {
                 return false;
@@ -115,7 +121,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         int width = 32;
         int height = 32;
         int layer = 1;
-        SpritePart sprt = new SpritePart(TowerPlugin.BASIC_TOWER_PATH, width, height, layer);
+        SpritePart sprt = new SpritePart(SingleDamageTowerPlugin.BASIC_TOWER_PATH, width, height, layer);
 
         return new Tower(pos, life, colli, wpn, sprt);
     }
@@ -126,10 +132,10 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     private void showTowerPlacementPreview(GameData gameData, World world) {
         // Create the preview entity for the first time
-        if (preview == null || world.getEntities(TowerPreview.class).isEmpty()) {
+        if (preview == null) {
             TowerPreview towerPreview = new TowerPreview(
                     new PositionPart(0, 0, 0),
-                    new SpritePart(TowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH, 2 * TileSizes.GRASS_WIDTH, 2 * TileSizes.GRASS_WIDTH, 2, 75)
+                    new SpritePart(SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH, 32, 32, 2)
             );
             world.addEntity(towerPreview);
             preview = towerPreview;
@@ -137,17 +143,20 @@ public class TowerControlSystem implements IEntityProcessingService {
 
         // Calculate placement of preview
         PositionPart posPart = preview.getPart(PositionPart.class);
-        posPart.setX(gameData.getMouseX());
-        posPart.setY(gameData.getMouseY());
-        map.fitEntityToMap(preview);
+        int x = roundDown(gameData.getMouseX(), TileSizes.GRASS_WIDTH);
+        int y = roundDown(gameData.getMouseY(), TileSizes.GRASS_WIDTH);
+        posPart.setX(x);
+        posPart.setY(y);
 
         // Set preview sprite according to legalness of placement
-        SpritePart sprite = preview.getPart(SpritePart.class);
+        String spritePath;
         if (isLegalPlacement(preview)) {
-            sprite.setSpritePath(TowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH);
+            spritePath = SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_LEGAL_PATH;
         } else {
-            sprite.setSpritePath(TowerPlugin.BASIC_TOWER_PREVIEW_ILLEGAL_PATH);
+            spritePath = SingleDamageTowerPlugin.BASIC_TOWER_PREVIEW_ILLEGAL_PATH;
         }
+        preview.remove(SpritePart.class);
+        preview.add(new SpritePart(spritePath, 32, 32, 2, 75));
     }
 
     private void attackEnemies(GameData gameData, World world) {

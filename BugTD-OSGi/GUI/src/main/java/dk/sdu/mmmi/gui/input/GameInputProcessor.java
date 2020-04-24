@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputAdapter;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
-import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
 
 public class GameInputProcessor extends InputAdapter {
 
@@ -34,7 +33,6 @@ public class GameInputProcessor extends InputAdapter {
         }
         if (k == Keys.ESCAPE) {
             gameData.getKeys().setKey(GameKeys.ESCAPE, true);
-            gameData.addEvent(new GameOverEvent(null));
         }
         if (k == Keys.SPACE) {
             gameData.getKeys().setKey(GameKeys.SPACE, true);

@@ -1,10 +1,21 @@
 package dk.sdu.mmmi.cbse;
 
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,24 +43,6 @@ public class Game {
 
     public GameData getGameData() {
         return gameData;
-    }
-    
-    public void restart(List<IGamePluginService> ignoreThese) {
-        // Stop all
-        for (IGamePluginService plugin : gamePluginList) {
-            if (ignoreThese.contains(plugin)) {
-                continue;
-            }
-            plugin.stop(gameData, world);
-        }
-        
-        // Start all
-        for (IGamePluginService plugin : gamePluginList) {
-            if (ignoreThese.contains(plugin)) {
-                continue;
-            }
-            plugin.start(gameData, world);
-        }
     }
 
     public void update() {

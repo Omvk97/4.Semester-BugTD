@@ -30,10 +30,10 @@ public class EnemyControlSystem implements IEntityProcessingService {
                     weapon.process(gameData, target);   // Dont really know what to use as arguments   
                 }
             }
-            
-            moveEnemy(enemy, p, movingPart, animationPart);
-           
-           // System.out.println("Enemy X = " + p.getX() + " Y = " + p.getY());
+            movingPart.setLeft(gameData.getKeys().isDown(LEFT));
+            movingPart.setRight(gameData.getKeys().isDown(RIGHT));
+            movingPart.setUp(gameData.getKeys().isDown(UP));
+            movingPart.setDown(gameData.getKeys().isDown(DOWN));
             setAnimation(enemy, gameData, animationPart);
             
             movingPart.process(gameData,enemy);
@@ -43,39 +43,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
                 world.removeEntity(enemy);
             }
         }
-    }
-    
-    
-    
-    public void moveEnemy(Entity enemy, PositionPart pos, MovingPart move, AnimationPart animPart) {
-        float targetX = 200;
-        float targetY = 100;
-        move.setRight(false);
-        move.setLeft(false);
-        move.setDown(false);
-        move.setUp(false);
-        if (pos.getX() != targetX ) {
-            if(pos.getX() - 5 < targetX) {
-                move.setRight(true);
-                animPart.setAtlasPath("texturesprites/enemy/enemyright.atlas");
-                
-            }
-            if (pos.getX() + 5> targetX) {
-                move.setLeft(true);
-                animPart.setAtlasPath("texturesprites/enemy/enemyleft.atlas");
-            } 
-            
-            if (pos.getY() + 5 > targetY) {
-                move.setDown(true);
-                animPart.setAtlasPath("texturesprites/enemy/enemydown.atlas");
-            }
-            if (pos.getY() - 5 < targetY) {
-                move.setUp(true);
-                animPart.setAtlasPath("texturesprites/enemy/enemyup.atlas");
-            }
-        }
-        
-        
     }
     public void setAnimation(Entity enemy, GameData gameData, AnimationPart animPart) {
         if (gameData.getKeys().isDown(DOWN)) {

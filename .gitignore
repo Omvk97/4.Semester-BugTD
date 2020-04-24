@@ -47,5 +47,5 @@ hs_err_pid*
 *.iml
 /BugTD-OSGi/CommonAI/target/
 /BugTD-OSGi/AI/target/
-/BugTD-OSGi/Queen/target/
-/BugTD-OSGi/OSGIEnemySpawner/target/
+/BugTD-OSGi/HitScan/target/
+/BugTD-OSGi/poms/target/

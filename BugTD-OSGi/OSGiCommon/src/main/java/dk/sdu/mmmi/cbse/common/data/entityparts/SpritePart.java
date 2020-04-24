@@ -32,10 +32,6 @@ public class SpritePart implements EntityPart {
         return spritePath;
     }
 
-    public void setSpritePath(String spritePath) {
-        this.spritePath = spritePath;
-    }
-
     public float getWidth() {
         return width;
     }

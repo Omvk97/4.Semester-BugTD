@@ -52,6 +52,7 @@ public class GuiPluginService extends com.badlogic.gdx.Game implements IGamePlug
 
     @Override
     public void render() {
+        Game.getInstance().update(); //TODO: Should this be in render?
         super.render();
     }
 
