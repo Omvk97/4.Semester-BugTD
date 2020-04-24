@@ -77,7 +77,7 @@ public class AIProcessingService implements IEntityProcessingService {
                     List<EnemyCommand> enemyCommands = new ArrayList<>();
                     // if there is no route, a tower must be destroyed, which will trigger a recalibration of AI for all enemies
                     if (tileRoute.isEmpty()) {
-                        enemyCommands.add(new EnemyCommand(calculateClosestTower(world), Command.ATTACK));
+                        enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy.getCurrentX(), enemy.getCurrentY()), Command.ATTACK));
                     } else {
                         tileRoute.forEach((tile) -> {
                             enemyCommands.add(new EnemyCommand(tile, Command.WALK));
@@ -98,7 +98,7 @@ public class AIProcessingService implements IEntityProcessingService {
                 if (enemy.getType() == EnemyType.ATTACKING) {
                     List<EnemyCommand> enemyCommands = new ArrayList<>();
 
-                    enemyCommands.add(new EnemyCommand(calculateClosestTower(world), Command.ATTACK));
+                    enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy.getCurrentX(), enemy.getCurrentY()), Command.ATTACK));
 
                     gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                 }
@@ -109,25 +109,32 @@ public class AIProcessingService implements IEntityProcessingService {
                 // No route found, therefore attack closest tower
                 List<EnemyCommand> enemyCommands = new ArrayList<>();
 
-                enemyCommands.add(new EnemyCommand(calculateClosestTower(world), Command.ATTACK));
+                enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy.getCurrentX(), enemy.getCurrentY()), Command.ATTACK));
 
                 gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
             }
         }
     }
 
-    private Tower calculateClosestTower(World world) {
-//        for (Entity entity : world.getEntities()) {
-//            PositionPart entityPositionPart = entity.getPart(PositionPart.class);
-//            if (entityPositionPart != null) {
-//                if (entityPositionPart.getX() == tile.getX() && entityPositionPart.getY() == tile.getY()) {
-//                    if (entity instanceof Tower) {
-//                        return (Tower) entity;
-//                    }
-//                }
-//            }
-//        }
-        return null;
+    private Tower calculateClosestTower(World world, float xPosition, float yPosition) {
+        Tower closestTower = null;
+        double closestDistance = 0;
+        for (Entity entity : world.getEntities()) {
+            if (entity instanceof Tower) {
+                PositionPart towerPosition = entity.getPart(PositionPart.class);
+                double distance = Math.sqrt(Math.sqrt(xPosition - towerPosition.getX()) + Math.sqrt(yPosition - towerPosition.getY()));
+                if (closestTower == null) {
+                    closestTower = (Tower) entity;
+                    closestDistance = distance;
+                } else {
+                    if (distance < closestDistance) {
+                        closestTower = (Tower) entity;
+                        closestDistance = distance;
+                    }
+                }
+            }
+        }
+        return closestTower;
     }
 
     public MapSPI getMapSPI() {

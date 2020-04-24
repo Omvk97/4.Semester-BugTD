@@ -43,14 +43,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
             PositionPart positionPart = enemy.getPositionPart();
             PreciseMovingPart movingPart = enemy.getMovingPart();
 
-//            Entity target = calculateClosestTower(world, p);
-//            if (target != null) {
-//                WeaponPart weapon = enemy.getPart(WeaponPart.class);
-//                weapon.setTarget(target);
-//                if (distance(p, target.getPart(PositionPart.class)) < weapon.getRange()) {
-//                    weapon.process(gameData, target);   // Dont really know what to use as arguments   
-//                }
-//            }
             // For loop ensures only the last sent route has an effect on enemy movement
             for (Event event : gameData.getEvents(RouteCalculatedEvent.class, enemy.getID())) {
                 RouteCalculatedEvent routeCalculatedEvent = (RouteCalculatedEvent) event;
@@ -78,7 +70,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
         float targetY = enemy.getYTarget();
         
         // TODO - if the target is an attacking target, don't stand completly on it
-        
         if (futureXPosition < targetX) {
             enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.RIGHT, "texturesprites/enemy/enemyright.atlas"));
         } else if (futureXPosition > targetX) {
