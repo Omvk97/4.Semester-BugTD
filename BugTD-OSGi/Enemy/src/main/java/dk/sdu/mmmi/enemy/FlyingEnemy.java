@@ -28,12 +28,44 @@ public class FlyingEnemy implements IGamePluginService {
         float acceleration = 200;
         float maxSpeed = 300;
         float rotationSpeed = 5;
-        float x = gameData.getDisplayWidth() / 3;
-        float y = gameData.getDisplayHeight() / 2;
+        float x = gameData.getDisplayWidth() / 2;
+        float y = 700;
         float radians = 3.1415f / 2;
         int life = 5;
         
 //Parts
+        AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32);
+        fEnemy.add(anm);
+        //Parts
+        //SpritePart sprite = new SpritePart("enemy/enemyright/right_01.png", 32, 32);
+        //fEnemy.add(sprite);
+        WeaponPart wpn = new WeaponPart(damage, range, speed);
+        fEnemy.add(wpn);
+        MovingPart mov = new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed);
+        fEnemy.add(mov);
+        PositionPart pos  = new PositionPart(x, y, radians);
+        fEnemy.add(pos);
+        LifePart lif = new LifePart(life);
+        fEnemy.add(lif);
+        world.addEntity(fEnemy);
+    }
+    
+    public static void createFlyingEnemy(GameData gameData, World world) {
+        Entity fEnemy = new Enemy();
+        //attributes
+        float damage = 10;
+        float range = 50;
+        float speed = 10;
+        float deacceleration = 100;
+        float acceleration = 200;
+        float maxSpeed = 300;
+        float rotationSpeed = 5;
+        float x = gameData.getDisplayWidth() / 2;
+        float y = 700;
+        float radians = 3.1415f / 2;
+        int life = 5;
+        
+        //Parts
         AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32);
         fEnemy.add(anm);
         //Parts

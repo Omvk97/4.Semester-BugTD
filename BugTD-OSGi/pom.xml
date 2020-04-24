@@ -63,6 +63,8 @@
         <module>GUI</module>
     <module>AI</module>
     <module>CommonAI</module>
+    <module>Queen</module>
+    <module>OSGIEnemySpawner</module>
   </modules>
 
     <build>
