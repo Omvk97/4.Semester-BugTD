@@ -60,6 +60,7 @@
         <module>Enemy</module>
         <module>CommonMap</module>
         <module>Map</module>
+        <module>GUI</module>
     <module>AI</module>
     <module>CommonAI</module>
     <module>OSGIEnemySpawner</module>
