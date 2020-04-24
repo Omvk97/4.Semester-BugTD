@@ -5,7 +5,6 @@
  */
 package dk.sdu.mmmi.commonai.events;
 
-import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.commontower.Tower;
 
@@ -13,9 +12,9 @@ import dk.sdu.mmmi.commontower.Tower;
  *
  * @author oliver
  */
-public class TowerPlacedDuringRoundEvent extends Event {
+public class MapChangedDuringRoundEvent extends Event {
     
-    public TowerPlacedDuringRoundEvent(Tower source) {
+    public MapChangedDuringRoundEvent(Tower source) {
         super(source);
     }
     

@@ -8,10 +8,10 @@ import static java.lang.Math.sqrt;
 
 public class MovingPart implements EntityPart {
 
-    private float dx, dy;
-    private float deceleration, acceleration;
-    private float maxSpeed, rotationSpeed;
-    private boolean left, right, up, down;
+    protected float dx, dy;
+    protected float deceleration, acceleration;
+    protected float maxSpeed, rotationSpeed;
+    protected boolean left, right, up, down;
 
     public MovingPart(float deceleration, float acceleration, float maxSpeed, float rotationSpeed) {
         this.deceleration = deceleration;

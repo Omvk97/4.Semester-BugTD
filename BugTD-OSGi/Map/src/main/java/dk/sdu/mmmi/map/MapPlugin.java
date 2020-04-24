@@ -3,6 +3,7 @@ package dk.sdu.mmmi.map;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
@@ -75,23 +76,25 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     @Override
     public Tile getClosestTile(float x, float y) {
-        return null;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public ArrayList<Tile> getTilesEntityIsOn(Entity entity) {
         PositionPart posPart = entity.getPart(PositionPart.class);
         SpritePart spritePart = entity.getPart(SpritePart.class);
-
-        if (posPart == null || spritePart == null) {
+        AnimationPart animationPart = entity.getPart(AnimationPart.class);
+        
+        // Entitity has to have a position part, and either a spritePart or an animationpart
+        if (posPart == null || (spritePart == null && animationPart == null)) {
             return new ArrayList<>();
         }
 
         ArrayList<Tile> overlappingTiles = new ArrayList<>();
         int tileNumberFromLeft = (int) posPart.getX() / TileSizes.GRASS_WIDTH;
         int tileNumberFromBottom = (int) posPart.getY() / TileSizes.GRASS_WIDTH;
-        int entityWidthInTiles = (int) spritePart.getWidth() / TileSizes.GRASS_WIDTH;
-        int entityHeightInTiles = (int) spritePart.getHeight() / TileSizes.GRASS_WIDTH;
+        int entityWidthInTiles = (int) (spritePart == null ? animationPart.getWidth() : spritePart.getWidth()) / TileSizes.GRASS_WIDTH;
+        int entityHeightInTiles = (int) (spritePart == null ? animationPart.getHeight() : spritePart.getHeight()) / TileSizes.GRASS_WIDTH;
 
         for (int i = tileNumberFromLeft; i < tileNumberFromLeft + entityWidthInTiles; i++) {
             for (int j = tileNumberFromBottom; j < tileNumberFromBottom + entityHeightInTiles; j++) {

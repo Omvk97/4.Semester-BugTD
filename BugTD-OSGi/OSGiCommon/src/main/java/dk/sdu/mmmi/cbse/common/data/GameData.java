@@ -92,4 +92,12 @@ public class GameData {
 
         return r;
     }
+    
+    public <E extends Event> void removeEvents(Class<E> type) {
+        for (Event event : events) {
+            if (event.getClass().equals(type)) {
+                events.remove(event);
+            }
+        }
+    }
 }

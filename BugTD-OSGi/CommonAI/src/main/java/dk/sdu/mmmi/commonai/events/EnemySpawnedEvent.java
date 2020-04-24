@@ -5,7 +5,6 @@
  */
 package dk.sdu.mmmi.commonai.events;
 
-import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.commonenemy.Enemy;
 
@@ -15,12 +14,12 @@ import dk.sdu.mmmi.commonenemy.Enemy;
  */
 public class EnemySpawnedEvent extends Event {
     
+    
     public EnemySpawnedEvent(Enemy source) {
         super(source);
     }
     
     public Enemy getEnemy() {
         return (Enemy) source;
-    }
-    
+    }  
 }

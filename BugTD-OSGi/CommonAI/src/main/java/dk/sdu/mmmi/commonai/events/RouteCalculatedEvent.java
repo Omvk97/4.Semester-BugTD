@@ -5,9 +5,9 @@
  */
 package dk.sdu.mmmi.commonai.events;
 
-import dk.sdu.mmmi.commonai.EnemyCommand;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.commonenemy.Enemy;
+import dk.sdu.mmmi.commonenemy.EnemyCommand;
 import java.util.List;
 
 /**
@@ -25,5 +25,9 @@ public class RouteCalculatedEvent extends Event {
     
     public Enemy getEnemy() {
         return (Enemy) source;
+    }
+
+    public List<EnemyCommand> getEnemyCommands() {
+        return enemyCommands;
     }
 }
