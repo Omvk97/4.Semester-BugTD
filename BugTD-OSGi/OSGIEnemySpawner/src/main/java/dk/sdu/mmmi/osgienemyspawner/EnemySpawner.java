@@ -33,7 +33,7 @@ public class EnemySpawner implements IEntityProcessingService {
          
         if (totalEnemysInWorld < targetEnemyCount) {
             if (lastSpawn > spawnTime) {
-                System.out.println("I spawned");
+      
                 if ("Ground".equals(enemyType)) {
                 GroundEnemy.createGroundEnemy(gameData, world);
                 }
@@ -43,7 +43,6 @@ public class EnemySpawner implements IEntityProcessingService {
 
                 lastSpawn = 0f;
             }
-            System.out.println("last spawn = " + lastSpawn);
         }
     }
     
