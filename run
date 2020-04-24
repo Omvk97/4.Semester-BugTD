@@ -1,0 +1,2 @@
+#!/bin/sh
+cd ./BugTD-OSGi && mvn install pax:provision
