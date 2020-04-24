@@ -114,7 +114,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         CollisionPart colli = new CollisionPart(32, 32);
 
         float damage = 10;
-        float range = 50;
+        float range = 200;
         float speed = 1;
         WeaponPart wpn = new WeaponPart(damage, range, speed);
 
@@ -167,7 +167,7 @@ public class TowerControlSystem implements IEntityProcessingService {
                 WeaponPart weapon = tower.getPart(WeaponPart.class);
                 weapon.setTarget(target);
                 if (distance(towerPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
-                    weapon.process(gameData, target);   // Dont really know what to use as arguments   
+                    weapon.process(gameData, tower);   // Dont really know what to use as arguments   
                 }
             }
         }
