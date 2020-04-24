@@ -20,6 +20,8 @@ public interface MapSPI {
     Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException;
 
     void loadFile(String filepath);
+    
+    void fitEntityToMap(Entity e);
 
     ArrayList<MapWave> getMapWaves();
 }
