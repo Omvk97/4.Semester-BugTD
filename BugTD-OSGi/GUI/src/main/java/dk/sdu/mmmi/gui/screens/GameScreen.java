@@ -15,9 +15,13 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
+import dk.sdu.mmmi.cbse.common.events.Event;
+import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
+import dk.sdu.mmmi.gui.GuiPluginService;
 import dk.sdu.mmmi.gui.input.GameInputProcessor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class GameScreen implements Screen {
@@ -42,6 +46,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(new GameInputProcessor(Game.getInstance().getGameData()));
+        Game.getInstance().restart(Arrays.asList(GuiPluginService.getInstance()));
     }
 
     @Override
@@ -53,10 +58,17 @@ public class GameScreen implements Screen {
 
         Game.getInstance().getGameData().setDelta(Gdx.graphics.getDeltaTime());
         Game.getInstance().getGameData().getKeys().update();
+        Game.getInstance().update(); //TODO: Should this be in render? From Thomas: Yes I think it fits here inside the GameScreen's render method
+        // Is this the right place to put the game over check? Yes it probably is
+        if (!Game.getInstance().getGameData().getEvents(GameOverEvent.class).isEmpty()) {
+            // TODO: Show some UI that informs the user that the game is over
+            for (Event gameOverEvent : Game.getInstance().getGameData().getEvents(GameOverEvent.class)) {
+                Game.getInstance().getGameData().removeEvent(gameOverEvent);
+            }
+            GuiPluginService.getInstance().setScreen(new MenuScreen());
+        }
         draw();
     }
-
-
 
     private void draw() {
         ArrayList<Entity> entitiesToDraw = new ArrayList<>();
@@ -89,10 +101,8 @@ public class GameScreen implements Screen {
             drawSprite(spritePart, positionPart);
         }
 
-
         loadAnimations();
         ArrayList<Entity> entitiesToAnimate = new ArrayList<>();
-
 
         // Populate list
         for (Entity entity : Game.getInstance().getWorld().getEntities()) {
@@ -104,8 +114,6 @@ public class GameScreen implements Screen {
                 entitiesToAnimate.add(entity);
             }
         }
-
-
 
         // Draw
         for (Entity entity : entitiesToAnimate) {
