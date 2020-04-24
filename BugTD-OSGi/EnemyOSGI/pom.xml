@@ -34,11 +34,6 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>CommonEnemy</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>CommonTower</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -47,14 +42,23 @@
             <artifactId>CommonAI</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CommonEnemy</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
-    <build>
+   <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>4.2.1</version>
+                <configuration>
+                    <instructions>
+                        <Bundle-Activator>dk.sdu.mmmi.cbse.enemy.Activator</Bundle-Activator>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>

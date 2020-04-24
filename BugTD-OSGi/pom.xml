@@ -58,10 +58,10 @@
         <module>DummyPlayer</module>
         <module>CommonMap</module>
         <module>Map</module>
-    <module>AI</module>
-    <module>CommonAI</module>
-    <module>CommonEnemyOSGI</module>
-    <module>EnemyOSGI</module>
+        <module>AI</module>
+        <module>CommonAI</module>
+        <module>CommonEnemyOSGI</module>
+        <module>EnemyOSGI</module>
   </modules>
 
     <build>

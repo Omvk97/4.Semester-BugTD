@@ -1,3 +1,0 @@
-Bundle-SymbolicName: Enemy
-Bundle-ActivationPolicy: lazy
-Service-Component: META-INF/controlsystem.xml, META-INF/flyingenemyplugin.xml, META-INF/groundenemy.xml
