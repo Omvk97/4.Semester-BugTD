@@ -1,7 +1,5 @@
 package dk.sdu.mmmi.map;
 
-import dk.sdu.mmmi.cbse.common.data.Entity;
-import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.*;
 import dk.sdu.mmmi.commonmap.MapWave;
@@ -9,7 +7,6 @@ import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commontower.Queen;
 import dk.sdu.mmmi.osgienemyspawner.EnemySpawnPoint;
-import dk.sdu.mmmi.queen.QueenPlugin;
 import dk.sdu.mmmi.queen.QueenStats;
 
 import java.util.ArrayList;
@@ -105,7 +102,7 @@ public class MapData {
 
             switch (currentType) {
                 case Tiles:
-                    processMapChunk(lines);
+                    processTilesChunk(lines);
                     break;
                 case Waves:
                     processWavesChunk(lines);
@@ -138,7 +135,7 @@ public class MapData {
         }
     }
 
-    private void processMapChunk(ArrayList<String> lines) {
+    private void processTilesChunk(ArrayList<String> lines) {
         tiles = new Tile[lines.size()][];
         int y = 0;
         for (int i = lines.size() - 1; i >= 0; i--) {
