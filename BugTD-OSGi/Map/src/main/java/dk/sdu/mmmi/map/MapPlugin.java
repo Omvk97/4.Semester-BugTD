@@ -38,6 +38,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         try (Scanner sc = new Scanner(new InputStreamReader(classLoader.getResource(filepath).openStream()))) {
             mapData = new MapData(16, sc);
             mapData.addTilesToWorld(world);
+            mapData.addQueenToWorld(world);
         } catch (Exception ex) {
             System.out.println("Exception caught while reading map file [" + filepath + "]");
             System.out.println(ex);
@@ -47,6 +48,16 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     @Override
     public ArrayList<MapWave> getMapWaves() {
         return mapData.getWaves();
+    }
+
+    @Override
+    public float getEnemySpawnY() {
+        return mapData.getEnemySpawnPoint().y;
+    }
+
+    @Override
+    public float getEnemySpawnX() {
+        return mapData.getEnemySpawnPoint().x;
     }
 
     @Override

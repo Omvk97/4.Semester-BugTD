@@ -12,6 +12,8 @@ import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commontower.Queen;
 
+import java.util.List;
+
 public class QueenControlSystem implements IEntityProcessingService {
 
     private Queen queen;
@@ -20,7 +22,9 @@ public class QueenControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         if (queen == null || !world.getEntities(Queen.class).contains(queen)) {
-            queen = (Queen) world.getEntities(Queen.class).get(0);
+            List<Entity> queensInGame = world.getEntities(Queen.class);
+            if (queensInGame.size() < 1) return;
+            queen = (Queen) queensInGame.get(0);
             map.fitEntityToMap(queen);
         }
 
