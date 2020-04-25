@@ -11,10 +11,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commonenemy.Enemy;
 
-/**
- *
- * @author marcu
- */
 public class FlyingEnemy implements IGamePluginService {
 
     @Override
@@ -32,7 +28,7 @@ public class FlyingEnemy implements IGamePluginService {
         float y = 700;
         float radians = 3.1415f / 2;
         int life = 5;
-        
+
 //Parts
         AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32);
         fEnemy.add(anm);
@@ -43,13 +39,13 @@ public class FlyingEnemy implements IGamePluginService {
         fEnemy.add(wpn);
         MovingPart mov = new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed);
         fEnemy.add(mov);
-        PositionPart pos  = new PositionPart(x, y, radians);
+        PositionPart pos = new PositionPart(x, y, radians);
         fEnemy.add(pos);
         LifePart lif = new LifePart(life);
         fEnemy.add(lif);
         world.addEntity(fEnemy);
     }
-    
+
     public static void createFlyingEnemy(GameData gameData, World world) {
         Entity fEnemy = new Enemy();
         //attributes
@@ -64,7 +60,7 @@ public class FlyingEnemy implements IGamePluginService {
         float y = 700;
         float radians = 3.1415f / 2;
         int life = 5;
-        
+
         //Parts
         AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32);
         fEnemy.add(anm);
@@ -75,7 +71,7 @@ public class FlyingEnemy implements IGamePluginService {
         fEnemy.add(wpn);
         MovingPart mov = new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed);
         fEnemy.add(mov);
-        PositionPart pos  = new PositionPart(x, y, radians);
+        PositionPart pos = new PositionPart(x, y, radians);
         fEnemy.add(pos);
         LifePart lif = new LifePart(life);
         fEnemy.add(lif);
