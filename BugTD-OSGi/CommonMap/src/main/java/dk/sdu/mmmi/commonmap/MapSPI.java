@@ -24,4 +24,9 @@ public interface MapSPI {
     void fitEntityToMap(Entity e);
 
     ArrayList<MapWave> getMapWaves();
+
+    float getEnemySpawnY();
+
+    float getEnemySpawnX();
+
 }

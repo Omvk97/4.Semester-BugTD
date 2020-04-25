@@ -51,6 +51,16 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     }
 
     @Override
+    public float getEnemySpawnY() {
+        return mapData.getEnemySpawnPoint().y;
+    }
+
+    @Override
+    public float getEnemySpawnX() {
+        return mapData.getEnemySpawnPoint().x;
+    }
+
+    @Override
     public Tile[][] getTiles() {
         return mapData.getTiles();
     }

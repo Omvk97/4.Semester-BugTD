@@ -8,6 +8,7 @@ import dk.sdu.mmmi.commonmap.MapWave;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commontower.Queen;
+import dk.sdu.mmmi.osgienemyspawner.EnemySpawnPoint;
 import dk.sdu.mmmi.queen.QueenPlugin;
 import dk.sdu.mmmi.queen.QueenStats;
 
@@ -19,11 +20,16 @@ public class MapData {
     private ArrayList<MapWave> waves;
     private int tileSize = 16;
     private Queen queen;
+    private EnemySpawnPoint enemySpawnPoint;
 
     public MapData(int tileSize) {
         this.tileSize = tileSize;
         tiles = new Tile[0][0];
         waves = new ArrayList<>();
+    }
+
+    public EnemySpawnPoint getEnemySpawnPoint() {
+        return enemySpawnPoint;
     }
 
     public MapData(int tileSize, Scanner sc) {
@@ -196,6 +202,24 @@ public class MapData {
         WeaponPart weapon = new WeaponPart(stats.damage, stats.range, stats.attackSpeed);
         SpritePart sprite = new SpritePart("towers/queen.png", 4*TileSizes.GRASS_WIDTH, 4*TileSizes.GRASS_HEIGHT, 1);
         this.queen = new Queen(pos, life, collision, weapon, sprite);
+    }
+
+    private void processEnemySpawnChunk(ArrayList<String> lines) {
+        this.enemySpawnPoint = new EnemySpawnPoint();
+        for (String line : lines) {
+            String type = line.split("=")[0];
+            String value = line.split("=")[1];
+            switch(type) {
+                case "X":
+                    this.enemySpawnPoint.x = Float.parseFloat(value);
+                    break;
+                case "Y":
+                    this.enemySpawnPoint.y = Float.parseFloat(value);
+                    break;
+                default:
+                    return;
+            }
+        }
     }
 
     private enum DataType {
