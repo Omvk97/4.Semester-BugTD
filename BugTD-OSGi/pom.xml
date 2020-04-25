@@ -55,14 +55,19 @@
         <module>OSGiLibGDX</module>
         <module>Tower</module>
         <module>CommonTower</module>
-        <module>DummyPlayer</module>
         <module>CommonEnemy</module>
         <module>Enemy</module>
         <module>CommonMap</module>
         <module>Map</module>
+        <module>GUI</module>
     <module>AI</module>
     <module>CommonAI</module>
+
     <module>Player</module>
+
+    <module>Queen</module>
+    <module>OSGIEnemySpawner</module>
+
   </modules>
 
     <build>

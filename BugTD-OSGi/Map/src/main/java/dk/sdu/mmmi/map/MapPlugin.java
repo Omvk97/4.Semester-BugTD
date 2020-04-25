@@ -3,6 +3,7 @@ package dk.sdu.mmmi.map;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
@@ -37,6 +38,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         try (Scanner sc = new Scanner(new InputStreamReader(classLoader.getResource(filepath).openStream()))) {
             mapData = new MapData(16, sc);
             mapData.addTilesToWorld(world);
+            mapData.addQueenToWorld(world);
         } catch (Exception ex) {
             System.out.println("Exception caught while reading map file [" + filepath + "]");
             System.out.println(ex);
@@ -46,6 +48,16 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     @Override
     public ArrayList<MapWave> getMapWaves() {
         return mapData.getWaves();
+    }
+
+    @Override
+    public float getEnemySpawnY() {
+        return mapData.getEnemySpawnPoint().y;
+    }
+
+    @Override
+    public float getEnemySpawnX() {
+        return mapData.getEnemySpawnPoint().x;
     }
 
     @Override
@@ -116,18 +128,31 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         int x = (int) positionpart.getX() / mapData.getTileSize();
         int y = (int) positionpart.getY() / mapData.getTileSize();
         if (direction == Direction.UP) {
-            return tiles[y-1][x];
+            return tiles[y - 1][x];
         }
         if (direction == Direction.RIGHT) {
-            return tiles[y][x+1];
+            return tiles[y][x + 1];
         }
         if (direction == Direction.DOWN) {
-            return tiles[y+1][x];
+            return tiles[y + 1][x];
         }
         if (direction == Direction.LEFT) {
-            return tiles[y][x-1];
+            return tiles[y][x - 1];
         }
         throw new ArrayIndexOutOfBoundsException("Yolo");
     }
-}
 
+    @Override
+    public void fitEntityToMap(Entity e) {
+        PositionPart pos = e.getPart(PositionPart.class);
+        pos.setX(roundDown(pos.getX(), TileSizes.GRASS_WIDTH));
+        pos.setY(roundDown(pos.getY(), TileSizes.GRASS_HEIGHT));
+    }
+
+    private int roundDown(double number, double place) {
+        double result = number / place;
+        result = Math.floor(result);
+        result *= place;
+        return (int) result;
+    }
+}

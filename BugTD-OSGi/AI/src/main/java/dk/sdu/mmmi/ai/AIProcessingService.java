@@ -48,7 +48,7 @@ public class AIProcessingService implements IEntityProcessingService {
         // Enemy Spawned event listener
         for (Event event : gameData.getEvents(EnemySpawnedEvent.class)) {
             EnemySpawnedEvent enemySpawnedEvent = (EnemySpawnedEvent) event;
-            enemiesToCalculate.add(enemySpawnedEvent.getEnemy());
+            enemiesToCalculate.add((Enemy) enemySpawnedEvent.getEnemy());
         }
         
         // Tower set event listener which should trigger re calibration of all enemies
