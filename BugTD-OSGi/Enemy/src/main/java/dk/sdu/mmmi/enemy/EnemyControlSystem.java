@@ -12,6 +12,8 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commontower.Tower;
+import java.awt.MouseInfo;
+import java.awt.Point;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
@@ -30,11 +32,10 @@ public class EnemyControlSystem implements IEntityProcessingService {
                     weapon.process(gameData, target);   // Dont really know what to use as arguments   
                 }
             }
-            movingPart.setLeft(gameData.getKeys().isDown(LEFT));
-            movingPart.setRight(gameData.getKeys().isDown(RIGHT));
-            movingPart.setUp(gameData.getKeys().isDown(UP));
-            movingPart.setDown(gameData.getKeys().isDown(DOWN));
+            moveEnemy(enemy, p, movingPart, animationPart);
+            
             setAnimation(enemy, gameData, animationPart);
+            //test();
             
             movingPart.process(gameData,enemy);
             p.process(gameData,enemy);
@@ -44,6 +45,45 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
         }
     }
+    
+    public void test(){
+        Point p = MouseInfo.getPointerInfo().getLocation();
+        double x = p.getX();
+        double y = p.getY();
+        System.out.println("X: " + x + "Y: " + y);
+    }
+    
+    public void moveEnemy(Entity enemy, PositionPart pos, MovingPart move, AnimationPart animPart) {
+        float targetX = 200;
+        float targetY = 100;
+        move.setRight(false);
+        move.setLeft(false);
+        move.setDown(false);
+        move.setUp(false);
+        if (pos.getX() != targetX ) {
+            if(pos.getX() - 5 < targetX) {
+                move.setRight(true);
+                animPart.setAtlasPath("texturesprites/enemy/enemyright.atlas");
+                
+            }
+            if (pos.getX() + 5> targetX) {
+                move.setLeft(true);
+                animPart.setAtlasPath("texturesprites/enemy/enemyleft.atlas");
+            } 
+            
+            if (pos.getY() + 5 > targetY) {
+                move.setDown(true);
+                animPart.setAtlasPath("texturesprites/enemy/enemydown.atlas");
+            }
+            if (pos.getY() - 5 < targetY) {
+                move.setUp(true);
+                animPart.setAtlasPath("texturesprites/enemy/enemyup.atlas");
+            }
+        }
+        
+        
+    }
+    
     public void setAnimation(Entity enemy, GameData gameData, AnimationPart animPart) {
         if (gameData.getKeys().isDown(DOWN)) {
             animPart.setAtlasPath("texturesprites/enemy/enemydown.atlas");
@@ -58,7 +98,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             animPart.setAtlasPath("texturesprites/enemy/enemyleft.atlas");
         }
     }
-    
+     
     private Entity calculateClosestTower(World world, PositionPart towerPosPart) {
         float currentMinDistance = Float.MAX_VALUE;
         Entity closestEnemy = null;

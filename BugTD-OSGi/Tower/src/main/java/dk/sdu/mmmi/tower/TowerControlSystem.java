@@ -52,7 +52,7 @@ public class TowerControlSystem implements IEntityProcessingService {
                 world.addEntity(tower);
             }
         }
-        gameData.getEvents().removeAll(eventsToDelete);
+        //gameData.getEvents().removeAll(eventsToDelete);
     }
 
     int roundDown(double number, double place) {

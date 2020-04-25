@@ -17,10 +17,10 @@ public class Activator implements BundleActivator {
     
     @Override
     public void start(BundleContext context) throws Exception {
-        GroundEnemy ground = new GroundEnemy();
-        context.registerService(IGamePluginService.class, ground, null);
-        FlyingEnemy flyBaby = new FlyingEnemy();
-        context.registerService(IGamePluginService.class, flyBaby, null);
+//        GroundEnemy ground = new GroundEnemy();
+//        context.registerService(IGamePluginService.class, ground, null);
+//        FlyingEnemy flyBaby = new FlyingEnemy();
+//        context.registerService(IGamePluginService.class, flyBaby, null);
     }
     
     @Override
