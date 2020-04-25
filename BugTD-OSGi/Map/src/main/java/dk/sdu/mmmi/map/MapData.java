@@ -141,7 +141,8 @@ public class MapData {
     private void processMapChunk(ArrayList<String> lines) {
         tiles = new Tile[lines.size()][];
         int y = 0;
-        for (String nextLine : lines) {
+        for (int i = lines.size() - 1; i >= 0; i--) {
+            String nextLine = lines.get(i);
             char[] chars = nextLine.toCharArray();
 
             Tile[] row = new Tile[chars.length];
