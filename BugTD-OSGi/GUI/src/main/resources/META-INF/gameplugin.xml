@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD:BugTD-OSGi/Player/src/main/resources/META-INF/gameplugin.xml
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="dk.sdu.mmmi.playerPlugin">
-    <implementation class="dk.sdu.mmmi.player.PlayerPlugin"/>
-     <service>
-=======
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="dk.sdu.mmmi.map">
     <implementation class="dk.sdu.mmmi.gui.GuiPluginService"/>
     <service>
->>>>>>> master:BugTD-OSGi/GUI/src/main/resources/META-INF/gameplugin.xml
         <provide interface="dk.sdu.mmmi.cbse.common.services.IGamePluginService"/>
     </service>
 </scr:component>
