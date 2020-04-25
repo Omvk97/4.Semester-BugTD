@@ -10,7 +10,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
-import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
@@ -40,7 +39,7 @@ public class TowerControlSystem implements IEntityProcessingService {
             if (!(event instanceof ClickEvent)) {
                 continue;
             }
-            
+
             eventsToDelete.add(event);
 
             // Calculate placement of new Tower
