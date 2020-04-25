@@ -113,6 +113,9 @@ public class MapData {
                 case Queen:
                     processQueenChunk(lines);
                     break;
+                case EnemySpawn:
+                    processEnemySpawnChunk(lines);
+                    break;
                 case Default:
                     return;
             }
@@ -227,6 +230,7 @@ public class MapData {
         Tiles,
         Waves,
         Queen,
+        EnemySpawn,
         End
     }
 
