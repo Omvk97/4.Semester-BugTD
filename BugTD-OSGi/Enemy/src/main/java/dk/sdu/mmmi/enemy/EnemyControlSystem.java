@@ -42,7 +42,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
 
             if (enemy.getCommands() != null && !enemy.getCommands().isEmpty() && !enemy.isDoneFollowingCommands()) {
-                moveAndAttackEnemy(enemy, gameData);
+                moveAndAttack(enemy, gameData);
             }
 
             movingPart.process(gameData, enemy);
@@ -50,13 +50,15 @@ public class EnemyControlSystem implements IEntityProcessingService {
         }
     }
 
-    public void moveAndAttackEnemy(Enemy enemy, GameData gameData) {
+    public void moveAndAttack(Enemy enemy, GameData gameData) {
         EnemyCommand command = enemy.getCommands().get(enemy.getCommandIndex());
         float futureXPosition = enemy.calculateFutureXPosition();
         float futureYPosition = enemy.calculateFutureYPosition();
 
         float targetX = enemy.getXTarget();
         float targetY = enemy.getYTarget();
+        
+        
 
         // TODO - if the target is an attacking target, don't stand completly on it
         if (futureXPosition < targetX) {

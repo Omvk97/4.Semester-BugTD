@@ -153,6 +153,13 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     private void attackEnemies(GameData gameData, World world) {
         for (Entity tower : world.getEntities(Tower.class)) {
+            // Remove dead towers
+            if (((LifePart) tower.getPart(LifePart.class)).isDead()) {
+                world.removeEntity(tower);
+                gameData.addEvent(new MapChangedDuringRoundEvent(tower));
+                continue;
+            }
+            
             PositionPart towerPosPart = tower.getPart(PositionPart.class);
             Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
             if (target != null) {
