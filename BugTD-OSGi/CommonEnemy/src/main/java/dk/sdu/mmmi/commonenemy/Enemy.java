@@ -24,10 +24,10 @@ public class Enemy extends Entity {
 
     public static Entity createGroundEnemy(float x, float y) {
         //attributes
-        float weaponDamage = 50;
+        float weaponDamage = 12.5f;
         float weaponRange = 50;
-        float weaponSpeed = 10;
-        float speedPerMovement = 1;
+        float weaponSpeed = 0.5f;
+        float speedPerMovement = 8;
         float radians = 3.1415f / 2;
         int life = 100;
 

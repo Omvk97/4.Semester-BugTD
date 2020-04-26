@@ -1,16 +1,16 @@
 @ Waves
 
 Ground*10
-Ground*10
-Flying*10
+Ground*20
+Ground*30
 
 @ Queen
 
 X=576
 Y=32
-LIFE=100
-DAMAGE=10
-RANGE=10
+LIFE=1000
+DAMAGE=25
+RANGE=32
 ATTACKSPEED=1
 
 @ EnemySpawn

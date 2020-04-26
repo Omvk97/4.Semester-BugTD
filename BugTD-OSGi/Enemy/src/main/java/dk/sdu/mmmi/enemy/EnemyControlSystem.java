@@ -42,7 +42,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
 
             if (enemy.getCommands() != null && !enemy.getCommands().isEmpty() && !enemy.isDoneFollowingCommands()) {
-                moveEnemy(enemy, gameData);
+                moveAndAttack(enemy, gameData);
             }
 
             movingPart.process(gameData, enemy);
@@ -50,7 +50,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
         }
     }
 
-    public void moveEnemy(Enemy enemy, GameData gameData) {
+    public void moveAndAttack(Enemy enemy, GameData gameData) {
         EnemyCommand command = enemy.getCommands().get(enemy.getCommandIndex());
         float futureXPosition = enemy.calculateFutureXPosition();
         float futureYPosition = enemy.calculateFutureYPosition();
@@ -58,28 +58,29 @@ public class EnemyControlSystem implements IEntityProcessingService {
         float targetX = enemy.getXTarget();
         float targetY = enemy.getYTarget();
 
-        // TODO - if the target is an attacking target, don't stand completly on it
-        if (futureXPosition < targetX) {
-            enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.RIGHT, "texturesprites/enemy/enemyright.atlas"));
-        } else if (futureXPosition > targetX) {
-            enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.LEFT, "texturesprites/enemy/enemyleft.atlas"));
-        } else if (futureYPosition < targetY) {
-            enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.UP, "texturesprites/enemy/enemyup.atlas"));
-        } else if (futureYPosition > targetY) {
-            enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.DOWN, "texturesprites/enemy/enemydown.atlas"));
-        } else { // The enemy stands on the right tile.
+        if (command.getCommand() == Command.WALK) {
+            if (futureXPosition < targetX) {
+                enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.RIGHT, "texturesprites/enemy/enemyright.atlas"));
+            } else if (futureXPosition > targetX) {
+                enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.LEFT, "texturesprites/enemy/enemyleft.atlas"));
+            } else if (futureYPosition < targetY) {
+                enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.UP, "texturesprites/enemy/enemyup.atlas"));
+            } else if (futureYPosition > targetY) {
+                enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.DOWN, "texturesprites/enemy/enemydown.atlas"));
+            } else {
+                enemy.incrementCommandIndex();
+            }
+        } else {
+            // TODO - if the target is an attacking target, don't stand completly on it// The enemy stands on the right tile.
             // Check if enemy should attack
-            if (command.getCommand() == Command.ATTACK) {
-                WeaponPart weaponPart = enemy.getWeaponPart();
-                Tower towerToAttack = (Tower) command.getTarget();
-                LifePart towerLifePart = towerToAttack.getPart(LifePart.class);
-                // If Tower isn't dead
-                if (!towerLifePart.isDead()) {
-                    // Attack tower
-                    weaponPart.process(gameData, towerToAttack);
-                } else {
-                    enemy.incrementCommandIndex();
-                }
+            WeaponPart weaponPart = enemy.getWeaponPart();
+            Entity target = command.getTarget();
+            LifePart targetLifePart = target.getPart(LifePart.class);
+            // If Tower isn't dead
+            if (!targetLifePart.isDead()) {
+                // Attack tower
+                weaponPart.setTarget(target);
+                weaponPart.process(gameData, enemy);
             } else {
                 // Move towards the next command when either enemy has to move again or the tower to attack is dead
                 enemy.incrementCommandIndex();
@@ -91,7 +92,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
         float currentMinDistance = Float.MAX_VALUE;
         Entity closestEnemy = null;
 
-        for (Entity enemy : world.getEntities(Tower.class)) {
+        for (Entity enemy : world.getEntities(Tower.class
+        )) {
             PositionPart enemyPosPart = enemy.getPart(PositionPart.class);
             float distance = distance(towerPosPart, enemyPosPart);
             if (distance < currentMinDistance) {
