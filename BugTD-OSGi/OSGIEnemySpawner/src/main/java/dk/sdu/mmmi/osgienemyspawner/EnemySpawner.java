@@ -47,11 +47,11 @@ public class EnemySpawner implements IEntityProcessingService {
             if (lastSpawn > spawnTime) {
                 System.out.println("Spawning enemy");
                 if ("Ground".equals(enemyType)) {
-                    Entity enemy = Enemy.createGroundEnemy(400, 400);
+                    Entity enemy = Enemy.createGroundEnemy(mapSPI.getEnemySpawnX(), mapSPI.getEnemySpawnY());
                     world.addEntity(enemy);
                     gameData.addEvent(new EnemySpawnedEvent(enemy));
                 } else if ("Flying".equals(enemyType)) {
-                    Entity enemy = Enemy.createFlyingEnemy(400, 400);
+                    Entity enemy = Enemy.createFlyingEnemy(mapSPI.getEnemySpawnX(), mapSPI.getEnemySpawnY());
                     world.addEntity(enemy);
                     gameData.addEvent(new EnemySpawnedEvent(enemy));
                 }
