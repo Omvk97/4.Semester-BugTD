@@ -40,7 +40,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
 
             if (enemy.getCommands() != null && !enemy.getCommands().isEmpty() && !enemy.isDoneFollowingCommands()) {
-                Command nextCommand = enemy.getCommands().get(enemy.getCommandIndex()).getCommand();
                 moveEnemy(enemy, gameData);
             }
 
@@ -64,7 +63,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.LEFT, "texturesprites/enemy/enemyleft.atlas"));
         } else if (futureYPosition < targetY) {
             enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.UP, "texturesprites/enemy/enemyup.atlas"));
-        } else if (futureYPosition < targetY) {
+        } else if (futureYPosition > targetY) {
             enemy.addMovement(new PreciseMovementInstruction(PreciseMovingPart.Movement.DOWN, "texturesprites/enemy/enemydown.atlas"));
         } else { // The enemy stands on the right tile.
             // Check if enemy should attack

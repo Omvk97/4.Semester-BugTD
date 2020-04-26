@@ -112,7 +112,7 @@ public class Enemy extends Entity {
     }
 
     public boolean isDoneFollowingCommands() {
-        return commandIndex == commands.size() - 1;
+        return commandIndex == commands.size();
     }
 
     public float getXTarget() {
