@@ -55,28 +55,32 @@ public class WeaponPart implements EntityPart {
     }
     
     @Override
-    public void process(GameData gameData, Entity entity) {
+    public void process(GameData gameData, Entity source) {
         // Check whether the Weapon is ready to shoot or not
         
         if (cooldown <= 0) {
             cooldown = speed;   // Reset cooldown
             LifePart lp = target.getPart(LifePart.class);
-            lp.setLife(lp.getLife() - (int) damage);    // Damage entity
-            lp.process(gameData, entity);
-            System.out.println("Damaged enemy: " + lp.getLife());
+            lp.setLife(lp.getLife() - damage);    // Damage entity
             attackflash = 0.15f;
+            System.out.println("Life: " + lp.getLife());
         }
         
         //Checks if it should draw attack
         if (attackflash > 0) {
-            PositionPart pPart1 = entity.getPart(PositionPart.class);
-            SpritePart sPart1 = entity.getPart(SpritePart.class);
+            PositionPart pPart1 = source.getPart(PositionPart.class);
             PositionPart pPart2 = target.getPart(PositionPart.class);
-            SpritePart sPart2 = entity.getPart(SpritePart.class);
-            float x1 = pPart1.getX() + (sPart1.getWidth() / 2);
-            float y1 = pPart1.getY() + (sPart1.getHeight() / 2);
-            float x2 = pPart2.getX() + (sPart2.getWidth() / 2);
-            float y2 = pPart2.getY() + (sPart2.getHeight() / 2);
+            
+            SpritePart sPart1 = source.getPart(SpritePart.class);
+            SpritePart sPart2 = target.getPart(SpritePart.class);
+            AnimationPart aPart1 = source.getPart(AnimationPart.class);
+            AnimationPart aPart2 = target.getPart(AnimationPart.class);
+            
+            float x1 = pPart1.getX() + (sPart1 == null ? (aPart1.getWidth() / 2) : (sPart1.getWidth() / 2));
+            float y1 = pPart1.getY() + (sPart1 == null ? (aPart1.getHeight() / 2) : (sPart1.getHeight() / 2));
+            float x2 = pPart2.getX() + (sPart2 == null ? (aPart2.getWidth() / 2) : (sPart2.getWidth() / 2));
+            float y2 = pPart2.getY() + (sPart2 == null ? (aPart2.getHeight() / 2) : (sPart2.getHeight() / 2));
+            
             drawAttack(x1, y1, x2, y2);
             attackflash -= gameData.getDelta();
         }

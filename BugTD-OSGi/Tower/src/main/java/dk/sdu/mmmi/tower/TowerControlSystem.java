@@ -101,7 +101,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         float radians = 0;
         PositionPart pos = new PositionPart(x, y, radians);
 
-        int hp = 100;
+        int hp = 1;
         LifePart life = new LifePart(hp);
 
         CollisionPart colli = new CollisionPart(32, 32);

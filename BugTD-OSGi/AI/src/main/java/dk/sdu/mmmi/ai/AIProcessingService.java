@@ -43,6 +43,10 @@ public class AIProcessingService implements IEntityProcessingService {
         });
 
         boolean mapHasChanged = false;
+        if (AIPlugin.isNewGame()) {
+            mapHasChanged = true;
+            AIPlugin.setNewGame(false);
+        }
         // Map changed event listener which should trigger re calibration of all enemies and re calibration of all connections between tiles
         if (!(gameData.getEvents(MapChangedDuringRoundEvent.class)).isEmpty()) {
             mapHasChanged = true;
@@ -75,7 +79,7 @@ public class AIProcessingService implements IEntityProcessingService {
                             enemyCommands.add(new EnemyCommand(tile, Command.WALK));
                         });
                     }
-
+                    enemyCommands.add(new EnemyCommand(mapSPI.getQueen(), Command.ATTACK));
                     gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                 } else if (enemy.getType() == EnemyType.FLYING) {
                     tileRoute = routeFinder.findBestRouteForFlyingEnemy(tiles, startTile, queenTile);

@@ -40,7 +40,7 @@ public class QueenControlSystem implements IEntityProcessingService {
             WeaponPart weapon = queen.getPart(WeaponPart.class);
             weapon.setTarget(target);
             if (distance(queenPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
-                weapon.process(gameData, target);   // Dont really know what to use as arguments   
+                weapon.process(gameData, queen);
             }
         }
     }

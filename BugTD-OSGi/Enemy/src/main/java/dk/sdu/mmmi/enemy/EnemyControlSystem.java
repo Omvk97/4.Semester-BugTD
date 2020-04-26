@@ -42,7 +42,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
 
             if (enemy.getCommands() != null && !enemy.getCommands().isEmpty() && !enemy.isDoneFollowingCommands()) {
-                moveEnemy(enemy, gameData);
+                moveAndAttackEnemy(enemy, gameData);
             }
 
             movingPart.process(gameData, enemy);
@@ -50,7 +50,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
         }
     }
 
-    public void moveEnemy(Enemy enemy, GameData gameData) {
+    public void moveAndAttackEnemy(Enemy enemy, GameData gameData) {
         EnemyCommand command = enemy.getCommands().get(enemy.getCommandIndex());
         float futureXPosition = enemy.calculateFutureXPosition();
         float futureYPosition = enemy.calculateFutureYPosition();
@@ -71,12 +71,13 @@ public class EnemyControlSystem implements IEntityProcessingService {
             // Check if enemy should attack
             if (command.getCommand() == Command.ATTACK) {
                 WeaponPart weaponPart = enemy.getWeaponPart();
-                Tower towerToAttack = (Tower) command.getTarget();
-                LifePart towerLifePart = towerToAttack.getPart(LifePart.class);
+                Entity target = command.getTarget();
+                LifePart targetLifePart = target.getPart(LifePart.class);
                 // If Tower isn't dead
-                if (!towerLifePart.isDead()) {
+                if (!targetLifePart.isDead()) {
                     // Attack tower
-                    weaponPart.process(gameData, towerToAttack);
+                    weaponPart.setTarget(target);
+                    weaponPart.process(gameData, enemy);
                 } else {
                     enemy.incrementCommandIndex();
                 }
