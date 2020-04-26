@@ -121,6 +121,27 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     }
 
     @Override
+    public <E extends Entity> boolean checkIfTileIsOccupied(Tile t, Class<E>... ignoreTheseClasses) {
+        for (Entity entity : world.getEntities()) {
+            boolean entityShouldBeIgnored = false;
+            for (Class<E> entityType : ignoreTheseClasses) {
+                if (entityType.equals(entity.getClass())) {
+                    entityShouldBeIgnored = true;
+                }
+            }
+
+            if (entity instanceof Tile || entityShouldBeIgnored) {
+                continue;
+            }
+
+            if (getTilesEntityIsOn(entity).contains(t)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException {
         Tile[][] tiles = mapData.getTiles();
 
