@@ -1,25 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package dk.sdu.mmmi.commonai.events;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.events.Event;
 
-/**
- *
- * @author oliver
- */
 public class EnemySpawnedEvent extends Event {
-    
+
     public EnemySpawnedEvent(Entity source) {
         super(source);
     }
-    
+
     public Entity getEnemy() {
         return source;
     }
-    
+
 }

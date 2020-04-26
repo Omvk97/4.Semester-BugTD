@@ -42,6 +42,11 @@
             <artifactId>CommonAI</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CommonTower</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
