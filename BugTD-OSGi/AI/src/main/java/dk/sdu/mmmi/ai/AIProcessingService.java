@@ -26,6 +26,7 @@ public class AIProcessingService implements IEntityProcessingService {
 
     private MapSPI mapSPI;
     private TileRouteFinder routeFinder = null;
+    private boolean mapHasChanged;
 
     @Override
     public void process(GameData gameData, World world) {
@@ -42,7 +43,6 @@ public class AIProcessingService implements IEntityProcessingService {
             gameData.removeEvent(event);
         });
 
-        boolean mapHasChanged = false;
         if (AIPlugin.isNewGame()) {
             mapHasChanged = true;
             AIPlugin.setNewGame(false);
@@ -98,8 +98,6 @@ public class AIProcessingService implements IEntityProcessingService {
 
                     gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                 }
-                // ensure that if map has changed at some point, connections is only calculated the first time.
-                mapHasChanged = false;
 
             } catch (IllegalStateException ex) {
                 // No route found, therefore attack closest tower
@@ -111,6 +109,9 @@ public class AIProcessingService implements IEntityProcessingService {
                     gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                 }
                 System.out.println("Exception no route");
+            } finally {
+                // Ensure that if map has changed at some point, connections is only calculated the first time.
+                mapHasChanged = false;
             }
         }
     }

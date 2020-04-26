@@ -11,6 +11,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.commonai.events.MapChangedDuringRoundEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
@@ -50,6 +51,7 @@ public class TowerControlSystem implements IEntityProcessingService {
 
             if (isLegalPlacement(tower)) {
                 world.addEntity(tower);
+                gameData.addEvent(new MapChangedDuringRoundEvent(tower));
             }
         }
         gameData.getEvents().removeAll(eventsToDelete);
