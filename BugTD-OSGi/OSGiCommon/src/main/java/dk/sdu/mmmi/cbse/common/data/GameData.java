@@ -54,7 +54,7 @@ public class GameData {
     public int getDisplayHeight() {
         return displayHeight;
     }
-    
+
     public <E extends Event> List<Event> getEvents(Class<E> type) {
         List<Event> r = new ArrayList();
         for (Event event : events) {
@@ -91,5 +91,13 @@ public class GameData {
         }
 
         return r;
+    }
+
+    public <E extends Event> void removeEvents(Class<E> type) {
+        for (Event event : events) {
+            if (event.getClass().equals(type)) {
+                events.remove(event);
+            }
+        }
     }
 }

@@ -50,10 +50,8 @@ public class WeaponPart implements EntityPart {
         sr.setColor(1, 1, 0, 1);
         Gdx.gl.glLineWidth(2);
         sr.begin(ShapeRenderer.ShapeType.Line);
-        System.out.println("X1: " + x1 + " Y1: " + y1 + " X2: " + x2 + " Y2 " + y2);
         sr.line(x1, y1, x2, y2);
         sr.end();
-        
     }
     
     @Override

@@ -25,6 +25,10 @@ public class MapData {
         waves = new ArrayList<>();
     }
 
+    public Queen getQueen() {
+        return queen;
+    }
+
     public EnemySpawnPoint getEnemySpawnPoint() {
         return enemySpawnPoint;
     }

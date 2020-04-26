@@ -10,6 +10,7 @@ import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
 import dk.sdu.mmmi.cbse.common.events.GameWonEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.commonai.events.EnemySpawnedEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.MapWave;
@@ -34,6 +35,9 @@ public class EnemySpawner implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
+        if (waves.isEmpty()) {
+            waves = mapSPI.getMapWaves();
+        }
         updateWaveInfo();
         getEnemyAmountInWorld(world, gameData);
         calculateCurrentRound(gameData);
@@ -41,12 +45,17 @@ public class EnemySpawner implements IEntityProcessingService {
 
         if (enemiesLeftToSpawn > 0) {
             if (lastSpawn > spawnTime) {
-
+                System.out.println("Spawning enemy");
                 if ("Ground".equals(enemyType)) {
-                    world.addEntity(Enemy.createGroundEnemy(400, 400));
+                    Entity enemy = Enemy.createGroundEnemy(400, 400);
+                    world.addEntity(enemy);
+                    gameData.addEvent(new EnemySpawnedEvent(enemy));
                 } else if ("Flying".equals(enemyType)) {
-                    world.addEntity(Enemy.createFlyingEnemy(400, 400));
+                    Entity enemy = Enemy.createFlyingEnemy(400, 400);
+                    world.addEntity(enemy);
+                    gameData.addEvent(new EnemySpawnedEvent(enemy));
                 }
+                
                 lastSpawn = 0f;
             }
         }
@@ -84,7 +93,6 @@ public class EnemySpawner implements IEntityProcessingService {
 
     public void setMapSPI(MapSPI mapSPI) {
         this.mapSPI = mapSPI;
-        waves = mapSPI.getMapWaves();
     }
 
     public void calculateCurrentRound(GameData gd) {
