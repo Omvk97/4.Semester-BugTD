@@ -227,9 +227,9 @@ public class MapData {
         System.out.println(stats);
         PositionPart pos = new PositionPart(stats.x, stats.y, 0);
         LifePart life = new LifePart(stats.life);
-        CollisionPart collision = new CollisionPart(4* TileSizes.GRASS_WIDTH, 4*TileSizes.GRASS_HEIGHT);
+        CollisionPart collision = new CollisionPart(3* TileSizes.GRASS_WIDTH, 3*TileSizes.GRASS_HEIGHT);
         WeaponPart weapon = new WeaponPart(stats.damage, stats.range, stats.attackSpeed);
-        SpritePart sprite = new SpritePart("towers/queen.png", 4*TileSizes.GRASS_WIDTH, 4*TileSizes.GRASS_HEIGHT, 1);
+        SpritePart sprite = new SpritePart("towers/queen.png", 3*TileSizes.GRASS_WIDTH, 3*TileSizes.GRASS_HEIGHT, 1);
         this.queen = new Queen(pos, life, collision, weapon, sprite);
     }
 
