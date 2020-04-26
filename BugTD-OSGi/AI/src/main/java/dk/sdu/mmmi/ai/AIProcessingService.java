@@ -53,7 +53,7 @@ public class AIProcessingService implements IEntityProcessingService {
 
         // Calculate best route for enemy
         Tile[][] tiles = mapSPI.getTiles();
-        Tile queenTile = mapSPI.getTiles()[40][33];
+        Tile queenTile = mapSPI.getTiles()[12][40];     // TODO: Find real queen position
 
         for (Enemy enemy : enemiesToCalculate) {
             try {
@@ -103,6 +103,7 @@ public class AIProcessingService implements IEntityProcessingService {
                 enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy.getCurrentX(), enemy.getCurrentY()), Command.ATTACK));
 
                 gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
+                System.out.println("Exception no route");
             }
         }
     }

@@ -23,32 +23,20 @@ public class Enemy extends Entity {
     private LifePart lifePart;
 
     public static Entity createGroundEnemy(float x, float y) {
-        Entity gEnemy = new Enemy();
         //attributes
-        float damage = 10;
-        float range = 50;
-        float speed = 10;
-        float deacceleration = 280;
-        float acceleration = 210;
-        float maxSpeed = 150;
-        float rotationSpeed = 5;
+        float weaponDamage = 50;
+        float weaponRange = 50;
+        float weaponSpeed = 10;
+        float speedPerMovement = 1;
         float radians = 3.1415f / 2;
         int life = 100;
 
-        //Parts
-        AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32, 0);
-        gEnemy.add(anm);
-
-        //SpritePart sprite = new SpritePart("enemy/enemyup/up_01.png", 32, 32);
-        //gEnemy.add(sprite);
-        WeaponPart wpn = new WeaponPart(damage, range, speed);
-        gEnemy.add(wpn);
-        MovingPart mov = new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed);
-        gEnemy.add(mov);
-        PositionPart pos = new PositionPart(x, y, radians);
-        gEnemy.add(pos);
-        LifePart lif = new LifePart(life);
-        gEnemy.add(lif);
+        Entity gEnemy = new Enemy(EnemyType.GROUND,
+                new WeaponPart(weaponDamage, weaponRange, weaponSpeed),
+                new AnimationPart("texturesprites/enemy/enemyup.atlas", 16, 16, 0),
+                new PositionPart(x, y, radians),
+                new PreciseMovingPart(speedPerMovement),
+                new LifePart(life));
 
         return gEnemy;
     }
