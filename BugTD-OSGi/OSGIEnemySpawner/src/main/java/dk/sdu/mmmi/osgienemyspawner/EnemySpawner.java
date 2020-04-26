@@ -24,6 +24,9 @@ public class EnemySpawner implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
+        if (waves.isEmpty()){
+            waves = mapSPI.getMapWaves();
+        }
         updateWaveInfo();
         getEnemyAmountInWorld(world);
         lastSpawn = lastSpawn + gameData.getDelta();
@@ -67,6 +70,6 @@ public class EnemySpawner implements IEntityProcessingService {
 
     public void setMapSPI(MapSPI mapSPI) {
         this.mapSPI = mapSPI;
-        waves = mapSPI.getMapWaves();
+        //waves = mapSPI.getMapWaves();
     }
 }

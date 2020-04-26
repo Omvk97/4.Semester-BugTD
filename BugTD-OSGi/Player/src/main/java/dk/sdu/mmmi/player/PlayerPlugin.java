@@ -38,7 +38,7 @@ public class PlayerPlugin implements IGamePluginService  {
          
          // parts 
          //AnimationPart animation = new AnimationPart("texturesprites/player64/stand_left_64.atlas", 32, 32);
-         AnimationPart animation = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32);
+         AnimationPart animation = new AnimationPart("texturesprites/player32/stand.atlas", 32, 32);
          aPlayer.add(animation);
 
          MovingPart moving = new MovingPart(deacceleration,acceleration,maxSpeed, rotation );
@@ -49,7 +49,7 @@ public class PlayerPlugin implements IGamePluginService  {
 //         aPlayer.add(animation);
 //         aPlayer.add(moving);
 //         aPlayer.add(position);
-         
+         System.out.println("hello");
          world.addEntity(aPlayer);
     }
     

@@ -5,11 +5,8 @@
  */
 package dk.sdu.mmmi.player;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector3;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
-import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import static dk.sdu.mmmi.cbse.common.data.GameKeys.*;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
@@ -18,12 +15,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.commonmap.MapSPI;
-import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +27,16 @@ import java.util.List;
  */
 public class PlayerControlSystem implements IEntityProcessingService {
     
-    private MapSPI map;
+//    private MapSPI map;
+//    
+//    public void setMapSPI(MapSPI spi){
+//        this.map = spi;
+//    }
     
-    public void setMapSPI(MapSPI spi){
-        this.map = spi;
-    }
+    // todo 
+    // 
+    float targetX;
+    float targetY;
 
     @Override
     public void process(GameData gameData, World world) {
@@ -52,7 +49,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             movingPart.setLeft(gameData.getKeys().isDown(LEFT));
             movingPart.setRight(gameData.getKeys().isDown(RIGHT));
             movingPart.setUp(gameData.getKeys().isDown(UP));
-            movingPart.setUp(gameData.getKeys().isDown(DOWN));
+            movingPart.setDown(gameData.getKeys().isDown(DOWN));
 
             
             setAnimation(player, gameData, animationPart);
@@ -60,7 +57,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
             positionPart.process(gameData, player);
 
 
-            // for later setup
             movePlayer(gameData, player, world, animationPart);
  
         }
@@ -68,31 +64,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
     }
     
     
-    public void getTargetX(GameData gameData){
-        
-        List <Event> events = new ArrayList<>();
-        
-        for (Event event : gameData.getEvents()){
-            if (!(event instanceof ClickEvent)){
-                continue;
-            }
-            
-            events.add(event);
-            
-            int clickX = ((ClickEvent) event).getX();
-            
-            clickX = roundDown(clickX, TileSizes.GRASS_WIDTH);
-            
-            System.out.println(clickX);
-        }
-        gameData.getEvents().removeAll(events);
-        
-    }
-    
     public void movePlayer(GameData gameData, Entity player, World world, AnimationPart ani){
         
-        float targetX;
-        float targetY;
+//        float targetX;
+//        float targetY;
         
         for (Entity player1 : world.getEntities(Player.class)){
             
@@ -112,7 +87,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 int clickX = ((ClickEvent) event).getX();
                 int clickY = ((ClickEvent) event).getY();
                 clickX = roundDown(clickX, TileSizes.GRASS_WIDTH);
-                clickX = roundDown(clickY, TileSizes.GRASS_WIDTH);
+                clickY = roundDown(clickY, TileSizes.GRASS_WIDTH);
                 targetX = clickX; 
                 targetY = clickY;
                 
@@ -124,31 +99,31 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 mov.setRight(false);
 
 
+                    // change atlasPath
+                    //if (pos.getX() != targetX && pos.getY() != targetY){
                     
-                    if (pos.getX() != targetX){
 
                         if (pos.getX() < targetX){
-                            mov.setRight(true);
-                            ani.setAtlasPath("texturesprites/enemy/enemydown.atlas");
+//                            mov.setRight(true);
+                            pos.setX(targetX);
+                            ani.setAtlasPath("texturesprites/player32/right.atlas");
                         }
                         if (pos.getX() > targetX){
-                            mov.setLeft(true);
-                            ani.setAtlasPath("texturesprites/enemy/enemyup.atlas");
+                            //mov.setLeft(true);
+                            pos.setX(targetX);
+                            ani.setAtlasPath("texturesprites/player32/left.atlas");
                         }
                         if (pos.getY() < targetY){
-                            mov.setUp(true);
-                            ani.setAtlasPath("texturesprites/enemy/enemyright.atlas");
+                            //mov.setUp(true);
+                            pos.setY(targetY);
+                            ani.setAtlasPath("texturesprites/player32/stand.atlas");
                         }
                         if (pos.getY() > targetY){
-                            mov.setDown(true);
-                            ani.setAtlasPath("texturesprites/enemy/enemyleft.atlas");
+                            //mov.setDown(true);
+                            pos.setY(targetY);
+                            ani.setAtlasPath("texturesprites/player32/stand.atlas");
                         }
-                    } else{
-                        mov.setUp(false);
-                        mov.setDown(false);
-                        mov.setLeft(false);
-                        mov.setRight(false);
-                    }
+                    //} 
                 }
 
             
@@ -156,163 +131,40 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }    
        
     }
-    
-    public void test(){
-        
-        Point p = MouseInfo.getPointerInfo().getLocation();
-        double x = p.getX();
-        System.out.println(x);
-        
-    }
-    
-    private Point getCurrentCursorLocation(){
-        Point res = null;
-        PointerInfo pi = MouseInfo.getPointerInfo();
-        if( null != pi){
-            res = pi.getLocation();
-        }
-        System.out.println(res);
-        return res;
-    }
-    
-//    public float getPosX(int xpos, int ypos){
-//        float x = xpos;
-//        float y = ypos; 
-//        float radians = 0;
-//        
-//        PositionPart pos = new PositionPart(x,y,radians);
-//        
-//        return pos.getX();
-//    }
 //    
-//    public float getPosY(int xpos, int ypos){
-//        float x = xpos;
-//        float y = ypos; 
-//        float radians = 0;
-//        
-//        PositionPart pos = new PositionPart(x,y,radians);
-//        
-//        return pos.getY();
-//    }
-//    
-//    public void setTargetX(){
-//        this.targetX = targetX;
-//    }
-//    
-//    public void setTargetY(){
-//        this.targetY = targetY;
-//    }
-//    
-//    public void touchDown(InputEvent event, float x, float y, int pointer){
-//        Vector3 mousePos = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
-//        System.out.println(mousePos);
-//    }
-//    
-//    
-//    public void placement(GameData gameData, World world){
-//
-//        if (test == null){
-//            Placement place = new Placement(new PositionPart(0,0,0));
-//            world.addEntity(test);
-//            test = place;
-//        }
-//        
-//        
-//        PositionPart posPart = test.getPart(PositionPart.class);
-//        int x = roundDown(gameData.getMouseX(), TileSizes.GRASS_WIDTH);
-//        posPart.getX();
-//        //System.out.println(posPart.getX());
-//        System.out.println(x);
-//        //return posPart.getX();
-//        
-//    }
-    
 //    public void test(){
-//        Vector3 mousePos = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
-//        System.out.println(mousePos);
 //        
-//        if (Gdx.input.justTouched()){
-//            System.out.println("ayy");
-//        }
+//        Point p = MouseInfo.getPointerInfo().getLocation();
+//        double x = p.getX();
+//        System.out.println(x);
+//        
 //    }
-    
-    public void movePlayerOnClick(Entity player, PositionPart pos, MovingPart mov, AnimationPart ani){
-        
-
-        float targetX = 0;
-        float targetY = pos.getX();
-        
-        float futureXPos;
-        float futureYPos;
-        
-//        Vector3 mousePos = new Vector3(Gdx.input.getX(),Gdx.input.getY(),0);
-//        System.out.println(mousePos);
-        
-        //GameKeys keys = new GameKeys();
-
-        mov.setUp(false);
-        mov.setDown(false);
-        mov.setLeft(false);
-        mov.setRight(false);
-            
-//        while(!keys.isDown(UP) || !keys.isDown(DOWN) || 
-//                !keys.isDown(LEFT) || !keys.isDown(RIGHT)){
-            
-            if (pos.getX() != targetX){
-                
-                if (pos.getX() < targetX){
-                    mov.setRight(true);
-                    //ani.setAtlasPath("");
-                }
-                if (pos.getX() > targetX){
-                    mov.setLeft(true);
-                    //ani.setAtlasPath("");
-                }
-                if (pos.getY() < targetY){
-                    mov.setUp(true);
-                    //ani.setAtlasPath("");
-                }
-                if (pos.getY() > targetY){
-                    mov.setDown(true);
-                    //ani.setAtlasPath("");
-                }
-            }
+//    
+//    private Point getCurrentCursorLocation(){
+//        Point res = null;
+//        PointerInfo pi = MouseInfo.getPointerInfo();
+//        if( null != pi){
+//            res = pi.getLocation();
 //        }
-
-    }
-        
+//        System.out.println(res);
+//        return res;
+//    }
+          
     
     public void setAnimation(Entity player, GameData gameData, AnimationPart ani){
 
-        // dont know if animation is needed for up and down, when the player model switches from side to side and not up and down
-//        if (gameData.getKeys().isDown(UP)){
-//            throw new UnsupportedOperationException("Something about atlas files "); 
-//        }
-//        if (gameData.getKeys().isDown(DOWN)){
-//            throw new UnsupportedOperationException("Something about atlas files "); 
-//        }
-//        if (gameData.getKeys().isDown(LEFT)){
-//            //ani.setAtlasPath("texturesprites/player64/player64.atlas");
-//            ani.setAtlasPath("texturesprites/enemy/enemyleft.atlas");
-//           // throw new UnsupportedOperationException("Something about atlas files "); 
-//        }
-//        if (gameData.getKeys().isDown(RIGHT)){
-//            //ani.setAtlasPath("texturesprites/player64/player64.atlas");
-//            ani.setAtlasPath("texturesprites/enemy/enemyright.atlas");
-//            //throw new UnsupportedOperationException("Something about atlas files "); 
-//        }
 
         if (gameData.getKeys().isDown(DOWN)) {
-            ani.setAtlasPath("texturesprites/enemy/enemydown.atlas");
+            ani.setAtlasPath("texturesprites/player32/stand.atlas");
         }
         if(gameData.getKeys().isDown(UP)) {
-            ani.setAtlasPath("texturesprites/enemy/enemyup.atlas");
+            ani.setAtlasPath("texturesprites/player32/stand.atlas");
         }
         if(gameData.getKeys().isDown(RIGHT)){
-            ani.setAtlasPath("texturesprites/enemy/enemyright.atlas");
+            ani.setAtlasPath("texturesprites/player32/right.atlas");
         }
         if(gameData.getKeys().isDown(LEFT)){
-            ani.setAtlasPath("texturesprites/enemy/enemyleft.atlas");
+            ani.setAtlasPath("texturesprites/player32/left.atlas");
         }
 
     }
