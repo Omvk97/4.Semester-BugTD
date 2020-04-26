@@ -25,17 +25,18 @@ public class MapData {
         waves = new ArrayList<>();
     }
 
-    public Queen getQueen() {
-        return queen;
+    public MapData(int tileSize, Scanner sc, World world) {
+        this(tileSize);
+        initFromScanner(sc);
+
+        addQueenToWorld(world);
+        addTilesToWorld(world);
     }
+
+    public Queen getQueen() { return queen; }
 
     public EnemySpawnPoint getEnemySpawnPoint() {
         return enemySpawnPoint;
-    }
-
-    public MapData(int tileSize, Scanner sc) {
-        this(tileSize);
-        initFromScanner(sc);
     }
 
     public Tile[][] getTiles() {
@@ -50,7 +51,7 @@ public class MapData {
         return tileSize;
     }
 
-    public void addTilesToWorld(World world) {
+    private void addTilesToWorld(World world) {
         for (int i = 0; i < tiles.length; i++) {
             Tile[] row = tiles[i];
             for (Tile tile : row) {
@@ -59,7 +60,7 @@ public class MapData {
         }
     }
 
-    public void addQueenToWorld(World world) {
+    private void addQueenToWorld(World world) {
         world.addEntity(queen);
     }
 

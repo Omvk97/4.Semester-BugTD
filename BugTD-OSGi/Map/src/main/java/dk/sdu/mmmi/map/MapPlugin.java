@@ -36,9 +36,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     public void loadFile(String filepath) {
         ClassLoader classLoader = this.getClass().getClassLoader();
         try (Scanner sc = new Scanner(new InputStreamReader(classLoader.getResource(filepath).openStream()))) {
-            mapData = new MapData(16, sc);
-            mapData.addTilesToWorld(world);
-            mapData.addQueenToWorld(world);
+            mapData = new MapData(16, sc, world);
         } catch (Exception ex) {
             System.out.println("Exception caught while reading map file [" + filepath + "]");
             System.out.println(ex);
