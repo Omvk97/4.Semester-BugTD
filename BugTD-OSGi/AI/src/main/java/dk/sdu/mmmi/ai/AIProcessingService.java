@@ -13,6 +13,7 @@ import dk.sdu.mmmi.commonai.events.MapChangedDuringRoundEvent;
 import dk.sdu.mmmi.commonai.events.RouteCalculatedEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonenemy.EnemyType;
+import dk.sdu.mmmi.commonmap.Direction;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commontower.Tower;
@@ -53,7 +54,7 @@ public class AIProcessingService implements IEntityProcessingService {
 
         // Calculate best route for enemy
         Tile[][] tiles = mapSPI.getTiles();
-        Tile queenTile = mapSPI.getTiles()[12][40];     // TODO: Find real queen position
+        Tile queenTile = mapSPI.getTileInDirection(mapSPI.getTilesEntityIsOn(mapSPI.getQueen()).get(0), Direction.LEFT);
 
         for (Enemy enemy : enemiesToCalculate) {
             try {
@@ -100,9 +101,11 @@ public class AIProcessingService implements IEntityProcessingService {
                 // No route found, therefore attack closest tower
                 List<EnemyCommand> enemyCommands = new ArrayList<>();
 
-                enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy.getCurrentX(), enemy.getCurrentY()), Command.ATTACK));
-
-                gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
+                Tower clostestTower = calculateClosestTower(world, enemy.getCurrentX(), enemy.getCurrentY());
+                if (clostestTower != null) {
+                    enemyCommands.add(new EnemyCommand(clostestTower, Command.ATTACK));
+                    gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
+                }
                 System.out.println("Exception no route");
             }
         }
