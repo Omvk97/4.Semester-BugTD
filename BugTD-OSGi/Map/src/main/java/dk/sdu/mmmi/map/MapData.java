@@ -6,8 +6,8 @@ import dk.sdu.mmmi.commonmap.MapWave;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commontower.Queen;
+import dk.sdu.mmmi.commontower.QueenStats;
 import dk.sdu.mmmi.osgienemyspawner.EnemySpawnPoint;
-import dk.sdu.mmmi.queen.QueenStats;
 
 import java.util.ArrayList;
 import java.util.Scanner;

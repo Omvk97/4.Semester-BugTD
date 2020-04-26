@@ -1,4 +1,4 @@
-package dk.sdu.mmmi.queen;
+package dk.sdu.mmmi.commontower;
 
 public class QueenStats {
     public float x;
