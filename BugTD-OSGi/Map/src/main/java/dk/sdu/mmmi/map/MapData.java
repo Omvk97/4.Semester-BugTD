@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class MapData {
     private Tile[][] tiles;
     private ArrayList<MapWave> waves;
-    private int tileSize = 16;
+    private int tileSize;
     private Queen queen;
     private EnemySpawnPoint enemySpawnPoint;
 
