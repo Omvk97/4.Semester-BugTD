@@ -61,6 +61,11 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     }
 
     @Override
+    public Entity getQueen() {
+        return mapData.getQueen();
+    }
+
+    @Override
     public Tile[][] getTiles() {
         return mapData.getTiles();
     }

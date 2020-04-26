@@ -31,4 +31,6 @@ public interface MapSPI {
 
     float getEnemySpawnX();
 
+    Entity getQueen();
+
 }
