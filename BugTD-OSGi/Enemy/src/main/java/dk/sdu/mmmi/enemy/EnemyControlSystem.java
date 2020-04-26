@@ -8,6 +8,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovementInstruction;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
+import dk.sdu.mmmi.cbse.common.events.EnemyDiedEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonai.events.Command;
@@ -25,6 +26,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             Enemy enemy = (Enemy) entity;
 
             if (((LifePart) enemy.getPart(LifePart.class)).isDead()) {
+                gameData.addEvent(new EnemyDiedEvent(enemy));
                 world.removeEntity(enemy);
             }
 

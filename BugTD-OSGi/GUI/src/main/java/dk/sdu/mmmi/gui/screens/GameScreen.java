@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import dk.sdu.mmmi.cbse.Game;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
@@ -17,6 +19,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
+import dk.sdu.mmmi.cbse.common.events.GameWonEvent;
 import dk.sdu.mmmi.gui.GuiPluginService;
 import dk.sdu.mmmi.gui.input.GameInputProcessor;
 
@@ -61,11 +64,19 @@ public class GameScreen implements Screen {
         Game.getInstance().getGameData().getKeys().update();
         Game.getInstance().update(); //TODO: Should this be in render? From Thomas: Yes I think it fits here inside the GameScreen's render method
         // Is this the right place to put the game over check? Yes it probably is
+        if(!Game.getInstance().getGameData().getEvents(GameWonEvent.class).isEmpty()){
+            for (Event gameWonEvent : Game.getInstance().getGameData().getEvents(GameWonEvent.class)) {
+                Game.getInstance().getGameData().removeEvent(gameWonEvent);
+                
+            }
+            GuiPluginService.getInstance().setScreen(new MenuScreen());
+        }
         if (!Game.getInstance().getGameData().getEvents(GameOverEvent.class).isEmpty()) {
             // TODO: Show some UI that informs the user that the game is over
             for (Event gameOverEvent : Game.getInstance().getGameData().getEvents(GameOverEvent.class)) {
                 Game.getInstance().getGameData().removeEvent(gameOverEvent);
             }
+            
             GuiPluginService.getInstance().setScreen(new MenuScreen());
         }
     }
