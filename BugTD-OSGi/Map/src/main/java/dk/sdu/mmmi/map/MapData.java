@@ -64,6 +64,29 @@ public class MapData {
         world.addEntity(queen);
     }
 
+    private enum DataType {
+        Default,
+        Tiles,
+        Waves,
+        Queen,
+        EnemySpawn,
+        End
+    }
+
+    private enum TileType {
+        Grass(1), Dirt(0);
+
+        private int numVal;
+
+        TileType(int numVal) {
+            this.numVal = numVal;
+        }
+
+        public int getNumVal() {
+            return numVal;
+        }
+    }
+
     private void initFromScanner(Scanner sc) {
         DataType currentType = DataType.Default;
         String dataChunk = "";
@@ -225,29 +248,6 @@ public class MapData {
                 default:
                     return;
             }
-        }
-    }
-
-    private enum DataType {
-        Default,
-        Tiles,
-        Waves,
-        Queen,
-        EnemySpawn,
-        End
-    }
-
-    private enum TileType {
-        Grass(1), Dirt(0);
-
-        private int numVal;
-
-        TileType(int numVal) {
-            this.numVal = numVal;
-        }
-
-        public int getNumVal() {
-            return numVal;
         }
     }
 }
