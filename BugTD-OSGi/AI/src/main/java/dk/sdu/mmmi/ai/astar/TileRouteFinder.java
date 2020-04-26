@@ -57,7 +57,7 @@ public class TileRouteFinder<T extends Tile> {
         }
 
         if (connectionsHaveChanged || groundConnections == null) {
-            calculateGroundConnections(tiles);
+            calculateGroundConnections(tiles, goalTile);
         }
 
         mapTilesGraph = new Graph<>(mapTiles, groundConnections);
@@ -91,7 +91,7 @@ public class TileRouteFinder<T extends Tile> {
         return route.stream().map(MapTile::getTile).collect(Collectors.toList());
     }
 
-    private void calculateGroundConnections(Tile[][] tiles) {
+    private void calculateGroundConnections(Tile[][] tiles, Tile goalTile) {
         System.out.println("Calculating Tile connections for Ground AI!");
         HashMap<String, Set<String>> calculatedConnections = new HashMap<>();
 
@@ -105,7 +105,7 @@ public class TileRouteFinder<T extends Tile> {
                         // Only add neighbor if it's walkable
                         if (neighbor.isWalkable()) {
                             // Add neighbor if it is not occupied by anything else than an enemy or towerPreview
-                            if (!map.checkIfTileIsOccupied(neighbor, entitiesToIgnore)) {
+                            if (!map.checkIfTileIsOccupied(neighbor, entitiesToIgnore) || neighbor.getID().equals(goalTile.getID())) {
                                 neighbors.add(neighbor.getID());
                             }
                         }

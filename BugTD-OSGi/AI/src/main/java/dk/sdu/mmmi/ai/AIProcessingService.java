@@ -61,24 +61,20 @@ public class AIProcessingService implements IEntityProcessingService {
         Tile queenTile = mapSPI.getTileInDirection(mapSPI.getTilesEntityIsOn(mapSPI.getQueen()).get(0), Direction.LEFT);
 
         for (Enemy enemy : enemiesToCalculate) {
+            Tile startTile = mapSPI.getTilesEntityIsOn(enemy).get(0);
             try {
                 // Calculate best route for enemy
                 List<Tile> tileRoute;
-
-                Tile startTile = mapSPI.getTilesEntityIsOn(enemy).get(0);
 
                 if (enemy.getType() == EnemyType.GROUND) {
                     tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, queenTile, mapHasChanged);
 
                     List<EnemyCommand> enemyCommands = new ArrayList<>();
-                    // if there is no route, a tower must be destroyed, which will trigger a recalibration of AI for all enemies
-                    if (tileRoute.isEmpty()) {
-                        enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy.getPositionPart()), Command.ATTACK));
-                    } else {
-                        tileRoute.forEach((tile) -> {
-                            enemyCommands.add(new EnemyCommand(tile, Command.WALK));
-                        });
-                    }
+
+                    tileRoute.forEach((tile) -> {
+                        enemyCommands.add(new EnemyCommand(tile, Command.WALK));
+                    });
+
                     enemyCommands.add(new EnemyCommand(mapSPI.getQueen(), Command.ATTACK));
                     gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                 } else if (enemy.getType() == EnemyType.FLYING) {
@@ -100,12 +96,21 @@ public class AIProcessingService implements IEntityProcessingService {
                 }
 
             } catch (IllegalStateException ex) {
+                
                 // No route found, therefore attack closest tower
                 List<EnemyCommand> enemyCommands = new ArrayList<>();
 
-                Entity clostestTower = calculateClosestTower(world, enemy.getPositionPart());
-                if (clostestTower != null) {
-                    enemyCommands.add(new EnemyCommand(clostestTower, Command.ATTACK));
+                Entity target = calculateClosestTower(world, enemy.getPositionPart());
+                if (target != null) {   // If there are no towers
+                    Tile towerTile = mapSPI.getTilesEntityIsOn(target).get(1);
+                    List<Tile> tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, towerTile, mapHasChanged);
+
+                    tileRoute.forEach((tile) -> {
+                        enemyCommands.add(new EnemyCommand(tile, Command.WALK));
+                    });
+
+                    enemyCommands.add(new EnemyCommand(target, Command.ATTACK));
+
                     gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                 }
                 System.out.println("Exception no route");
@@ -130,8 +135,8 @@ public class AIProcessingService implements IEntityProcessingService {
         }
         return closestTower;
     }
-    
-     private float distance(PositionPart enemyPosPart, PositionPart towerPosPart) {
+
+    private float distance(PositionPart enemyPosPart, PositionPart towerPosPart) {
         float dx = (float) enemyPosPart.getX() - (float) towerPosPart.getX();
         float dy = (float) enemyPosPart.getY() - (float) towerPosPart.getY();
         return (float) Math.sqrt(dx * dx + dy * dy);
