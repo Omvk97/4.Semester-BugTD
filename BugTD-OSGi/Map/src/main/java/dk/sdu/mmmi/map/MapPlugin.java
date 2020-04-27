@@ -8,6 +8,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commonmap.*;
+import dk.sdu.mmmi.commontower.Queen;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -36,6 +37,10 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         for (Entity tile : world.getEntities(Tile.class)) {
             world.removeEntity(tile);
         }
+        for (Entity queen : world.getEntities(Queen.class)) {
+            world.removeEntity(queen);
+        }
+        // TODO: How to remove EnemySpawner?
     }
 
     @Override
