@@ -153,11 +153,29 @@ public class MapData {
         int waveNumber = 0;
         for (String line : lines) {
             waveNumber++;
-            String[] splitLine = line.split("\\*");
-            String enemyType = splitLine[0];
-            int enemyCount = Integer.parseInt(splitLine[1]);
-            MapWave wave = new MapWave(enemyType, enemyCount, waveNumber);
-            System.out.println(wave);
+            String type = "";
+            int amount = 0;
+            int life = 0;
+            String[] splitLine = line.split(";");
+            for (String split : splitLine) {
+                String key = split.split("=")[0];
+                String value = split.split("=")[1];
+                switch (key) {
+                    case "Type":
+                        type = value;
+                        break;
+                    case "Amount":
+                        amount = Integer.parseInt(value);
+                        break;
+                    case "Life":
+                        life = Integer.parseInt(value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            MapWave wave = new MapWave(type, amount, waveNumber, life);
+            System.out.println(wave); 
             waves.add(wave);
 
         }

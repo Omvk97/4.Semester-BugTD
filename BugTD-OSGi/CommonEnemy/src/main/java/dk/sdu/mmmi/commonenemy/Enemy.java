@@ -22,14 +22,13 @@ public class Enemy extends Entity {
     private PreciseMovingPart movingPart;
     private LifePart lifePart;
 
-    public static Entity createGroundEnemy(float x, float y) {
+    public static Entity createGroundEnemy(float x, float y, int life) {
         //attributes
         float weaponDamage = 12.5f;
         float weaponRange = 50;
         float weaponSpeed = 0.5f;
         float speedPerMovement = 8;
         float radians = 3.1415f / 2;
-        int life = 100;
 
         Entity gEnemy = new Enemy(EnemyType.GROUND,
                 new WeaponPart(weaponDamage, weaponRange, weaponSpeed),
@@ -41,7 +40,7 @@ public class Enemy extends Entity {
         return gEnemy;
     }
 
-    public static Entity createFlyingEnemy(float x, float y) {
+    public static Entity createFlyingEnemy(float x, float y, int life) {
         Entity fEnemy = new Enemy();
         //attributes
         float damage = 10;
@@ -52,7 +51,6 @@ public class Enemy extends Entity {
         float maxSpeed = 300;
         float rotationSpeed = 5;
         float radians = 3.1415f / 2;
-        int life = 5;
 
         //Parts
         AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32);
