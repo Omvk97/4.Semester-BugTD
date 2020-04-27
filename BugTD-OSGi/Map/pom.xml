@@ -12,9 +12,9 @@
         <bundle.namespace>dk.sdu.mmmi</bundle.namespace>
     </properties>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>OSGiMap</artifactId>
+    <artifactId>Map</artifactId>
     <packaging>bundle</packaging>
-    <name>OSGiMap</name>
+    <name>Map</name>
     <dependencies>    
         <dependency>
             <groupId>org.osgi</groupId>
