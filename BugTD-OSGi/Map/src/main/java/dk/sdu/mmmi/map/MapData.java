@@ -208,7 +208,7 @@ public class MapData {
                     stats.y = Float.parseFloat(value);
                     break;
                 case "LIFE":
-                    stats.life = Integer.parseInt(value);
+                    stats.life = Float.parseFloat(value);
                     break;
                 case "DAMAGE":
                     stats.damage = Float.parseFloat(value);
