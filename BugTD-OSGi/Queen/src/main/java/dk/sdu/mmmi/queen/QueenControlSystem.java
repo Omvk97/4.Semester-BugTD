@@ -30,6 +30,7 @@ public class QueenControlSystem implements IEntityProcessingService {
 
         // Check if dead
         if (((LifePart) queen.getPart(LifePart.class)).isDead()) {
+            gameData.setMenuFlashMessage("Game over! You lost.");
             gameData.addEvent(new GameOverEvent(queen));
         }
 

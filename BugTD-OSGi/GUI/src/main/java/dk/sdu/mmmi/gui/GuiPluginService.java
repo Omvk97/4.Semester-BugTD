@@ -39,6 +39,7 @@ public class GuiPluginService extends com.badlogic.gdx.Game implements IGamePlug
     }
 
     public void startGame() {
+        Game.getInstance().getGameData().setMenuFlashMessage("");
         this.setScreen(new GameScreen());
     }
 

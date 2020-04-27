@@ -108,6 +108,7 @@ public class EnemySpawner implements IEntityProcessingService {
                         totalEnemysInWorld = 0;
                     }
                 } else {
+                    gd.setMenuFlashMessage("Congratulations, you beat the level!");
                     gd.addEvent(new GameWonEvent(null));
                 }
                 nextRoundTimer = 0f;

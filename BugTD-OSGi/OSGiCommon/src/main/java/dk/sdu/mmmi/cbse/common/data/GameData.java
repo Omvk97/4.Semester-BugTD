@@ -15,6 +15,11 @@ public class GameData {
     private int mouseX;
     private int mouseY;
     private int difficulty = 1;
+    private String menuFlashMessage;
+
+    public String getMenuFlashMessage() { return menuFlashMessage; }
+
+    public void setMenuFlashMessage(String menuFlashMessage) { this.menuFlashMessage = menuFlashMessage; }
 
     public int getDifficulty() { return difficulty; }
 

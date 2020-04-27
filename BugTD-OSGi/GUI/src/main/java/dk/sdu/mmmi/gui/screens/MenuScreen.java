@@ -35,13 +35,17 @@ public class MenuScreen implements Screen {
         stage.addActor(table);
 
         Label title = new LabelFactory("Bug TD", 2).create();
+        Label flashMessage = new LabelFactory(Game.getInstance().getGameData().getMenuFlashMessage(), 1).create();
         TextButton easyGame = new TextButtonFactory("Easy").create();
         TextButton mediumGame = new TextButtonFactory("Medium").create();
         TextButton hardGame = new TextButtonFactory("Antpossible!").create();
         TextButton exit = new TextButtonFactory("Exit").create();
 
-        table.row().padBottom(50);
+        table.row().padBottom(20);
         table.add(title);
+
+        table.row().padBottom(20);
+        table.add(flashMessage);
 
         table.row();
         table.add(easyGame);
