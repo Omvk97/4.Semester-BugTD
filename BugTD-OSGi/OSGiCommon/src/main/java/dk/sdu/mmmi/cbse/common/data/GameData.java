@@ -14,6 +14,11 @@ public class GameData {
     private List<Event> events = new CopyOnWriteArrayList<>();
     private int mouseX;
     private int mouseY;
+    private int difficulty = 1;
+
+    public int getDifficulty() { return difficulty; }
+
+    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
 
     public void addEvent(Event e) {
         events.add(e);

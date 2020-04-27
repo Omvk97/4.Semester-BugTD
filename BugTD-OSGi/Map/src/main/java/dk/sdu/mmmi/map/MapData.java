@@ -175,7 +175,7 @@ public class MapData {
                 }
             }
             MapWave wave = new MapWave(type, amount, waveNumber, life);
-            System.out.println(wave); 
+            System.out.println(wave);
             waves.add(wave);
 
         }
