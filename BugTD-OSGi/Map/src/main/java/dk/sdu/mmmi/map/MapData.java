@@ -175,7 +175,6 @@ public class MapData {
                 }
             }
             MapWave wave = new MapWave(type, amount, waveNumber, life);
-            System.out.println(wave);
             waves.add(wave);
 
         }
@@ -242,7 +241,6 @@ public class MapData {
             }
         }
 
-        System.out.println(stats);
         PositionPart pos = new PositionPart(stats.x, stats.y, 0);
         LifePart life = new LifePart(stats.life);
         CollisionPart collision = new CollisionPart(3* TileSizes.GRASS_WIDTH, 3*TileSizes.GRASS_HEIGHT);
