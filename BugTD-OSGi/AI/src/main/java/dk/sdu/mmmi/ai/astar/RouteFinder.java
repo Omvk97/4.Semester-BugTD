@@ -47,7 +47,7 @@ public class RouteFinder<T extends GraphNode> {
                     current = allNodes.get(current.getPrevious());
                 } while (current != null);
                 
-                System.out.println("Final Route: " + route);
+                // System.out.println("Final Route: " + route);
                 return route;
             }
             

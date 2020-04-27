@@ -63,7 +63,7 @@ public class WeaponPart implements EntityPart {
             LifePart lp = target.getPart(LifePart.class);
             lp.setLife(lp.getLife() - damage);    // Damage entity
             attackflash = 0.15f;
-            System.out.println("Life: " + lp.getLife());
+            // System.out.println("Life: " + lp.getLife());
         }
         
         //Checks if it should draw attack

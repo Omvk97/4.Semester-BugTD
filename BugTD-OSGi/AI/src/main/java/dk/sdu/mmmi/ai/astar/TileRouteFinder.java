@@ -92,7 +92,7 @@ public class TileRouteFinder<T extends Tile> {
     }
 
     private void calculateGroundConnections(Tile[][] tiles, Tile goalTile) {
-        System.out.println("Calculating Tile connections for Ground AI!");
+        // System.out.println("Calculating Tile connections for Ground AI!");
         HashMap<String, Set<String>> calculatedConnections = new HashMap<>();
 
         for (int y = 0; y < tiles.length; y++) {
@@ -121,7 +121,7 @@ public class TileRouteFinder<T extends Tile> {
 
     private void calculateFlyConnections(Tile[][] tiles) {
         HashMap<String, Set<String>> calculatedConnections = new HashMap<>();
-        System.out.println("Calculating Tile Connections for Flying AI");
+        // System.out.println("Calculating Tile Connections for Flying AI");
         for (int y = 0; y < tiles.length; y++) {
             for (int x = 0; x < tiles[y].length; x++) {
                 Tile tile = tiles[y][x];

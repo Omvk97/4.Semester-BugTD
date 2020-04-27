@@ -45,7 +45,7 @@ public class EnemySpawner implements IEntityProcessingService {
 
         if (enemiesLeftToSpawn > 0) {
             if (lastSpawn > spawnTime) {
-                System.out.println("Spawning enemy");
+                // System.out.println("Spawning enemy");
                 if ("Ground".equals(enemyType)) {
                     Entity enemy = Enemy.createGroundEnemy(mapSPI.getEnemySpawnX(), mapSPI.getEnemySpawnY(), currentWave.getEnemyLife());
                     world.addEntity(enemy);

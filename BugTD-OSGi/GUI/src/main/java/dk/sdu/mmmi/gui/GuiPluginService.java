@@ -19,8 +19,6 @@ public class GuiPluginService extends com.badlogic.gdx.Game implements IGamePlug
 
     public void init(GameData gameData) {
 
-        System.out.println("Init GUI MANAGER");
-
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "BugTD";
         cfg.width = 832;
