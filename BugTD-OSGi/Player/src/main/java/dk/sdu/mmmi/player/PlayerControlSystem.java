@@ -18,6 +18,7 @@ import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonmap.TileSizes;
 import java.util.ArrayList;
 import java.util.List;
+import dk.sdu.mmmi.player.Player;
 
 
 
@@ -27,24 +28,26 @@ import java.util.List;
  */
 public class PlayerControlSystem implements IEntityProcessingService {
     
-//    private MapSPI map;
-//    
-//    public void setMapSPI(MapSPI spi){
-//        this.map = spi;
-//    }
-    
-    // todo 
-    // 
+
     float targetX;
     float targetY;
+    
+    ArrayList<Float> testX = new ArrayList<>();
+    ArrayList<Float> testY = new ArrayList<>();
+    
 
     @Override
     public void process(GameData gameData, World world) {
          for (Entity player : world.getEntities(Player.class)){
+//             Player player = (Player) entity;
              
             PositionPart positionPart = player.getPart(PositionPart.class);
             MovingPart movingPart = player.getPart(MovingPart.class);
             AnimationPart animationPart = player.getPart(AnimationPart.class);
+
+//            PositionPart positionPart = player.getPositionPart();
+//            PreciseMovingPart movingPart = player.getMovingPart();
+//            AnimationPart animationPart = player.getAnimationPart();
             
             movingPart.setLeft(gameData.getKeys().isDown(LEFT));
             movingPart.setRight(gameData.getKeys().isDown(RIGHT));
@@ -64,11 +67,13 @@ public class PlayerControlSystem implements IEntityProcessingService {
     }
     
     
+    
     public void movePlayer(GameData gameData, Entity player, World world, AnimationPart ani){
+           
+        int counter = 0;
         
-//        float targetX;
-//        float targetY;
         
+ 
         for (Entity player1 : world.getEntities(Player.class)){
             
             PositionPart pos = player1.getPart(PositionPart.class);
@@ -82,55 +87,89 @@ public class PlayerControlSystem implements IEntityProcessingService {
                     continue;
                 }
 
-                events.add(event);
+                    events.add(event);
 
-                int clickX = ((ClickEvent) event).getX();
-                int clickY = ((ClickEvent) event).getY();
-                clickX = roundDown(clickX, TileSizes.GRASS_WIDTH);
-                clickY = roundDown(clickY, TileSizes.GRASS_WIDTH);
-                targetX = clickX; 
-                targetY = clickY;
-                
-                System.out.println(clickX);
-
-                mov.setUp(false);
-                mov.setDown(false);
-                mov.setLeft(false);
-                mov.setRight(false);
+                    int clickX = ((ClickEvent) event).getX();
+                    int clickY = ((ClickEvent) event).getY();
+                    clickX = roundDown(clickX, TileSizes.GRASS_WIDTH);
+                    clickY = roundDown(clickY, TileSizes.GRASS_WIDTH);
+                    targetX = clickX; 
+                    targetY = clickY;
 
 
-                    // change atlasPath
-                    //if (pos.getX() != targetX && pos.getY() != targetY){
-                    
+                    System.out.println("X: " + clickX + "Y : " + clickY);
 
-                        if (pos.getX() < targetX){
-//                            mov.setRight(true);
-                            pos.setX(targetX);
-                            ani.setAtlasPath("texturesprites/player32/right.atlas");
-                        }
-                        if (pos.getX() > targetX){
-                            //mov.setLeft(true);
-                            pos.setX(targetX);
-                            ani.setAtlasPath("texturesprites/player32/left.atlas");
-                        }
-                        if (pos.getY() < targetY){
-                            //mov.setUp(true);
-                            pos.setY(targetY);
-                            ani.setAtlasPath("texturesprites/player32/stand.atlas");
-                        }
-                        if (pos.getY() > targetY){
-                            //mov.setDown(true);
-                            pos.setY(targetY);
-                            ani.setAtlasPath("texturesprites/player32/stand.atlas");
-                        }
-                    //} 
+
+                    mov.setUp(false);
+                    mov.setDown(false);
+                    mov.setLeft(false);
+                    mov.setRight(false);
+
+
+                        
+//                        if (pos.getX() < targetX){
+//                            while (pos.getX() < targetX){
+//                                
+//                                counter ++;
+//                                pos.setX(pos.getX() + 1);
+//                                ani.setAtlasPath("texturesprites/player32/right.atlas");
+//                                System.out.println("Function called: " + counter + " times");
+//                                
+//                            } 
+//   
                 }
-
             
+            if (! isKeyPressed(gameData)){
+                
+                if (pos.getX() < targetX){
+                    pos.setX(pos.getX() + 5);
+                    mov.setRight(true);
+                    ani.setAtlasPath("texturesprites/player32/right.atlas");
+                }
+                if (pos.getX() > targetX){
+                    pos.setX(pos.getX() - 5);
+                    mov.setLeft(true);
+                    ani.setAtlasPath("texturesprites/player32/left.atlas");
+                }
+                if (pos.getY() < targetY){
+                    mov.setUp(true);
+                    pos.setY(pos.getY() + 5);
+                    ani.setAtlasPath("texturesprites/player32/stand.atlas");
+                }
+                if (pos.getY() > targetY){
+                    mov.setDown(true);
+                    pos.setY(pos.getY() - 5);
+                    ani.setAtlasPath("texturesprites/player32/stand.atlas");
+                }
+                if (pos.getX() == targetX && pos.getY() == targetY){
+                    System.out.println("stuff");
+                    testX.add(targetX);
+                    testY.add(targetY);
+                    
+                    if (testX.contains(targetX) && testY.contains(targetY)){
+                        mov.setUp(false);
+                        mov.setDown(false);
+                        mov.setLeft(false);
+                        mov.setRight(false);
+                    }
+
+                }
+            }
+
             gameData.getEvents().removeAll(events);
         }    
        
     }
+    
+    @Override
+    public String toString(){
+        String result = "+";
+        for (Float num : testX){
+            result += num.toString();
+        }
+        return result;
+    }
+    
 //    
 //    public void test(){
 //        
