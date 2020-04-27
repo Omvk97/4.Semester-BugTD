@@ -3,21 +3,19 @@ package dk.sdu.mmmi.gui.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import dk.sdu.mmmi.cbse.Game;
-import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.gui.GuiPluginService;
 import dk.sdu.mmmi.gui.components.LabelFactory;
 import dk.sdu.mmmi.gui.components.TextButtonFactory;
-import dk.sdu.mmmi.gui.input.GameInputProcessor;
 
 public class MenuScreen implements Screen {
 
@@ -40,6 +38,11 @@ public class MenuScreen implements Screen {
         TextButton mediumGame = new TextButtonFactory("Medium").create();
         TextButton hardGame = new TextButtonFactory("Antpossible!").create();
         TextButton exit = new TextButtonFactory("Exit").create();
+        Image queenImage = new Image(new Texture("menu/queen.png"));
+        queenImage.setScale(2);
+        queenImage.setOriginX(16); // Scale from center of image (32x32)
+
+        table.add(queenImage);
 
         table.row().padBottom(20);
         table.add(title);
