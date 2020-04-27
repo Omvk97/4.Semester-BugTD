@@ -35,16 +35,25 @@ public class MenuScreen implements Screen {
         stage.addActor(table);
 
         Label title = new LabelFactory("Bug TD", 2).create();
-        TextButton newGame = new TextButtonFactory("New Game").create();
+        TextButton easyGame = new TextButtonFactory("Easy").create();
+        TextButton mediumGame = new TextButtonFactory("Medium").create();
+        TextButton hardGame = new TextButtonFactory("Antpossible!").create();
         TextButton exit = new TextButtonFactory("Exit").create();
 
         table.row().padBottom(50);
         table.add(title);
 
         table.row();
-        table.add(newGame);
+        table.add(easyGame);
 
         table.row();
+        table.add(mediumGame);
+
+        table.row();
+        table.add(hardGame);
+
+
+        table.row().padTop(10);
         table.add(exit);
 
         // Create button listeners
@@ -55,9 +64,26 @@ public class MenuScreen implements Screen {
             }
         });
 
-        newGame.addListener(new ChangeListener() {
+        easyGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                Game.getInstance().getGameData().setDifficulty(1);
+                GuiPluginService.getInstance().startGame();
+            }
+        });
+
+        mediumGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                Game.getInstance().getGameData().setDifficulty(2);
+                GuiPluginService.getInstance().startGame();
+            }
+        });
+
+        hardGame.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                Game.getInstance().getGameData().setDifficulty(3);
                 GuiPluginService.getInstance().startGame();
             }
         });

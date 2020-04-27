@@ -22,7 +22,13 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     @Override
     public void start(GameData gameData, World world) {
         this.world = world;
-        loadFile("/levels/level01.buggydata");
+        if (gameData.getDifficulty() == 3) {
+            loadFile("/levels/level03.buggydata");
+        } else if (gameData.getDifficulty() == 2) {
+            loadFile("/levels/level02.buggydata");
+        } else {
+            loadFile("/levels/level01.buggydata");
+        }
     }
 
     @Override
