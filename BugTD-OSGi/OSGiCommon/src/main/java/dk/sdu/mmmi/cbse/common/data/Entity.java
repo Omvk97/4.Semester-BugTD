@@ -1,12 +1,13 @@
 package dk.sdu.mmmi.cbse.common.data;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import dk.sdu.mmmi.cbse.common.data.entityparts.EntityPart;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Entity implements Serializable {
+public class Entity extends Sprite implements Serializable {
 
     private final UUID ID = UUID.randomUUID();
 

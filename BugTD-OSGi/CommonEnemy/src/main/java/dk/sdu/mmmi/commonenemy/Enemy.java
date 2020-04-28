@@ -1,5 +1,7 @@
 package dk.sdu.mmmi.commonenemy;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
@@ -7,6 +9,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovementInstruction;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovingPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.RegionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.commonai.events.EnemyCommand;
 import java.util.List;
@@ -21,6 +24,13 @@ public class Enemy extends Entity {
     private PositionPart positionPart;
     private PreciseMovingPart movingPart;
     private LifePart lifePart;
+    private RegionPart regionpart;
+    private enum State {RIGHT, LEFT, DOWN, UP};
+    public State previousState;
+    public State currentState;
+    private Animation down,left,right,up;
+    private float stateTimer;
+    
 
     public static Entity createGroundEnemy(float x, float y) {
         //attributes
@@ -30,13 +40,15 @@ public class Enemy extends Entity {
         float speedPerMovement = 1;
         float radians = 3.1415f / 2;
         int life = 100;
-
+        
+        
         Entity gEnemy = new Enemy(EnemyType.GROUND,
                 new WeaponPart(weaponDamage, weaponRange, weaponSpeed),
                 new AnimationPart("texturesprites/enemy/enemyup.atlas", 16, 16, 0),
                 new PositionPart(x, y, radians),
                 new PreciseMovingPart(speedPerMovement),
-                new LifePart(life));
+                new LifePart(life),
+                new RegionPart("down"));
 
         return gEnemy;
     }
@@ -89,10 +101,26 @@ public class Enemy extends Entity {
         this.lifePart = lifePart;
         add(lifePart);
     }
+    public Enemy(EnemyType type, WeaponPart weaponPart, AnimationPart animationPart, PositionPart positionPart, PreciseMovingPart movingPart, LifePart lifePart, RegionPart regionPart) {
+        this.type = type;
+        this.weaponPart = weaponPart;
+        add(weaponPart);
+        this.animationPart = animationPart;
+        add(animationPart);
+        this.positionPart = positionPart;
+        add(positionPart);
+        this.movingPart = movingPart;
+        add(movingPart);
+        this.lifePart = lifePart;
+        add(lifePart);
+        this.regionpart = regionPart;
+        add(regionPart);
+    }
 
     public List<EnemyCommand> getCommands() {
         return commands;
     }
+    
 
     public void setCommands(List<EnemyCommand> moveCommands) {
         this.commands = moveCommands;

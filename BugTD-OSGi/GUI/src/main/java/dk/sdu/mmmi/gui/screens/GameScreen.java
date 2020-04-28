@@ -36,14 +36,17 @@ public class GameScreen implements Screen {
     private static final AssetManager assetManager = new AssetManager();
     private Animation animation;
     private TextureAtlas textureAtlas;
+    private TextureAtlas atlas;
 
     public GameScreen() {
+        atlas = new TextureAtlas("texturesprites/Enemies_and_player.pack");
         stage = new Stage();
         stage = new Stage();
         spriteBatch = new SpriteBatch();
         animationBatch = new SpriteBatch();
         loadAssets();
         loadAnimations();
+        System.out.println("regions : " + atlas.getRegions());
     }
 
     @Override
@@ -111,8 +114,11 @@ public class GameScreen implements Screen {
 
             drawSprite(spritePart, positionPart);
         }
+        
 
-        loadAnimations();
+        
+/*
+        //loadAnimations();
         ArrayList<Entity> entitiesToAnimate = new ArrayList<>();
 
         // Populate list
@@ -133,15 +139,15 @@ public class GameScreen implements Screen {
 
             drawAnimation(animationPart, positionPart);
         }
-
+*/
     }
-
+/*
     private void drawAnimation(AnimationPart anima, PositionPart pos) {
         spriteBatch.begin();
         spriteBatch.draw(animation.getKeyFrame(elapsedTime, true), pos.getX(), pos.getY());
         spriteBatch.end();
     }
-
+*/
     private void drawSprite(SpritePart spritePart, PositionPart positionPart) {
         animationBatch.begin();
         Texture texture = assetManager.get(spritePart.getSpritePath(), Texture.class);
@@ -177,6 +183,10 @@ public class GameScreen implements Screen {
         }
         GameScreen.assetManager.finishLoading();
 
+    }
+    
+    public TextureAtlas getAtlas() {
+        return this.atlas;
     }
 
     @Override

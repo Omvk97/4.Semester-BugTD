@@ -1,21 +1,18 @@
 package dk.sdu.mmmi.enemy;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovingPart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commonenemy.Enemy;
-import dk.sdu.mmmi.commonenemy.EnemyType;
 
-public class GroundEnemy implements IGamePluginService {
-
+public class GroundEnemy extends Sprite implements IGamePluginService {
+    
+    
     @Override
     public void start(GameData gameData, World world) {
+        
     }
 
     @Override

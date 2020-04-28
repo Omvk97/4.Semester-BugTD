@@ -1,5 +1,6 @@
 package dk.sdu.mmmi.enemy;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -17,14 +18,14 @@ import dk.sdu.mmmi.commonai.events.RouteCalculatedEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commontower.Tower;
 
-public class EnemyControlSystem implements IEntityProcessingService {
+public class EnemyControlSystem extends Sprite implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
 
         for (Entity entity : world.getEntities(Enemy.class)) {
             Enemy enemy = (Enemy) entity;
-
+            
             if (((LifePart) enemy.getPart(LifePart.class)).isDead()) {
                 gameData.addEvent(new EnemyDiedEvent(enemy));
                 world.removeEntity(enemy);
