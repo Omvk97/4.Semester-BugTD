@@ -136,9 +136,11 @@ public class GameScreen implements Screen {
 
     }
 
-    private void drawAnimation(AnimationPart anima, PositionPart pos) {
+    private void drawAnimation(AnimationPart animationPart, PositionPart posPart) {
         spriteBatch.begin();
-        spriteBatch.draw(animation.getKeyFrame(elapsedTime, true), pos.getX(), pos.getY());
+        TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal(animationPart.getAtlasPath()));
+        Animation animation = new Animation(1f / 15f, textureAtlas.getRegions());
+        spriteBatch.draw(animation.getKeyFrame(elapsedTime, true), posPart.getX(), posPart.getY());
         spriteBatch.end();
     }
 
