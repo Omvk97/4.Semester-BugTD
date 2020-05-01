@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import dk.sdu.mmmi.cbse.Game;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
@@ -34,8 +32,6 @@ public class GameScreen implements Screen {
     SpriteBatch spriteBatch;
     SpriteBatch animationBatch;
     private static final AssetManager assetManager = new AssetManager();
-    private Animation animation;
-    private TextureAtlas textureAtlas;
 
     public GameScreen() {
         stage = new Stage();
@@ -43,7 +39,6 @@ public class GameScreen implements Screen {
         spriteBatch = new SpriteBatch();
         animationBatch = new SpriteBatch();
         loadAssets();
-        loadAnimations();
     }
 
     @Override
@@ -55,28 +50,29 @@ public class GameScreen implements Screen {
     @Override
     public void render(float v) {
         elapsedTime += Gdx.graphics.getDeltaTime();
-        // clear screen to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         draw();
         Game.getInstance().getGameData().setDelta(Gdx.graphics.getDeltaTime());
         Game.getInstance().getGameData().getKeys().update();
-        Game.getInstance().update(); //TODO: Should this be in render? From Thomas: Yes I think it fits here inside the GameScreen's render method
-        // Is this the right place to put the game over check? Yes it probably is
-        if(!Game.getInstance().getGameData().getEvents(GameWonEvent.class).isEmpty()){
+        Game.getInstance().update();
+        
+        // Check if game is won
+        if (!Game.getInstance().getGameData().getEvents(GameWonEvent.class).isEmpty()) {
             for (Event gameWonEvent : Game.getInstance().getGameData().getEvents(GameWonEvent.class)) {
                 Game.getInstance().getGameData().removeEvent(gameWonEvent);
-                
+
             }
             GuiPluginService.getInstance().setScreen(new MenuScreen());
         }
+        // Check if game is lost
         if (!Game.getInstance().getGameData().getEvents(GameOverEvent.class).isEmpty()) {
             // TODO: Show some UI that informs the user that the game is over
             for (Event gameOverEvent : Game.getInstance().getGameData().getEvents(GameOverEvent.class)) {
                 Game.getInstance().getGameData().removeEvent(gameOverEvent);
             }
-            
+
             GuiPluginService.getInstance().setScreen(new MenuScreen());
         }
     }
@@ -104,7 +100,7 @@ public class GameScreen implements Screen {
             }
         });
 
-        // Draw
+        // Draw sprites
         for (Entity entity : entitiesToDraw) {
             SpritePart spritePart = entity.getPart(SpritePart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
@@ -112,28 +108,15 @@ public class GameScreen implements Screen {
             drawSprite(spritePart, positionPart);
         }
 
-        loadAnimations();
-        ArrayList<Entity> entitiesToAnimate = new ArrayList<>();
-
-        // Populate list
+        // Draw animations
         for (Entity entity : Game.getInstance().getWorld().getEntities()) {
             AnimationPart animationPart = entity.getPart(AnimationPart.class);
             PositionPart positionPart = entity.getPart(PositionPart.class);
-            // System.out.println(textureAtlas.getRegions());
 
             if (animationPart != null && positionPart != null) {
-                entitiesToAnimate.add(entity);
+                drawAnimation(animationPart, positionPart);
             }
         }
-
-        // Draw
-        for (Entity entity : entitiesToAnimate) {
-            AnimationPart animationPart = entity.getPart(AnimationPart.class);
-            PositionPart positionPart = entity.getPart(PositionPart.class);
-
-            drawAnimation(animationPart, positionPart);
-        }
-
     }
 
     private void drawAnimation(AnimationPart animationPart, PositionPart posPart) {
@@ -155,21 +138,9 @@ public class GameScreen implements Screen {
         sprite.setSize(spritePart.getWidth(), spritePart.getHeight());
         sprite.draw(animationBatch);
         animationBatch.end();
-
-    }
-
-    public void loadAnimations() {
-        for (Entity entity : Game.getInstance().getWorld().getEntities()) {
-            AnimationPart animationPart = entity.getPart(AnimationPart.class);
-            if (animationPart != null) {
-                textureAtlas = new TextureAtlas(Gdx.files.internal(animationPart.getAtlasPath()));
-                animation = new Animation(1f / 15f, textureAtlas.getRegions());
-            }
-        }
     }
 
     public void loadAssets() {
-
         for (Entity entity : Game.getInstance().getWorld().getEntities()) {
             SpritePart spritePart = entity.getPart(SpritePart.class);
             if (spritePart != null) {
@@ -178,7 +149,6 @@ public class GameScreen implements Screen {
             }
         }
         GameScreen.assetManager.finishLoading();
-
     }
 
     @Override
@@ -206,6 +176,5 @@ public class GameScreen implements Screen {
         stage.dispose();
         spriteBatch.dispose();
         animationBatch.dispose();
-        textureAtlas.dispose();
     }
 }
