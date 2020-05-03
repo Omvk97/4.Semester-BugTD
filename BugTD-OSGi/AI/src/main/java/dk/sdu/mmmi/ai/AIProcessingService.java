@@ -108,9 +108,19 @@ public class AIProcessingService implements IEntityProcessingService {
                     List<EnemyCommand> enemyCommands = new ArrayList<>();
 
                     Entity target = calculateClosestTower(world, enemy.getPositionPart());
+                    
                     if (target != null) {   // No towers check
                         Tile towerTile = mapSPI.getTilesEntityIsOn(target).get(1);
-                        List<Tile> tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, towerTile, mapHasChanged, changedTowers);
+                        
+                        if (mapSPI.getTileInDirection(towerTile, Direction.LEFT).isWalkable()) {
+                            towerTile = mapSPI.getTileInDirection(towerTile, Direction.LEFT);
+                        } else if (mapSPI.getTileInDirection(towerTile, Direction.UP).isWalkable()) {
+                            towerTile = mapSPI.getTileInDirection(towerTile, Direction.UP);
+                        } else if (mapSPI.getTileInDirection(towerTile, Direction.RIGHT).isWalkable()) {
+                            towerTile = mapSPI.getTileInDirection(towerTile, Direction.RIGHT);
+                        }
+                        
+                        List<Tile> tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, mapSPI.getTileInDirection(towerTile, Direction.LEFT), mapHasChanged, changedTowers);
 
                         tileRoute.forEach((tile) -> {
                             enemyCommands.add(new EnemyCommand(tile, Command.WALK));
