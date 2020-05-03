@@ -7,8 +7,10 @@ public class PlayerArrivedEvent extends Event {
     private int x;
     private int y;
 
-    public PlayerArrivedEvent(Entity source) {
+    public PlayerArrivedEvent(Entity source, int x, int y) {
         super(source);
+        this.x = x;
+        this.y = y;
     }
 
     public int getX() {

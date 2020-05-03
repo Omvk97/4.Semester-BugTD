@@ -10,12 +10,14 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
+import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonai.events.MapChangedDuringRoundEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
+import dk.sdu.mmmi.commonplayer.Player;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
 import java.util.ArrayList;
@@ -35,26 +37,21 @@ public class TowerControlSystem implements IEntityProcessingService {
     }
 
     private void createNewTowers(GameData gameData, World world) {
-        List<Event> eventsToDelete = new ArrayList<>();
-        for (Event event : gameData.getEvents()) {
-            if (!(event instanceof ClickEvent)) {
-                continue;
-            }
-
-            eventsToDelete.add(event);
+        for (Event event : gameData.getEvents(PlayerArrivedEvent.class)) {
 
             // Calculate placement of new Tower
-            int clickX = ((ClickEvent) event).getX();
-            int clickY = ((ClickEvent) event).getY();
+            int clickX = ((PlayerArrivedEvent) event).getX();
+            int clickY = ((PlayerArrivedEvent) event).getY();
             Tower tower = createNewTower(clickX, clickY);
             map.fitEntityToMap(tower);
 
             if (isLegalPlacement(tower)) {
+                System.out.println("Yeds");
                 world.addEntity(tower);
                 gameData.addEvent(new MapChangedDuringRoundEvent(tower));
             }
         }
-        //gameData.getEvents().removeAll(eventsToDelete);
+        gameData.removeEvents(PlayerArrivedEvent.class);
     }
 
     private boolean isLegalPlacement(Entity e) {
@@ -65,7 +62,8 @@ public class TowerControlSystem implements IEntityProcessingService {
         }
 
         for (Tile tile : tiles) {
-            if (map.checkIfTileIsOccupied(tile, Arrays.asList(preview)) || !tile.isWalkable()) {
+            Class[] entitiesToIgnore = {TowerPreview.class, Player.class};
+            if (map.checkIfTileIsOccupied(tile, entitiesToIgnore) || !tile.isWalkable()) {
                 return false;
             }
         }

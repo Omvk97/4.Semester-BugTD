@@ -67,7 +67,7 @@
 
     <module>Queen</module>
     <module>OSGIEnemySpawner</module>
-
+    <module>CommonPlayer</module>
   </modules>
 
     <build>

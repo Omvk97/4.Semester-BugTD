@@ -12,6 +12,7 @@ import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonmap.TileSizes;
+import dk.sdu.mmmi.commonplayer.Player;
 
 public class PlayerControlSystem implements IEntityProcessingService {
 
@@ -76,7 +77,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             // Player arrived and tower can be placed
             if (pos.getX() == targetX && pos.getY() == targetY) {
-                gameData.addEvent(new PlayerArrivedEvent(player));
+                gameData.addEvent(new PlayerArrivedEvent(player, (int) pos.getX(), (int) pos.getY()));
             }
         }
     }
