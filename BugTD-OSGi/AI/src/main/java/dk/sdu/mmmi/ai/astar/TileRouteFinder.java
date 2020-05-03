@@ -62,7 +62,6 @@ public class TileRouteFinder<T extends Tile> {
 
         mapTilesGraph = new Graph<>(mapTiles, groundConnections);
         routeFinder = new RouteFinder<>(mapTilesGraph, new TilePathCostScorer(), new QueenHeuristicScorer());
-
         List<MapTile> route = routeFinder.findRoute(mapTilesGraph.getNode(startTile.getID()), mapTilesGraph.getNode(goalTile.getID()));
 
         return route.stream().map(MapTile::getTile).collect(Collectors.toList());
