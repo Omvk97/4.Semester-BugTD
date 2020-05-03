@@ -48,7 +48,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
         PositionPart posPart = player.getPart(PositionPart.class);
         if (player.hasTarget() && posPart.getX() == targetX && posPart.getY() == targetY) {
             gameData.addEvent(new PlayerArrivedEvent(player, (int) posPart.getX(), (int) posPart.getY()));
-            player.setHasTarget(false);
+            // I used to set player.hasTarget to false here, but i figured that it might as well
+            // keep trying to place a tower where i stands in case an Enemy is blocking it currently.
+            // Now a tower will be placed when the Enemy is gone (unless the player is moved elsewhere).
         }
     }
 
@@ -87,11 +89,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 moveVertical(player, dy < -speed ? -speed : dy);
             }
         }
-    }
-
-    public void playerWithinRangeOfTower(World world, PositionPart pos) {
-        throw new UnsupportedOperationException("Not supported yet.");
-
     }
 
     public boolean isKeyPressed(GameData gameData) {
