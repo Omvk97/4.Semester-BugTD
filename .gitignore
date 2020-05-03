@@ -42,7 +42,7 @@ hs_err_pid*
 /BugTD-OSGi/Map/target/
 
 # Manually added
-
+.idea
 /BugTD-OSGi/.idea
 *.iml
 /BugTD-OSGi/CommonAI/target/

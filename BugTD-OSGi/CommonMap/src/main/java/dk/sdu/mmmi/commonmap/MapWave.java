@@ -4,11 +4,13 @@ public class MapWave {
     private String enemyType;
     private int enemyAmount;
     private int waveNumber;
+    private int enemyLife;
 
-    public MapWave(String enemyType, int enemyAmount, int waveNumber) {
+    public  MapWave(String enemyType, int enemyAmount, int waveNumber, int enemyLife) {
         this.enemyType = enemyType;
         this.enemyAmount = enemyAmount;
         this.waveNumber = waveNumber;
+        this.enemyLife = enemyLife;
     }
 
     public String getEnemyType() {
@@ -22,6 +24,8 @@ public class MapWave {
     public int getWaveNumber() {
         return waveNumber;
     }
+
+    public int getEnemyLife() { return enemyLife; }
 
     @Override
     public String toString() {

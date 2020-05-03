@@ -1,9 +1,9 @@
-package dk.sdu.mmmi.queen;
+package dk.sdu.mmmi.commontower;
 
 public class QueenStats {
     public float x;
     public float y;
-    public int life;
+    public float life;
     public float damage;
     public float range;
     public float attackSpeed;

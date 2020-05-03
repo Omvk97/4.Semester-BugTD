@@ -3,11 +3,12 @@ package dk.sdu.mmmi.map;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commonmap.*;
+import dk.sdu.mmmi.commontower.Queen;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -22,7 +23,13 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     @Override
     public void start(GameData gameData, World world) {
         this.world = world;
-        loadFile("/levels/level01.buggydata");
+        if (gameData.getDifficulty() == 3) {
+            loadFile("/levels/level03.buggydata");
+        } else if (gameData.getDifficulty() == 2) {
+            loadFile("/levels/level02.buggydata");
+        } else {
+            loadFile("/levels/level01.buggydata");
+        }
     }
 
     @Override
@@ -30,15 +37,17 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         for (Entity tile : world.getEntities(Tile.class)) {
             world.removeEntity(tile);
         }
+        for (Entity queen : world.getEntities(Queen.class)) {
+            world.removeEntity(queen);
+        }
+        // TODO: How to remove EnemySpawner?
     }
 
     @Override
     public void loadFile(String filepath) {
         ClassLoader classLoader = this.getClass().getClassLoader();
         try (Scanner sc = new Scanner(new InputStreamReader(classLoader.getResource(filepath).openStream()))) {
-            mapData = new MapData(16, sc);
-            mapData.addTilesToWorld(world);
-            mapData.addQueenToWorld(world);
+            mapData = new MapData(16, sc, world);
         } catch (Exception ex) {
             System.out.println("Exception caught while reading map file [" + filepath + "]");
             System.out.println(ex);
@@ -61,6 +70,11 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     }
 
     @Override
+    public Entity getQueen() {
+        return mapData.getQueen();
+    }
+
+    @Override
     public Tile[][] getTiles() {
         return mapData.getTiles();
     }
@@ -74,23 +88,23 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     public ArrayList<Tile> getTilesEntityIsOn(Entity entity) {
         PositionPart posPart = entity.getPart(PositionPart.class);
         SpritePart spritePart = entity.getPart(SpritePart.class);
-
-        if (posPart == null || spritePart == null) {
+        AnimationPart animationPart = entity.getPart(AnimationPart.class);
+        
+        // Entitity has to have a position part, and either a spritePart or an animationpart
+        if (posPart == null || (spritePart == null && animationPart == null)) {
             return new ArrayList<>();
         }
 
         ArrayList<Tile> overlappingTiles = new ArrayList<>();
-        int tileNumberFromLeft = (int) posPart.getX() / mapData.getTileSize();
-        int tileNumberFromBottom = (int) posPart.getY() / mapData.getTileSize();
-        int entityWidthInTiles = (int) spritePart.getWidth() / mapData.getTileSize();
-        int entityHeightInTiles = (int) spritePart.getHeight() / mapData.getTileSize();
-
-        Tile[][] tiles = mapData.getTiles();
+        int tileNumberFromLeft = (int) posPart.getX() / TileSizes.GRASS_WIDTH;
+        int tileNumberFromBottom = (int) posPart.getY() / TileSizes.GRASS_WIDTH;
+        int entityWidthInTiles = (int) (spritePart == null ? animationPart.getWidth() : spritePart.getWidth()) / TileSizes.GRASS_WIDTH;
+        int entityHeightInTiles = (int) (spritePart == null ? animationPart.getHeight() : spritePart.getHeight()) / TileSizes.GRASS_WIDTH;
 
         for (int i = tileNumberFromLeft; i < tileNumberFromLeft + entityWidthInTiles; i++) {
             for (int j = tileNumberFromBottom; j < tileNumberFromBottom + entityHeightInTiles; j++) {
                 try {
-                    overlappingTiles.add(tiles[j][i]);
+                    overlappingTiles.add(mapData.getTiles()[j][i]);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     // Do nothing
                 }
@@ -98,7 +112,6 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         }
 
         return overlappingTiles;
-
     }
 
     @Override
@@ -110,6 +123,27 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     public boolean checkIfTileIsOccupied(Tile t, List<Entity> ignoreThese) {
         for (Entity entity : world.getEntities()) {
             if (entity instanceof Tile || ignoreThese.contains(entity)) {
+                continue;
+            }
+
+            if (getTilesEntityIsOn(entity).contains(t)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public <E extends Entity> boolean checkIfTileIsOccupied(Tile t, Class<E>... ignoreTheseClasses) {
+        for (Entity entity : world.getEntities()) {
+            boolean entityShouldBeIgnored = false;
+            for (Class<E> entityType : ignoreTheseClasses) {
+                if (entityType.equals(entity.getClass())) {
+                    entityShouldBeIgnored = true;
+                }
+            }
+
+            if (entity instanceof Tile || entityShouldBeIgnored) {
                 continue;
             }
 

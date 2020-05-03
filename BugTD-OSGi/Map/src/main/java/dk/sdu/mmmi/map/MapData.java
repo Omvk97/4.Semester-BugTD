@@ -6,8 +6,8 @@ import dk.sdu.mmmi.commonmap.MapWave;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commontower.Queen;
+import dk.sdu.mmmi.commontower.QueenStats;
 import dk.sdu.mmmi.osgienemyspawner.EnemySpawnPoint;
-import dk.sdu.mmmi.queen.QueenStats;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class MapData {
     private Tile[][] tiles;
     private ArrayList<MapWave> waves;
-    private int tileSize = 16;
+    private int tileSize;
     private Queen queen;
     private EnemySpawnPoint enemySpawnPoint;
 
@@ -25,13 +25,18 @@ public class MapData {
         waves = new ArrayList<>();
     }
 
-    public EnemySpawnPoint getEnemySpawnPoint() {
-        return enemySpawnPoint;
-    }
-
-    public MapData(int tileSize, Scanner sc) {
+    public MapData(int tileSize, Scanner sc, World world) {
         this(tileSize);
         initFromScanner(sc);
+
+        addQueenToWorld(world);
+        addTilesToWorld(world);
+    }
+
+    public Queen getQueen() { return queen; }
+
+    public EnemySpawnPoint getEnemySpawnPoint() {
+        return enemySpawnPoint;
     }
 
     public Tile[][] getTiles() {
@@ -46,7 +51,7 @@ public class MapData {
         return tileSize;
     }
 
-    public void addTilesToWorld(World world) {
+    private void addTilesToWorld(World world) {
         for (int i = 0; i < tiles.length; i++) {
             Tile[] row = tiles[i];
             for (Tile tile : row) {
@@ -55,8 +60,31 @@ public class MapData {
         }
     }
 
-    public void addQueenToWorld(World world) {
+    private void addQueenToWorld(World world) {
         world.addEntity(queen);
+    }
+
+    private enum DataType {
+        Default,
+        Tiles,
+        Waves,
+        Queen,
+        EnemySpawn,
+        End
+    }
+
+    private enum TileType {
+        Grass(1), Dirt(0);
+
+        private int numVal;
+
+        TileType(int numVal) {
+            this.numVal = numVal;
+        }
+
+        public int getNumVal() {
+            return numVal;
+        }
     }
 
     private void initFromScanner(Scanner sc) {
@@ -125,11 +153,28 @@ public class MapData {
         int waveNumber = 0;
         for (String line : lines) {
             waveNumber++;
-            String[] splitLine = line.split("\\*");
-            String enemyType = splitLine[0];
-            int enemyCount = Integer.parseInt(splitLine[1]);
-            MapWave wave = new MapWave(enemyType, enemyCount, waveNumber);
-            System.out.println(wave);
+            String type = "";
+            int amount = 0;
+            int life = 0;
+            String[] splitLine = line.split(";");
+            for (String split : splitLine) {
+                String key = split.split("=")[0];
+                String value = split.split("=")[1];
+                switch (key) {
+                    case "Type":
+                        type = value;
+                        break;
+                    case "Amount":
+                        amount = Integer.parseInt(value);
+                        break;
+                    case "Life":
+                        life = Integer.parseInt(value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            MapWave wave = new MapWave(type, amount, waveNumber, life);
             waves.add(wave);
 
         }
@@ -180,7 +225,7 @@ public class MapData {
                     stats.y = Float.parseFloat(value);
                     break;
                 case "LIFE":
-                    stats.life = Integer.parseInt(value);
+                    stats.life = Float.parseFloat(value);
                     break;
                 case "DAMAGE":
                     stats.damage = Float.parseFloat(value);
@@ -196,12 +241,11 @@ public class MapData {
             }
         }
 
-        System.out.println(stats);
         PositionPart pos = new PositionPart(stats.x, stats.y, 0);
         LifePart life = new LifePart(stats.life);
-        CollisionPart collision = new CollisionPart(4* TileSizes.GRASS_WIDTH, 4*TileSizes.GRASS_HEIGHT);
+        CollisionPart collision = new CollisionPart(3* TileSizes.GRASS_WIDTH, 3*TileSizes.GRASS_HEIGHT);
         WeaponPart weapon = new WeaponPart(stats.damage, stats.range, stats.attackSpeed);
-        SpritePart sprite = new SpritePart("towers/queen.png", 4*TileSizes.GRASS_WIDTH, 4*TileSizes.GRASS_HEIGHT, 1);
+        SpritePart sprite = new SpritePart("towers/queen.png", 3*TileSizes.GRASS_WIDTH, 3*TileSizes.GRASS_HEIGHT, 1);
         this.queen = new Queen(pos, life, collision, weapon, sprite);
     }
 
@@ -220,29 +264,6 @@ public class MapData {
                 default:
                     return;
             }
-        }
-    }
-
-    private enum DataType {
-        Default,
-        Tiles,
-        Waves,
-        Queen,
-        EnemySpawn,
-        End
-    }
-
-    private enum TileType {
-        Grass(1), Dirt(0);
-
-        private int numVal;
-
-        TileType(int numVal) {
-            this.numVal = numVal;
-        }
-
-        public int getNumVal() {
-            return numVal;
         }
     }
 }

@@ -5,42 +5,42 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovementInstruction;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
+import dk.sdu.mmmi.commonai.events.EnemyCommand;
+import java.util.List;
 
 public class Enemy extends Entity {
 
-    public static Entity createGroundEnemy(float x, float y) {
-        Entity gEnemy = new Enemy();
+    private List<EnemyCommand> commands = null;
+    private int commandIndex = 0;
+    private EnemyType type;
+    private WeaponPart weaponPart;
+    private AnimationPart animationPart;
+    private PositionPart positionPart;
+    private PreciseMovingPart movingPart;
+    private LifePart lifePart;
+
+    public static Entity createGroundEnemy(float x, float y, int life) {
         //attributes
-        float damage = 10;
-        float range = 50;
-        float speed = 10;
-        float deacceleration = 280;
-        float acceleration = 210;
-        float maxSpeed = 150;
-        float rotationSpeed = 5;
+        float weaponDamage = 12.5f;
+        float weaponRange = 50;
+        float weaponSpeed = 0.5f;
+        float speedPerMovement = 8;
         float radians = 3.1415f / 2;
-        int life = 100;
 
-        //Parts
-        AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32, 0);
-        gEnemy.add(anm);
-
-        //SpritePart sprite = new SpritePart("enemy/enemyup/up_01.png", 32, 32);
-        //gEnemy.add(sprite);
-        WeaponPart wpn = new WeaponPart(damage, range, speed);
-        gEnemy.add(wpn);
-        MovingPart mov = new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed);
-        gEnemy.add(mov);
-        PositionPart pos = new PositionPart(x, y, radians);
-        gEnemy.add(pos);
-        LifePart lif = new LifePart(life);
-        gEnemy.add(lif);
+        Entity gEnemy = new Enemy(EnemyType.GROUND,
+                new WeaponPart(weaponDamage, weaponRange, weaponSpeed),
+                new AnimationPart("texturesprites/enemy/enemyup.atlas", 16, 16, 0),
+                new PositionPart(x, y, radians),
+                new PreciseMovingPart(speedPerMovement),
+                new LifePart(life));
 
         return gEnemy;
     }
 
-    public static Entity createFlyingEnemy(float x, float y) {
+    public static Entity createFlyingEnemy(float x, float y, int life) {
         Entity fEnemy = new Enemy();
         //attributes
         float damage = 10;
@@ -51,7 +51,6 @@ public class Enemy extends Entity {
         float maxSpeed = 300;
         float rotationSpeed = 5;
         float radians = 3.1415f / 2;
-        int life = 5;
 
         //Parts
         AnimationPart anm = new AnimationPart("texturesprites/enemy/enemyup.atlas", 32, 32);
@@ -71,4 +70,94 @@ public class Enemy extends Entity {
         return fEnemy;
     }
 
+    public Enemy() {
+        super();
+    }
+
+    public Enemy(EnemyType type, WeaponPart weaponPart, AnimationPart animationPart, PositionPart positionPart, PreciseMovingPart movingPart, LifePart lifePart) {
+        this.type = type;
+        this.weaponPart = weaponPart;
+        add(weaponPart);
+        this.animationPart = animationPart;
+        add(animationPart);
+        this.positionPart = positionPart;
+        add(positionPart);
+        this.movingPart = movingPart;
+        add(movingPart);
+        this.lifePart = lifePart;
+        add(lifePart);
+    }
+
+    public List<EnemyCommand> getCommands() {
+        return commands;
+    }
+
+    public void setCommands(List<EnemyCommand> moveCommands) {
+        this.commands = moveCommands;
+        resetCommandIndex();
+    }
+
+    public void incrementCommandIndex() {
+        this.commandIndex++;
+    }
+
+    private void resetCommandIndex() {
+        this.commandIndex = 0;
+    }
+
+    public int getCommandIndex() {
+        return this.commandIndex;
+    }
+
+    public boolean isDoneFollowingCommands() {
+        return commandIndex == commands.size();
+    }
+
+    public float getXTarget() {
+        return commands.get(commandIndex).getX();
+    }
+
+    public float getYTarget() {
+        return commands.get(commandIndex).getY();
+    }
+
+    public EnemyType getType() {
+        return type;
+    }
+
+    public float getCurrentX() {
+        return positionPart.getX();
+    }
+
+    public float getCurrentY() {
+        return positionPart.getY();
+    }
+
+    public float calculateFutureXPosition() {
+        return movingPart.calculateFutureXPosition(getCurrentX());
+    }
+
+    public float calculateFutureYPosition() {
+        return movingPart.calculateFutureYPosition(getCurrentY());
+    }
+
+    public void addMovement(PreciseMovementInstruction preciseMovementInstruction) {
+        movingPart.addMovement(preciseMovementInstruction);
+    }
+
+    public WeaponPart getWeaponPart() {
+        return weaponPart;
+    }
+
+    public AnimationPart getAnimationPart() {
+        return animationPart;
+    }
+
+    public PositionPart getPositionPart() {
+        return positionPart;
+    }
+
+    public PreciseMovingPart getMovingPart() {
+        return movingPart;
+    }
 }

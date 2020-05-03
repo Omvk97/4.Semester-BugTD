@@ -6,18 +6,18 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 public class LifePart implements EntityPart {
 
     private boolean dead = false;
-    private int life;
+    private float life;
     private boolean isHit = false;
 
-    public LifePart(int life) {
+    public LifePart(float life) {
         this.life = life;
     }
 
-    public int getLife() {
+    public float getLife() {
         return life;
     }
 
-    public void setLife(int life) {
+    public void setLife(float life) {
         this.life = life;
     }
 

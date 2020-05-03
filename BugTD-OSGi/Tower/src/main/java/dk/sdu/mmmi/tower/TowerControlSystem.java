@@ -11,6 +11,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.commonai.events.MapChangedDuringRoundEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
@@ -50,6 +51,7 @@ public class TowerControlSystem implements IEntityProcessingService {
 
             if (isLegalPlacement(tower)) {
                 world.addEntity(tower);
+                gameData.addEvent(new MapChangedDuringRoundEvent(tower));
             }
         }
         //gameData.getEvents().removeAll(eventsToDelete);
@@ -101,7 +103,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         float radians = 0;
         PositionPart pos = new PositionPart(x, y, radians);
 
-        int hp = 100;
+        int hp = 1;
         LifePart life = new LifePart(hp);
 
         CollisionPart colli = new CollisionPart(32, 32);
@@ -151,6 +153,13 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     private void attackEnemies(GameData gameData, World world) {
         for (Entity tower : world.getEntities(Tower.class)) {
+            // Remove dead towers
+            if (((LifePart) tower.getPart(LifePart.class)).isDead()) {
+                world.removeEntity(tower);
+                gameData.addEvent(new MapChangedDuringRoundEvent(tower));
+                continue;
+            }
+            
             PositionPart towerPosPart = tower.getPart(PositionPart.class);
             Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
             if (target != null) {

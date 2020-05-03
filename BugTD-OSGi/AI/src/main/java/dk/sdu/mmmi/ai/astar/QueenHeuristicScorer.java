@@ -16,7 +16,7 @@ public class QueenHeuristicScorer implements Scorer<MapTile>{
         double ac = Math.abs(queenTile.getY() - from.getY());
         double cb = Math.abs(queenTile.getX() - from.getX());
         
-        return Math.hypot(ac, cb);
+        return 10 * Math.hypot(ac, cb);
     }
     
 }

@@ -14,6 +14,16 @@ public class GameData {
     private List<Event> events = new CopyOnWriteArrayList<>();
     private int mouseX;
     private int mouseY;
+    private int difficulty = 1;
+    private String menuFlashMessage;
+
+    public String getMenuFlashMessage() { return menuFlashMessage; }
+
+    public void setMenuFlashMessage(String menuFlashMessage) { this.menuFlashMessage = menuFlashMessage; }
+
+    public int getDifficulty() { return difficulty; }
+
+    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
 
     public void addEvent(Event e) {
         events.add(e);
@@ -54,7 +64,7 @@ public class GameData {
     public int getDisplayHeight() {
         return displayHeight;
     }
-    
+
     public <E extends Event> List<Event> getEvents(Class<E> type) {
         List<Event> r = new ArrayList();
         for (Event event : events) {
@@ -91,5 +101,13 @@ public class GameData {
         }
 
         return r;
+    }
+
+    public <E extends Event> void removeEvents(Class<E> type) {
+        for (Event event : events) {
+            if (event.getClass().equals(type)) {
+                events.remove(event);
+            }
+        }
     }
 }

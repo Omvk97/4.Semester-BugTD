@@ -12,9 +12,9 @@
         <bundle.namespace>dk.sdu.mmmi</bundle.namespace>
     </properties>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>OSGiMap</artifactId>
+    <artifactId>Map</artifactId>
     <packaging>bundle</packaging>
-    <name>OSGiMap</name>
+    <name>Map</name>
     <dependencies>    
         <dependency>
             <groupId>org.osgi</groupId>
@@ -37,11 +37,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Queen</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -49,6 +44,12 @@
         <dependency>
             <groupId>dk.sdu.mmmi.build</groupId>
             <artifactId>OSGIEnemySpawner</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.build</groupId>
+            <artifactId>CommonTower</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

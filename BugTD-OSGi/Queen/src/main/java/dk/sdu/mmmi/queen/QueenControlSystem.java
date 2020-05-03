@@ -30,6 +30,7 @@ public class QueenControlSystem implements IEntityProcessingService {
 
         // Check if dead
         if (((LifePart) queen.getPart(LifePart.class)).isDead()) {
+            gameData.setMenuFlashMessage("Game over! You lost.");
             gameData.addEvent(new GameOverEvent(queen));
         }
 
@@ -40,7 +41,7 @@ public class QueenControlSystem implements IEntityProcessingService {
             WeaponPart weapon = queen.getPart(WeaponPart.class);
             weapon.setTarget(target);
             if (distance(queenPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
-                weapon.process(gameData, target);   // Dont really know what to use as arguments   
+                weapon.process(gameData, queen);
             }
         }
     }
