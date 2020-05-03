@@ -8,7 +8,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
-import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
@@ -20,8 +19,6 @@ import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commonplayer.Player;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TowerControlSystem implements IEntityProcessingService {
@@ -38,20 +35,19 @@ public class TowerControlSystem implements IEntityProcessingService {
 
     private void createNewTowers(GameData gameData, World world) {
         for (Event event : gameData.getEvents(PlayerArrivedEvent.class)) {
-
+            gameData.removeEvent(event);
+            
             // Calculate placement of new Tower
-            int clickX = ((PlayerArrivedEvent) event).getX();
-            int clickY = ((PlayerArrivedEvent) event).getY();
-            Tower tower = createNewTower(clickX, clickY);
+            int posX = ((PlayerArrivedEvent) event).getX();
+            int posY = ((PlayerArrivedEvent) event).getY();
+            Tower tower = createNewTower(posX, posY);
             map.fitEntityToMap(tower);
 
             if (isLegalPlacement(tower)) {
-                System.out.println("Yeds");
                 world.addEntity(tower);
                 gameData.addEvent(new MapChangedDuringRoundEvent(tower));
             }
         }
-        gameData.removeEvents(PlayerArrivedEvent.class);
     }
 
     private boolean isLegalPlacement(Entity e) {
