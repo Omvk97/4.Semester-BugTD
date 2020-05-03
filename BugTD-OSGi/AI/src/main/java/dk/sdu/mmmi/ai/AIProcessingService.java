@@ -5,6 +5,7 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonai.events.Command;
 import dk.sdu.mmmi.commonai.events.EnemyCommand;
@@ -27,6 +28,7 @@ public class AIProcessingService implements IEntityProcessingService {
     private MapSPI mapSPI;
     private TileRouteFinder routeFinder = null;
     private boolean mapHasChanged;
+    private List<Entity> changedTowers = new ArrayList<>();
 
     @Override
     public void process(GameData gameData, World world) {
@@ -50,12 +52,16 @@ public class AIProcessingService implements IEntityProcessingService {
                 AIPlugin.setNewGame(false);
             }
             // Map changed event listener which should trigger re calibration of all enemies and re calibration of all connections between tiles
-            if (!(gameData.getEvents(MapChangedDuringRoundEvent.class)).isEmpty()) {
+            for (Event mapChangedEvent : gameData.getEvents(MapChangedDuringRoundEvent.class)) {
+                changedTowers.add(mapChangedEvent.getSource());
+                gameData.removeEvents(MapChangedDuringRoundEvent.class);
+            }
+            
+            if (!changedTowers.isEmpty()) {
                 mapHasChanged = true;
                 world.getEntities(Enemy.class).forEach((enemy) -> {
                     enemiesToCalculate.add((Enemy) enemy);
                 });
-                gameData.removeEvents(MapChangedDuringRoundEvent.class);
             }
 
             // Calculate best route for enemy
@@ -69,7 +75,8 @@ public class AIProcessingService implements IEntityProcessingService {
                     List<Tile> tileRoute;
 
                     if (enemy.getType() == EnemyType.GROUND) {
-                        tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, queenTile, mapHasChanged);
+
+                        tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, queenTile, mapHasChanged, changedTowers);
 
                         List<EnemyCommand> enemyCommands = new ArrayList<>();
 
@@ -97,15 +104,13 @@ public class AIProcessingService implements IEntityProcessingService {
                         gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                     }
 
-                } catch (IllegalStateException ex) {
-
-                    // No route found, therefore attack closest tower
+                } catch (IllegalStateException ex) {     // No route found, therefore attack closest tower
                     List<EnemyCommand> enemyCommands = new ArrayList<>();
 
                     Entity target = calculateClosestTower(world, enemy.getPositionPart());
-                    if (target != null) {   // If there are no towers
+                    if (target != null) {   // No towers check
                         Tile towerTile = mapSPI.getTilesEntityIsOn(target).get(1);
-                        List<Tile> tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, towerTile, mapHasChanged);
+                        List<Tile> tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, towerTile, mapHasChanged, changedTowers);
 
                         tileRoute.forEach((tile) -> {
                             enemyCommands.add(new EnemyCommand(tile, Command.WALK));
@@ -115,7 +120,6 @@ public class AIProcessingService implements IEntityProcessingService {
 
                         gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                     }
-                    System.out.println("Exception no route");
                 } finally {
                     // Ensure that if map has changed at some point, connections is only calculated the first time.
                     mapHasChanged = false;
