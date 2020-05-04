@@ -17,6 +17,7 @@ public class EnemySpawnerPlugin implements IGamePluginService {
     @Override
     public void stop(GameData gameData, World world) {
         world.removeEntity(enemySpawner);
+        this.enemySpawner = null;
     }
 
     private EnemySpawner createEnemySpawner() {

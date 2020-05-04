@@ -63,4 +63,8 @@ public class EnemySpawnerProcessingService implements IEntityProcessingService {
     public void setMapSPI(MapSPI mapSPI) {
         this.mapSPI = mapSPI;
     }
+
+    public void removeMapSPI(MapSPI mapSPI) {
+        this.mapSPI = null;
+    }
 }
