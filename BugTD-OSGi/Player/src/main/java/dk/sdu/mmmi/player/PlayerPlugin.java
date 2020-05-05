@@ -6,6 +6,8 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.events.ClickEvent;
+import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commonplayer.Player;
 
@@ -46,6 +48,8 @@ public class PlayerPlugin implements IGamePluginService {
     public void stop(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
             world.removeEntity(player);
+            gameData.getEvents().removeAll(gameData.getEvents(PlayerArrivedEvent.class));
+            gameData.getEvents().removeAll(gameData.getEvents(ClickEvent.class));
         }
     }
 
