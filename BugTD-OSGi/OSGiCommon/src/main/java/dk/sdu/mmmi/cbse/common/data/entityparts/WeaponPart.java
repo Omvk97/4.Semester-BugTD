@@ -14,11 +14,19 @@ public class WeaponPart implements EntityPart {
     private float speed;
     private boolean isAttacking = false;
     public ShapeRenderer sr;
+    private int color[] = {1,1,1,1};
     // TODO: private Damagetype dt
 
     float cooldown = 0;
     float attackflash = 0;
 
+    public enum Color{
+        WHITE,
+        YELLOW,
+        BLUE,
+        GREEN,
+        RED
+    }
     public WeaponPart(float damage, float range, float speed) {
         this.damage = damage;
         this.range = range;
@@ -32,6 +40,46 @@ public class WeaponPart implements EntityPart {
     
     public Entity getTarget(){
         return target;
+    }
+    
+    public void setColor(Color colorpart){
+        switch(colorpart){
+            case WHITE:
+                color[0] = 1;
+                color[1] = 1;
+                color[2] = 1;
+                color[3] = 1;
+                break;
+                
+            case YELLOW:
+                color[0] = 1;
+                color[1] = 1;
+                color[2] = 0;
+                color[3] = 1; 
+                break;
+                
+            case BLUE:
+                color[0] = 0;
+                color[1] = 0;
+                color[2] = 1;
+                color[3] = 1;
+                break;
+                
+            case GREEN:
+                color[0] = 0;
+                color[1] = 1;
+                color[2] = 0;
+                color[3] = 1;
+                break;
+                
+            case RED:
+                color[0] = 1;
+                color[1] = 0;
+                color[2] = 0;
+                color[3] = 1;
+                
+                
+        }
     }
 
     public float getRange() {
@@ -47,7 +95,7 @@ public class WeaponPart implements EntityPart {
     
     public void drawAttack(float x1, float y1, float x2, float y2){
         sr = new ShapeRenderer();
-        sr.setColor(1, 1, 0, 1);
+        sr.setColor(color[0], color[1], color[2], color[3]);
         Gdx.gl.glLineWidth(2);
         sr.begin(ShapeRenderer.ShapeType.Line);
         sr.line(x1, y1, x2, y2);

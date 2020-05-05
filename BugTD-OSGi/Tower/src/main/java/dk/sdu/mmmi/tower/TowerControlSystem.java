@@ -166,6 +166,7 @@ public class TowerControlSystem implements IEntityProcessingService {
             if (target != null) {
                 WeaponPart weapon = tower.getPart(WeaponPart.class);
                 weapon.setTarget(target);
+                weapon.setColor(WeaponPart.Color.YELLOW);
                 if (distance(towerPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
                     weapon.process(gameData, tower);   // Dont really know what to use as arguments   
                 }

@@ -82,6 +82,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             if (!targetLifePart.isDead()) {
                 // Attack tower
                 weaponPart.setTarget(target);
+                weaponPart.setColor(WeaponPart.Color.RED);
                 weaponPart.process(gameData, enemy);
             } else {
                 // Move towards the next command when either enemy has to move again or the tower to attack is dead
