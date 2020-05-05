@@ -16,6 +16,8 @@ import dk.sdu.mmmi.commonai.events.EnemyCommand;
 import dk.sdu.mmmi.commonai.events.RouteCalculatedEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commontower.Tower;
+import java.awt.MouseInfo;
+import java.awt.Point;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
@@ -87,6 +89,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
         }
     }
+
+
 
     private Entity calculateClosestTower(World world, PositionPart towerPosPart) {
         float currentMinDistance = Float.MAX_VALUE;

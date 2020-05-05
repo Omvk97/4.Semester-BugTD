@@ -8,18 +8,17 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
-import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
+import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonai.events.MapChangedDuringRoundEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
+import dk.sdu.mmmi.commonplayer.Player;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TowerControlSystem implements IEntityProcessingService {
@@ -35,18 +34,13 @@ public class TowerControlSystem implements IEntityProcessingService {
     }
 
     private void createNewTowers(GameData gameData, World world) {
-        List<Event> eventsToDelete = new ArrayList<>();
-        for (Event event : gameData.getEvents()) {
-            if (!(event instanceof ClickEvent)) {
-                continue;
-            }
-
-            eventsToDelete.add(event);
-
+        for (Event event : gameData.getEvents(PlayerArrivedEvent.class)) {
+            gameData.removeEvent(event);
+            
             // Calculate placement of new Tower
-            int clickX = ((ClickEvent) event).getX();
-            int clickY = ((ClickEvent) event).getY();
-            Tower tower = createNewTower(clickX, clickY);
+            int posX = ((PlayerArrivedEvent) event).getX();
+            int posY = ((PlayerArrivedEvent) event).getY();
+            Tower tower = createNewTower(posX, posY);
             map.fitEntityToMap(tower);
 
             if (isLegalPlacement(tower)) {
@@ -61,7 +55,6 @@ public class TowerControlSystem implements IEntityProcessingService {
                 gameData.addEvent(new MapChangedDuringRoundEvent(tower));
             }
         }
-        gameData.getEvents().removeAll(eventsToDelete);
     }
 
     private boolean isLegalPlacement(Entity e) {
@@ -72,7 +65,8 @@ public class TowerControlSystem implements IEntityProcessingService {
         }
 
         for (Tile tile : tiles) {
-            if (map.checkIfTileIsOccupied(tile, Arrays.asList(preview)) || !tile.isWalkable()) {
+            Class[] entitiesToIgnore = {TowerPreview.class, Player.class};
+            if (map.checkIfTileIsOccupied(tile, entitiesToIgnore) || !tile.isWalkable()) {
                 return false;
             }
         }

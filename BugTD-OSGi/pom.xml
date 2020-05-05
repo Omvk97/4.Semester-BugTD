@@ -62,8 +62,12 @@
         <module>GUI</module>
     <module>AI</module>
     <module>CommonAI</module>
+
+    <module>Player</module>
+
     <module>Queen</module>
     <module>OSGIEnemySpawner</module>
+    <module>CommonPlayer</module>
   </modules>
 
     <build>
