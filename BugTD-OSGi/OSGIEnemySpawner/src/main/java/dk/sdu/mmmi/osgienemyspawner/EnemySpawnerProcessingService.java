@@ -24,10 +24,10 @@ public class EnemySpawnerProcessingService implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        if (mapSPI != null) {
+        if (mapSPI == null) {
             return;
         }
-        
+
         // Find and set EnemySpawner entitiy in world
         List<Entity> entities = world.getEntities(EnemySpawner.class);
         if (entities.size() < 1) return;
