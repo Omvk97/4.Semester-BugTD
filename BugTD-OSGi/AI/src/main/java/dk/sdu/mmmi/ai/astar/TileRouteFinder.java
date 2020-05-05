@@ -41,6 +41,10 @@ public class TileRouteFinder<T extends Tile> {
         }
         return instance;
     }
+    
+    public static void resetInstance() {
+        instance = null;
+    }
 
     private Graph<MapTile> mapTilesGraph;
 
