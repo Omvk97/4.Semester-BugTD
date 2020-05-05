@@ -123,6 +123,10 @@ public class TowerControlSystem implements IEntityProcessingService {
     public void setMapSPI(MapSPI spi) {
         this.map = spi;
     }
+    
+    public void removeMapSPI(MapSPI spi) {
+        this.map = null;
+    }
 
     private void showTowerPlacementPreview(GameData gameData, World world) {
         // Create the preview entity for the first time

@@ -71,4 +71,9 @@ public class QueenControlSystem implements IEntityProcessingService {
     public void setMapSPI(MapSPI spi) {
         this.map = spi;
     }
+    
+    public void removeMapSPI(MapSPI spi) {
+        this.map = null;
+    }
+
 }
