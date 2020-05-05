@@ -40,6 +40,7 @@ public class QueenControlSystem implements IEntityProcessingService {
         if (target != null) {
             WeaponPart weapon = queen.getPart(WeaponPart.class);
             weapon.setTarget(target);
+            weapon.setColor(WeaponPart.Color.BLUE);
             if (distance(queenPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
                 weapon.process(gameData, queen);
             }
