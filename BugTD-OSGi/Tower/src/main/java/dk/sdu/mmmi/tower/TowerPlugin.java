@@ -4,6 +4,7 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
+import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
@@ -32,6 +33,9 @@ public class TowerPlugin implements IGamePluginService {
         Entity basicTowerPreviewIllegal = new Entity();
         basicTowerPreviewIllegal.add(new SpritePart(BASIC_TOWER_PREVIEW_ILLEGAL_PATH, width, height, layer));
         world.addEntity(basicTowerPreviewIllegal);
+        
+        // Clear all PlayerHasArrivedEvents
+        gameData.getEvents().removeAll(gameData.getEvents(PlayerArrivedEvent.class));
     }
 
     @Override
