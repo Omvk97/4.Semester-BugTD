@@ -46,6 +46,11 @@ public class TowerControlSystem implements IEntityProcessingService {
             if (isLegalPlacement(tower)) {
                 world.addEntity(tower);
                 gameData.addEvent(new MapChangedDuringRoundEvent(tower));
+
+                // Make player stop creating more PlayerHasArrivedEvents
+                if (!world.getEntities(Player.class).isEmpty()) {
+                    ((Player) world.getEntities(Player.class).get(0)).setHasTarget(false);
+                }
             }
         }
     }
