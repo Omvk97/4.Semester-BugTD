@@ -7,7 +7,23 @@ import java.util.List;
 
 public interface MapSPI {
 
+    void loadFile(String filepath);
+
+
+    /* MAP STATE */
+
+    float getEnemySpawnY();
+
+    float getEnemySpawnX();
+
+    Entity getQueen();
+
+    ArrayList<MapWave> getMapWaves();
+
     Tile[][] getTiles();
+
+
+    /* UTILITY FUNCTIONS */
 
     Tile getClosestTile(float x, float y);
 
@@ -21,16 +37,6 @@ public interface MapSPI {
 
     Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException;
 
-    void loadFile(String filepath);
-
     void fitEntityToMap(Entity e);
-
-    ArrayList<MapWave> getMapWaves();
-
-    float getEnemySpawnY();
-
-    float getEnemySpawnX();
-
-    Entity getQueen();
 
 }
