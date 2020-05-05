@@ -45,6 +45,13 @@ public class TowerControlSystem implements IEntityProcessingService {
 
             if (isLegalPlacement(tower)) {
                 world.addEntity(tower);
+                System.out.println("");
+                System.out.println(tower.getID());
+                System.out.println("Tower stands on tiles:");
+                for (Tile tile : map.getTilesEntityIsOn(tower)) {
+                    System.out.println(tile.getID());
+                }
+                System.out.println("");
                 gameData.addEvent(new MapChangedDuringRoundEvent(tower));
             }
         }
@@ -135,7 +142,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         posPart.setX(gameData.getMouseX());
         posPart.setY(gameData.getMouseY());
         map.fitEntityToMap(preview);
-
+        
         // Set preview sprite according to legalness of placement
         SpritePart sprite = preview.getPart(SpritePart.class);
         if (isLegalPlacement(preview)) {
