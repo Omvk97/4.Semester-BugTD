@@ -68,6 +68,8 @@
     <module>Queen</module>
     <module>OSGIEnemySpawner</module>
     <module>CommonPlayer</module>
+    <module>Weapon</module>
+    <module>CommonWeapon</module>
   </modules>
 
     <build>

@@ -5,12 +5,12 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commontower.Queen;
+import dk.sdu.mmmi.weaponpart.WeaponPart;
 
 import java.util.List;
 

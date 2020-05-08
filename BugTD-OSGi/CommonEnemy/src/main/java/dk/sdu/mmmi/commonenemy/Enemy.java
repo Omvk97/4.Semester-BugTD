@@ -7,8 +7,8 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovementInstruction;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovingPart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.commonai.events.EnemyCommand;
+import dk.sdu.mmmi.weaponpart.WeaponPart;
 import java.util.List;
 
 public class Enemy extends Entity {

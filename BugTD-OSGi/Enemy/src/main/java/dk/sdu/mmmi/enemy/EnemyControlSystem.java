@@ -7,7 +7,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovementInstruction;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovingPart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.EnemyDiedEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
@@ -16,6 +15,7 @@ import dk.sdu.mmmi.commonai.events.EnemyCommand;
 import dk.sdu.mmmi.commonai.events.RouteCalculatedEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commontower.Tower;
+import dk.sdu.mmmi.weaponpart.WeaponPart;
 import java.awt.MouseInfo;
 import java.awt.Point;
 
@@ -23,6 +23,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
+        System.out.println("Processing EnemyControlSystem");
 
         for (Entity entity : world.getEntities(Enemy.class)) {
             Enemy enemy = (Enemy) entity;

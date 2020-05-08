@@ -1,10 +1,15 @@
-package dk.sdu.mmmi.cbse.common.data.entityparts;
+package dk.sdu.mmmi.weaponpart;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
+import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.EntityPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 
 public class WeaponPart implements EntityPart {
 
