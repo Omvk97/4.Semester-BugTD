@@ -61,6 +61,7 @@ public class MapData {
     }
 
     private void addQueenToWorld(World world) {
+        if (queen == null) return;
         world.addEntity(queen);
     }
 
