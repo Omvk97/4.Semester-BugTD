@@ -213,7 +213,7 @@ public class MapData {
         }
     }
 
-    private void processQueenChunk(ArrayList<String> lines) {
+    protected void processQueenChunk(ArrayList<String> lines) {
         QueenStats stats = new QueenStats();
         for (String line : lines) {
             String type = line.split("=")[0];
