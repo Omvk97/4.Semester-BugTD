@@ -41,7 +41,7 @@ public class QueenControlSystem implements IEntityProcessingService {
             WeaponPart weapon = queen.getPart(WeaponPart.class);
             weapon.setTarget(target);
             weapon.setColor(WeaponPart.Color.BLUE);
-            if (distance(queenPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
+            if (map.distance(queen, target) < weapon.getRange()) {
                 weapon.process(gameData, queen);
             }
         }
@@ -52,20 +52,13 @@ public class QueenControlSystem implements IEntityProcessingService {
         Entity closestEnemy = null;
 
         for (Entity enemy : world.getEntities(Enemy.class)) {
-            PositionPart enemyPosPart = enemy.getPart(PositionPart.class);
-            float distance = distance(queenPosPart, enemyPosPart);
+            float distance = map.distance(queen, enemy);
             if (distance < currentMinDistance) {
                 currentMinDistance = distance;
                 closestEnemy = enemy;
             }
         }
         return closestEnemy;
-    }
-
-    private float distance(PositionPart towerPosPart, PositionPart enemyPosPart) {
-        float dx = (float) towerPosPart.getX() - (float) enemyPosPart.getX();
-        float dy = (float) towerPosPart.getY() - (float) enemyPosPart.getY();
-        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
     public void setMapSPI(MapSPI spi) {

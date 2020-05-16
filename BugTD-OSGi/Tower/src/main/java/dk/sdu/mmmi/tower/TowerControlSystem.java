@@ -75,13 +75,12 @@ public class TowerControlSystem implements IEntityProcessingService, TowerContro
     }
 
     @Override
-    public Entity calculateClosestEnemy(World world, PositionPart towerPosPart) {
+    public Entity calculateClosestEnemy(World world, Entity tower) {
         float currentMinDistance = Float.MAX_VALUE;
         Entity closestEnemy = null;
 
         for (Entity enemy : world.getEntities(Enemy.class)) {
-            PositionPart enemyPosPart = enemy.getPart(PositionPart.class);
-            float distance = distance(towerPosPart, enemyPosPart);
+            float distance = map.distance(tower, enemy);
             if (distance < currentMinDistance) {
                 currentMinDistance = distance;
                 closestEnemy = enemy;
@@ -93,12 +92,6 @@ public class TowerControlSystem implements IEntityProcessingService, TowerContro
     @Override
     public Entity calculateLowestHealthEnemy() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private float distance(PositionPart towerPosPart, PositionPart enemyPosPart) {
-        float dx = (float) towerPosPart.getX() - (float) enemyPosPart.getX();
-        float dy = (float) towerPosPart.getY() - (float) enemyPosPart.getY();
-        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
     @Override
@@ -171,13 +164,12 @@ public class TowerControlSystem implements IEntityProcessingService, TowerContro
                 continue;
             }
 
-            PositionPart towerPosPart = tower.getPart(PositionPart.class);
-            Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
+            Entity target = calculateClosestEnemy(world, tower);      // Or something
             if (target != null) {
                 WeaponPart weapon = tower.getPart(WeaponPart.class);
                 weapon.setTarget(target);
                 weapon.setColor(WeaponPart.Color.YELLOW);
-                if (distance(towerPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
+                if (map.distance(tower, target) < weapon.getRange()) {
                     weapon.process(gameData, tower);   // Dont really know what to use as arguments   
                 }
             }

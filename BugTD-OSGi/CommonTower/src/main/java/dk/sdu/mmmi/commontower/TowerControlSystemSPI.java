@@ -3,7 +3,6 @@ package dk.sdu.mmmi.commontower;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 
 public interface TowerControlSystemSPI {
 
@@ -17,7 +16,7 @@ public interface TowerControlSystemSPI {
     void showTowerPlacementPreview(GameData gameData, World world);
 
     /* ATTACK ENEMIES */
-    Entity calculateClosestEnemy(World world, PositionPart towerPosPart);
+    Entity calculateClosestEnemy(World world, Entity tower);
 
     Entity calculateLowestHealthEnemy();
 
