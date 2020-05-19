@@ -24,11 +24,11 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     public void start(GameData gameData, World world) {
         this.world = world;
         if (gameData.getDifficulty() == 3) {
-            loadFile("/levels/level03.buggydata");
+            loadFile("levels/level03.buggydata");
         } else if (gameData.getDifficulty() == 2) {
-            loadFile("/levels/level02.buggydata");
+            loadFile("levels/level02.buggydata");
         } else {
-            loadFile("/levels/level01.buggydata");
+            loadFile("levels/level01.buggydata");
         }
     }
 
@@ -189,6 +189,9 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         result *= place;
         return (int) result;
     }
+
+    public MapData getMapData() {
+        return mapData;
     
     @Override
     public float distance(Entity e1, Entity e2) {
