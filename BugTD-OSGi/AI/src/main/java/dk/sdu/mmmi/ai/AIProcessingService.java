@@ -28,21 +28,21 @@ import java.util.List;
 import java.util.Set;
 
 public class AIProcessingService extends EventObserver implements IEntityProcessingService, AIProcessingServiceSPI {
-    
+
     private boolean mapHasChanged;
     private final List<Entity> changedTowers = new ArrayList<>();
     private boolean firstTimeRunning = true;
     Set<Enemy> enemiesToCalculate = new HashSet<>(); // Set to avoid duplicates if enemy is both spwaning and tower is placed at the same time
-    
+
     @Override
     public void process(GameData gameData, World world) {
-        
+
         if (firstTimeRunning) {
             this.setRemoveEvent(true); // Will make sure that after an event has been observed that it will automatically be removed and therefore not saved
             gameData.listenForEvent(this, EventType.EnemySpawnedEvent, EventType.MapChangedDuringRoundEvent);
             firstTimeRunning = false;
         }
-        
+
         MapSPI mapSPI = AIPlugin.getMapSPI();
         TileRouteFinder routeFinder = AIPlugin.getRouteFinder();
         if (mapSPI == null) {
@@ -57,7 +57,7 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
             mapHasChanged = true;
             AIPlugin.setNewGame(false);
         }
-        
+
 //        // Map changed event listener which should trigger re calibration of all enemies and re calibration of all connections between tiles
 //        for (Event mapChangedEvent : gameData.getEvents(MapChangedDuringRoundEvent.class)) {
 //            changedTowers.add(mapChangedEvent.getSource());
@@ -107,7 +107,7 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
                 if (enemy.getType() == EnemyType.ATTACKING) {
                     List<EnemyCommand> enemyCommands = new ArrayList<>();
 
-                    enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy.getPositionPart()), Command.ATTACK));
+                    enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy), Command.ATTACK));
 
                     gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                 }
@@ -115,7 +115,7 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
             } catch (IllegalStateException ex) {     // No route found, therefore attack closest tower
                 List<EnemyCommand> enemyCommands = new ArrayList<>();
 
-                Entity target = calculateClosestTower(world, enemy.getPositionPart());
+                Entity target = calculateClosestTower(world, enemy);
 
                 if (target != null) {   // No towers check
                     Tile towerTile = mapSPI.getTilesEntityIsOn(target).get(1);
@@ -147,25 +147,19 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
 
     }
 
-    public Entity calculateClosestTower(World world, PositionPart enemyPosPart) {
+    @Override
+    public Entity calculateClosestTower(World world, Entity enemy) {
         float currentMinDistance = Float.MAX_VALUE;
         Entity closestTower = null;
 
         for (Entity tower : world.getEntities(Tower.class)) {
-            PositionPart towerPosPart = tower.getPart(PositionPart.class);
-            float distance = distance(enemyPosPart, towerPosPart);
+            float distance = AIPlugin.getMapSPI().distance(enemy, tower);
             if (distance < currentMinDistance) {
                 currentMinDistance = distance;
                 closestTower = tower;
             }
         }
         return closestTower;
-    }
-
-    public float distance(PositionPart enemyPosPart, PositionPart towerPosPart) {
-        float dx = (float) enemyPosPart.getX() - (float) towerPosPart.getX();
-        float dy = (float) enemyPosPart.getY() - (float) towerPosPart.getY();
-        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
     public void setMapSPI(MapSPI mapSPI) {
@@ -184,7 +178,7 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
                 enemiesToCalculate.add((Enemy) enemySpawnedEvent.getEnemy());
                 break;
             case MapChangedDuringRoundEvent:
-                 changedTowers.add(e.getSource());
+                changedTowers.add(e.getSource());
                 break;
             default:
                 break;
