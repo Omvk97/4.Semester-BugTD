@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AIProcessingService implements IEntityProcessingService {
+public class AIProcessingService implements IEntityProcessingService, dk.sdu.mmmi.commonai.AIProcessingService {
     
     private boolean mapHasChanged;
     private List<Entity> changedTowers = new ArrayList<>();
