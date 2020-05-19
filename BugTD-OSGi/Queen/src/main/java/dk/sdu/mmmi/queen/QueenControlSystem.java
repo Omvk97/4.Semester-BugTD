@@ -4,17 +4,17 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commontower.Queen;
+import dk.sdu.mmmi.commontower.QueenControlSystemSPI;
 
 import java.util.List;
 
-public class QueenControlSystem implements IEntityProcessingService {
+public class QueenControlSystem implements IEntityProcessingService, QueenControlSystemSPI {
 
     private Queen queen;
     private MapSPI map;
@@ -23,7 +23,9 @@ public class QueenControlSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         if (queen == null || !world.getEntities(Queen.class).contains(queen)) {
             List<Entity> queensInGame = world.getEntities(Queen.class);
-            if (queensInGame.size() < 1) return;
+            if (queensInGame.size() < 1) {
+                return;
+            }
             queen = (Queen) queensInGame.get(0);
             map.fitEntityToMap(queen);
         }
@@ -34,26 +36,30 @@ public class QueenControlSystem implements IEntityProcessingService {
             gameData.addEvent(new GameOverEvent(queen));
         }
 
+        attackEnemies(gameData, world);
+    }
+
+    @Override
+    public void attackEnemies(GameData gameData, World world) {
         // Attack enemies
-        PositionPart queenPosPart = queen.getPart(PositionPart.class);
-        Entity target = calculateClosestEnemy(world, queenPosPart);      // Or something
+        Entity target = calculateClosestEnemy(world);      // Or something
         if (target != null) {
             WeaponPart weapon = queen.getPart(WeaponPart.class);
             weapon.setTarget(target);
             weapon.setColor(WeaponPart.Color.BLUE);
-            if (distance(queenPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
+            if (map.distance(queen, target) < weapon.getRange()) {
                 weapon.process(gameData, queen);
             }
         }
     }
 
-    private Entity calculateClosestEnemy(World world, PositionPart queenPosPart) {
+    @Override
+    public Entity calculateClosestEnemy(World world) {
         float currentMinDistance = Float.MAX_VALUE;
         Entity closestEnemy = null;
 
         for (Entity enemy : world.getEntities(Enemy.class)) {
-            PositionPart enemyPosPart = enemy.getPart(PositionPart.class);
-            float distance = distance(queenPosPart, enemyPosPart);
+            float distance = map.distance(queen, enemy);
             if (distance < currentMinDistance) {
                 currentMinDistance = distance;
                 closestEnemy = enemy;
@@ -62,16 +68,10 @@ public class QueenControlSystem implements IEntityProcessingService {
         return closestEnemy;
     }
 
-    private float distance(PositionPart towerPosPart, PositionPart enemyPosPart) {
-        float dx = (float) towerPosPart.getX() - (float) enemyPosPart.getX();
-        float dy = (float) towerPosPart.getY() - (float) enemyPosPart.getY();
-        return (float) Math.sqrt(dx * dx + dy * dy);
-    }
-
     public void setMapSPI(MapSPI spi) {
         this.map = spi;
     }
-    
+
     public void removeMapSPI(MapSPI spi) {
         this.map = null;
     }

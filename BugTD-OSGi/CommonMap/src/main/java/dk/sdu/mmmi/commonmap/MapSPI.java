@@ -38,5 +38,7 @@ public interface MapSPI {
     Tile getTileInDirection(Tile tile, Direction direction) throws ArrayIndexOutOfBoundsException;
 
     void fitEntityToMap(Entity e);
+    
+    float distance(Entity e1, Entity e2);
 
 }

@@ -189,4 +189,13 @@ public class MapPlugin implements IGamePluginService, MapSPI {
         result *= place;
         return (int) result;
     }
+    
+    @Override
+    public float distance(Entity e1, Entity e2) {
+        PositionPart p1 = e1.getPart(PositionPart.class);
+        PositionPart p2 = e2.getPart(PositionPart.class);
+        float dx = (float) p1.getX() - (float) p2.getX();
+        float dy = (float) p1.getY() - (float) p2.getY();
+        return (float) Math.sqrt(dx * dx + dy * dy);
+    }
 }
