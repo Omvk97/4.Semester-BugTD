@@ -19,10 +19,13 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     private World world;
     private MapData mapData;
+    private GameData gameData;
+    private String queenID;
 
     @Override
     public void start(GameData gameData, World world) {
         this.world = world;
+        this.gameData = gameData;
         if (gameData.getDifficulty() == 3) {
             loadFile("levels/level03.buggydata");
         } else if (gameData.getDifficulty() == 2) {
@@ -47,7 +50,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     public void loadFile(String filepath) {
         ClassLoader classLoader = this.getClass().getClassLoader();
         try (Scanner sc = new Scanner(new InputStreamReader(classLoader.getResource(filepath).openStream()))) {
-            mapData = new MapData(16, sc, world);
+            mapData = new MapData(16, sc, world, gameData);
         } catch (Exception ex) {
             System.out.println("Exception caught while reading map file [" + filepath + "]");
             System.out.println(ex);
@@ -70,13 +73,20 @@ public class MapPlugin implements IGamePluginService, MapSPI {
     }
 
     @Override
-    public Entity getQueen() {
-        return mapData.getQueen();
+    public Tile[][] getTiles() {
+        return mapData.getTiles();
     }
 
     @Override
-    public Tile[][] getTiles() {
-        return mapData.getTiles();
+    public void setQueenID(String queenID) {
+        this.queenID = queenID;
+    }
+
+    @Override
+    public Entity getQueen() {
+        System.out.println("@@@@");
+        System.out.println(queenID);
+        return world.getEntity(queenID);
     }
 
     @Override

@@ -9,6 +9,9 @@ import dk.sdu.mmmi.commontower.Queen;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
 public class MapPluginTest {
@@ -71,7 +74,10 @@ public class MapPluginTest {
 
     @Test
     public void mapAndQueenIntegration() {
-        Queen queen = mapPlugin.getMapData().getQueen();
+        // Get queen from world
+        List<Entity> queensInGame = world.getEntities(Queen.class);
+        assert(queensInGame.size() > 0);
+        Queen queen = (Queen) queensInGame.get(0);
 
         // Map can create a queen from the loaded text file
         assert(queen != null);

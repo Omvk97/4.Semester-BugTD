@@ -16,11 +16,13 @@ public interface MapSPI {
 
     float getEnemySpawnX();
 
-    Entity getQueen();
-
     ArrayList<MapWave> getMapWaves();
 
     Tile[][] getTiles();
+
+    void setQueenID(String queenID);
+
+    Entity getQueen();
 
 
     /* UTILITY FUNCTIONS */

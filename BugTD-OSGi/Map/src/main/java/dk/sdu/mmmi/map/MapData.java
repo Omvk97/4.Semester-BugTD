@@ -1,39 +1,33 @@
 package dk.sdu.mmmi.map;
 
+import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.*;
+import dk.sdu.mmmi.cbse.common.events.QueenSpawnedEvent;
 import dk.sdu.mmmi.commonmap.MapWave;
 import dk.sdu.mmmi.commonmap.Tile;
-import dk.sdu.mmmi.commonmap.TileSizes;
-import dk.sdu.mmmi.commontower.Queen;
-import dk.sdu.mmmi.commontower.QueenStats;
 import dk.sdu.mmmi.osgienemyspawner.EnemySpawnPoint;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class MapData {
     private Tile[][] tiles;
     private ArrayList<MapWave> waves;
     private int tileSize;
-    private Queen queen;
     private EnemySpawnPoint enemySpawnPoint;
+    private GameData gameData;
 
-    public MapData(int tileSize) {
+    public MapData(int tileSize, Scanner sc, World world, GameData gameData) {
         this.tileSize = tileSize;
         tiles = new Tile[0][0];
         waves = new ArrayList<>();
-    }
-
-    public MapData(int tileSize, Scanner sc, World world) {
-        this(tileSize);
+        this.gameData = gameData;
         initFromScanner(sc);
 
-        addQueenToWorld(world);
         addTilesToWorld(world);
     }
-
-    public Queen getQueen() { return queen; }
 
     public EnemySpawnPoint getEnemySpawnPoint() {
         return enemySpawnPoint;
@@ -58,11 +52,6 @@ public class MapData {
                 world.addEntity(tile);
             }
         }
-    }
-
-    private void addQueenToWorld(World world) {
-        if (queen == null) return;
-        world.addEntity(queen);
     }
 
     private enum DataType {
@@ -214,40 +203,35 @@ public class MapData {
     }
 
     protected void processQueenChunk(ArrayList<String> lines) {
-        QueenStats stats = new QueenStats();
+        QueenSpawnedEvent queenSpawnedEvent = new QueenSpawnedEvent(null);
+
         for (String line : lines) {
             String type = line.split("=")[0];
             String value = line.split("=")[1];
             switch(type) {
                 case "X":
-                    stats.x = Float.parseFloat(value);
+                    queenSpawnedEvent.setX(Float.parseFloat(value));
                     break;
                 case "Y":
-                    stats.y = Float.parseFloat(value);
+                    queenSpawnedEvent.setY(Float.parseFloat(value));
                     break;
                 case "LIFE":
-                    stats.life = Float.parseFloat(value);
+                    queenSpawnedEvent.setLife(Float.parseFloat(value));
                     break;
                 case "DAMAGE":
-                    stats.damage = Float.parseFloat(value);
+                    queenSpawnedEvent.setDamage(Float.parseFloat(value));
                     break;
                 case "RANGE":
-                    stats.range = Float.parseFloat(value);
+                    queenSpawnedEvent.setRange(Float.parseFloat(value));
                     break;
                 case "ATTACKSPEED":
-                    stats.attackSpeed = Float.parseFloat(value);
+                    queenSpawnedEvent.setAttackSpeed(Float.parseFloat(value));
                     break;
                 default:
                     return;
             }
         }
-
-        PositionPart pos = new PositionPart(stats.x, stats.y, 0);
-        LifePart life = new LifePart(stats.life);
-        CollisionPart collision = new CollisionPart(3* TileSizes.GRASS_WIDTH, 3*TileSizes.GRASS_HEIGHT);
-        WeaponPart weapon = new WeaponPart(stats.damage, stats.range, stats.attackSpeed);
-        SpritePart sprite = new SpritePart("towers/queen.png", 3*TileSizes.GRASS_WIDTH, 3*TileSizes.GRASS_HEIGHT, 1);
-        this.queen = new Queen(pos, life, collision, weapon, sprite);
+        gameData.addEvent(queenSpawnedEvent);
     }
 
     private void processEnemySpawnChunk(ArrayList<String> lines) {
