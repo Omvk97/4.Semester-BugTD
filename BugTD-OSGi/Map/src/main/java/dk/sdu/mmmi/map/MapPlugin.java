@@ -192,6 +192,7 @@ public class MapPlugin implements IGamePluginService, MapSPI {
 
     public MapData getMapData() {
         return mapData;
+    }
     
     @Override
     public float distance(Entity e1, Entity e2) {
