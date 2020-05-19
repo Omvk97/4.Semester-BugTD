@@ -1,8 +1,13 @@
 package dk.sdu.mmmi.cbse.common.data;
 
 import dk.sdu.mmmi.cbse.common.events.Event;
+import dk.sdu.mmmi.cbse.common.events.EventObserver;
+import dk.sdu.mmmi.cbse.common.events.EventType;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameData {
@@ -11,22 +16,47 @@ public class GameData {
     private int displayWidth;
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
-    private List<Event> events = new CopyOnWriteArrayList<>();
+    private final List<Event> events = new CopyOnWriteArrayList<>();
+    private final Map<EventObserver, EventType[]> observers = new HashMap<>();
     private int mouseX;
     private int mouseY;
     private int difficulty = 1;
     private String menuFlashMessage;
 
-    public String getMenuFlashMessage() { return menuFlashMessage; }
+    public String getMenuFlashMessage() {
+        return menuFlashMessage;
+    }
 
-    public void setMenuFlashMessage(String menuFlashMessage) { this.menuFlashMessage = menuFlashMessage; }
+    public void setMenuFlashMessage(String menuFlashMessage) {
+        this.menuFlashMessage = menuFlashMessage;
+    }
 
-    public int getDifficulty() { return difficulty; }
+    public int getDifficulty() {
+        return difficulty;
+    }
 
-    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
 
     public void addEvent(Event e) {
         events.add(e);
+        if (e.getType() != null) {
+            Iterator it = observers.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                EventObserver key = (EventObserver) pair.getKey();
+                EventType[] value = (EventType[]) pair.getValue();
+                for (EventType eventType : value) {
+                    if (eventType.equals(e.getType())) {
+                        key.methodToCall(e);
+                        if (key.getRemoveEvent()) {
+                            events.remove(e);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void removeEvent(Event e) {
@@ -109,5 +139,13 @@ public class GameData {
                 events.remove(event);
             }
         }
+    }
+
+    public void listenForEvent(EventObserver observer, EventType... eventsToListenFor) {
+        observers.put(observer, eventsToListenFor);
+    }
+
+    public void removeListener(EventObserver observer) {
+        observers.remove(observer);
     }
 }

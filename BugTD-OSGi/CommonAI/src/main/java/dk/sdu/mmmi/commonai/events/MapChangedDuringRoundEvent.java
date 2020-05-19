@@ -7,6 +7,7 @@ package dk.sdu.mmmi.commonai.events;
 
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.events.Event;
+import dk.sdu.mmmi.cbse.common.events.EventType;
 
 /**
  *
@@ -15,7 +16,7 @@ import dk.sdu.mmmi.cbse.common.events.Event;
 public class MapChangedDuringRoundEvent extends Event {
 
     public MapChangedDuringRoundEvent(Entity source) {
-        super(source);
+        super(source, EventType.MapChangedDuringRoundEvent);
     }
 
     public Entity getTower() {

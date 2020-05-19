@@ -13,7 +13,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
  *
  * @author oliver
  */
-public interface AIProcessingService {
-    Entity calculateClosetsTower(World world, PositionPart enemyPositionPart);
+public interface AIProcessingServiceSPI {
+    Entity calculateClosestTower(World world, PositionPart enemyPositionPart);
     float distance(PositionPart entity1, PositionPart entity2);
 }
