@@ -1,21 +1,13 @@
 package dk.sdu.mmmi.osgienemyspawner;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.events.EnemyDiedEvent;
-import dk.sdu.mmmi.cbse.common.events.Event;
-import dk.sdu.mmmi.cbse.common.events.GameOverEvent;
-import dk.sdu.mmmi.cbse.common.events.GameWonEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonai.events.EnemySpawnedEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
-import dk.sdu.mmmi.commonmap.MapWave;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class EnemySpawnerProcessingService implements IEntityProcessingService {

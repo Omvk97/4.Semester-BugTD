@@ -6,7 +6,10 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.events.Event;
+import dk.sdu.mmmi.cbse.common.events.EventObserver;
+import dk.sdu.mmmi.cbse.common.events.EventType;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.commonai.AIProcessingServiceSPI;
 import dk.sdu.mmmi.commonai.events.Command;
 import dk.sdu.mmmi.commonai.events.EnemyCommand;
 import dk.sdu.mmmi.commonai.events.EnemySpawnedEvent;
@@ -20,16 +23,26 @@ import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commontower.Tower;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class AIProcessingService implements IEntityProcessingService {
+public class AIProcessingService extends EventObserver implements IEntityProcessingService, AIProcessingServiceSPI {
     
     private boolean mapHasChanged;
-    private List<Entity> changedTowers = new ArrayList<>();
-
+    private final List<Entity> changedTowers = new ArrayList<>();
+    private boolean firstTimeRunning = true;
+    Set<Enemy> enemiesToCalculate = new HashSet<>(); // Set to avoid duplicates if enemy is both spwaning and tower is placed at the same time
+    
     @Override
     public void process(GameData gameData, World world) {
+        
+        if (firstTimeRunning) {
+            this.setRemoveEvent(true); // Will make sure that after an event has been observed that it will automatically be removed and therefore not saved
+            gameData.listenForEvent(this, EventType.EnemySpawnedEvent, EventType.MapChangedDuringRoundEvent);
+            firstTimeRunning = false;
+        }
+        
         MapSPI mapSPI = AIPlugin.getMapSPI();
         TileRouteFinder routeFinder = AIPlugin.getRouteFinder();
         if (mapSPI == null) {
@@ -40,23 +53,16 @@ public class AIProcessingService implements IEntityProcessingService {
             routeFinder = TileRouteFinder.getInstance(mapSPI);
         }
 
-        Set<Enemy> enemiesToCalculate = new HashSet<>(); // Set to avoid duplicates if enemy is both spwaning and tower is placed at the same time
-        // Enemy Spawned event listener
-        gameData.getEvents(EnemySpawnedEvent.class).forEach((event) -> {
-            EnemySpawnedEvent enemySpawnedEvent = (EnemySpawnedEvent) event;
-            enemiesToCalculate.add((Enemy) enemySpawnedEvent.getEnemy());
-            gameData.removeEvent(event);
-        });
-
         if (AIPlugin.isNewGame()) {
             mapHasChanged = true;
             AIPlugin.setNewGame(false);
         }
-        // Map changed event listener which should trigger re calibration of all enemies and re calibration of all connections between tiles
-        for (Event mapChangedEvent : gameData.getEvents(MapChangedDuringRoundEvent.class)) {
-            changedTowers.add(mapChangedEvent.getSource());
-            gameData.removeEvents(MapChangedDuringRoundEvent.class);
-        }
+        
+//        // Map changed event listener which should trigger re calibration of all enemies and re calibration of all connections between tiles
+//        for (Event mapChangedEvent : gameData.getEvents(MapChangedDuringRoundEvent.class)) {
+//            changedTowers.add(mapChangedEvent.getSource());
+//            gameData.removeEvents(MapChangedDuringRoundEvent.class);
+//        }
 
         if (!changedTowers.isEmpty()) {
             mapHasChanged = true;
@@ -68,8 +74,9 @@ public class AIProcessingService implements IEntityProcessingService {
         // Calculate best route for enemy
         Tile[][] tiles = mapSPI.getTiles();
         Tile queenTile = mapSPI.getTileInDirection(mapSPI.getTilesEntityIsOn(mapSPI.getQueen()).get(0), Direction.LEFT);
-
-        for (Enemy enemy : enemiesToCalculate) {
+        Iterator<Enemy> it = enemiesToCalculate.iterator();
+        while (it.hasNext()) {
+            Enemy enemy = it.next();
             Tile startTile = mapSPI.getTilesEntityIsOn(enemy).get(0);
             try {
                 // Calculate best route for enemy
@@ -134,12 +141,13 @@ public class AIProcessingService implements IEntityProcessingService {
             } finally {
                 // Ensure that if map has changed at some point, connections is only calculated the first time.
                 mapHasChanged = false;
+                it.remove();
             }
         }
 
     }
 
-    private Entity calculateClosestTower(World world, PositionPart enemyPosPart) {
+    public Entity calculateClosestTower(World world, PositionPart enemyPosPart) {
         float currentMinDistance = Float.MAX_VALUE;
         Entity closestTower = null;
 
@@ -154,7 +162,7 @@ public class AIProcessingService implements IEntityProcessingService {
         return closestTower;
     }
 
-    private float distance(PositionPart enemyPosPart, PositionPart towerPosPart) {
+    public float distance(PositionPart enemyPosPart, PositionPart towerPosPart) {
         float dx = (float) enemyPosPart.getX() - (float) towerPosPart.getX();
         float dy = (float) enemyPosPart.getY() - (float) towerPosPart.getY();
         return (float) Math.sqrt(dx * dx + dy * dy);
@@ -166,5 +174,20 @@ public class AIProcessingService implements IEntityProcessingService {
 
     public void removeMapSPI(MapSPI map) {
         AIPlugin.setMapSPI(null);
+    }
+
+    @Override
+    public void methodToCall(Event e) {
+        switch (e.getType()) {
+            case EnemySpawnedEvent:
+                EnemySpawnedEvent enemySpawnedEvent = (EnemySpawnedEvent) e;
+                enemiesToCalculate.add((Enemy) enemySpawnedEvent.getEnemy());
+                break;
+            case MapChangedDuringRoundEvent:
+                 changedTowers.add(e.getSource());
+                break;
+            default:
+                break;
+        }
     }
 }
