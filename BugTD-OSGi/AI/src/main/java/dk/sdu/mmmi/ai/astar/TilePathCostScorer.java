@@ -13,7 +13,7 @@ public class TilePathCostScorer implements Scorer<MapTile>{
 
     @Override
     public double computeCost(MapTile from, MapTile goal) {
-        return 1;
+        return 16;
     }
     
 }

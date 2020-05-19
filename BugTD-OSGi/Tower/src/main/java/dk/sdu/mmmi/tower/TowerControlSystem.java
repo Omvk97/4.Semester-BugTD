@@ -20,8 +20,9 @@ import dk.sdu.mmmi.commonplayer.Player;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
 import java.util.List;
+import dk.sdu.mmmi.commontower.TowerControlSystemSPI;
 
-public class TowerControlSystem implements IEntityProcessingService {
+public class TowerControlSystem implements IEntityProcessingService, TowerControlSystemSPI {
 
     private MapSPI map;
     private Entity preview;
@@ -29,18 +30,19 @@ public class TowerControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         showTowerPlacementPreview(gameData, world);
-        createNewTowers(gameData, world);
+        placeNewTowers(gameData, world);
         attackEnemies(gameData, world);
     }
 
-    private void createNewTowers(GameData gameData, World world) {
+    @Override
+    public void placeNewTowers(GameData gameData, World world) {
         for (Event event : gameData.getEvents(PlayerArrivedEvent.class)) {
             gameData.removeEvent(event);
-            
+
             // Calculate placement of new Tower
             int posX = ((PlayerArrivedEvent) event).getX();
             int posY = ((PlayerArrivedEvent) event).getY();
-            Tower tower = createNewTower(posX, posY);
+            Tower tower = constructNewTower(posX, posY);
             map.fitEntityToMap(tower);
 
             if (isLegalPlacement(tower)) {
@@ -55,7 +57,8 @@ public class TowerControlSystem implements IEntityProcessingService {
         }
     }
 
-    private boolean isLegalPlacement(Entity e) {
+    @Override
+    public boolean isLegalPlacement(Entity e) {
         List<Tile> tiles = map.getTilesEntityIsOn(e);
 
         if (tiles.size() < 4) {
@@ -71,13 +74,13 @@ public class TowerControlSystem implements IEntityProcessingService {
         return true;
     }
 
-    private Entity calculateClosestEnemy(World world, PositionPart towerPosPart) {
+    @Override
+    public Entity calculateClosestEnemy(World world, Entity tower) {
         float currentMinDistance = Float.MAX_VALUE;
         Entity closestEnemy = null;
 
         for (Entity enemy : world.getEntities(Enemy.class)) {
-            PositionPart enemyPosPart = enemy.getPart(PositionPart.class);
-            float distance = distance(towerPosPart, enemyPosPart);
+            float distance = map.distance(tower, enemy);
             if (distance < currentMinDistance) {
                 currentMinDistance = distance;
                 closestEnemy = enemy;
@@ -86,17 +89,13 @@ public class TowerControlSystem implements IEntityProcessingService {
         return closestEnemy;
     }
 
-    private Entity calculateLowestHealthEnemy() {
+    @Override
+    public Entity calculateLowestHealthEnemy() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private float distance(PositionPart towerPosPart, PositionPart enemyPosPart) {
-        float dx = (float) towerPosPart.getX() - (float) enemyPosPart.getX();
-        float dy = (float) towerPosPart.getY() - (float) enemyPosPart.getY();
-        return (float) Math.sqrt(dx * dx + dy * dy);
-    }
-
-    private Tower createNewTower(int xpos, int ypos) {
+    @Override
+    public Tower constructNewTower(int xpos, int ypos) {
         float x = xpos;
         float y = ypos;
         float radians = 0;
@@ -123,12 +122,13 @@ public class TowerControlSystem implements IEntityProcessingService {
     public void setMapSPI(MapSPI spi) {
         this.map = spi;
     }
-    
+
     public void removeMapSPI(MapSPI spi) {
         this.map = null;
     }
 
-    private void showTowerPlacementPreview(GameData gameData, World world) {
+    @Override
+    public void showTowerPlacementPreview(GameData gameData, World world) {
         // Create the preview entity for the first time
         if (preview == null || world.getEntities(TowerPreview.class).isEmpty()) {
             TowerPreview towerPreview = new TowerPreview(
@@ -144,7 +144,7 @@ public class TowerControlSystem implements IEntityProcessingService {
         posPart.setX(gameData.getMouseX());
         posPart.setY(gameData.getMouseY());
         map.fitEntityToMap(preview);
-        
+
         // Set preview sprite according to legalness of placement
         SpritePart sprite = preview.getPart(SpritePart.class);
         if (isLegalPlacement(preview)) {
@@ -154,7 +154,8 @@ public class TowerControlSystem implements IEntityProcessingService {
         }
     }
 
-    private void attackEnemies(GameData gameData, World world) {
+    @Override
+    public void attackEnemies(GameData gameData, World world) {
         for (Entity tower : world.getEntities(Tower.class)) {
             // Remove dead towers
             if (((LifePart) tower.getPart(LifePart.class)).isDead()) {
@@ -162,14 +163,13 @@ public class TowerControlSystem implements IEntityProcessingService {
                 gameData.addEvent(new MapChangedDuringRoundEvent(tower));
                 continue;
             }
-            
-            PositionPart towerPosPart = tower.getPart(PositionPart.class);
-            Entity target = calculateClosestEnemy(world, towerPosPart);      // Or something
+
+            Entity target = calculateClosestEnemy(world, tower);      // Or something
             if (target != null) {
                 WeaponPart weapon = tower.getPart(WeaponPart.class);
                 weapon.setTarget(target);
                 weapon.setColor(WeaponPart.Color.YELLOW);
-                if (distance(towerPosPart, target.getPart(PositionPart.class)) < weapon.getRange()) {
+                if (map.distance(tower, target) < weapon.getRange()) {
                     weapon.process(gameData, tower);   // Dont really know what to use as arguments   
                 }
             }
