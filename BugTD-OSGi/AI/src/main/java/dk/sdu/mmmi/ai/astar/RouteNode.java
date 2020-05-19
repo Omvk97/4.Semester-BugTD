@@ -15,7 +15,7 @@ public class RouteNode<T extends GraphNode> implements Comparable<RouteNode> {
 
     private final T current;
     private T previous;
-    private double routeScore;
+    private double pathCost;
     private double estimatedScore;
 
     RouteNode(T current) {
@@ -25,7 +25,7 @@ public class RouteNode<T extends GraphNode> implements Comparable<RouteNode> {
     RouteNode(T current, T previous, double routeScore, double estimatedScore) {
         this.current = current;
         this.previous = previous;
-        this.routeScore = routeScore;
+        this.pathCost = routeScore;
         this.estimatedScore = estimatedScore;
     }
 
@@ -52,12 +52,12 @@ public class RouteNode<T extends GraphNode> implements Comparable<RouteNode> {
         this.previous = previous;
     }
 
-    public double getRouteScore() {
-        return routeScore;
+    public double getPathCost() {
+        return pathCost;
     }
 
-    public void setRouteScore(double routeScore) {
-        this.routeScore = routeScore;
+    public void setPathCost(double pathCost) {
+        this.pathCost = pathCost;
     }
 
     public double getEstimatedScore() {
@@ -71,7 +71,7 @@ public class RouteNode<T extends GraphNode> implements Comparable<RouteNode> {
     @Override
     public String toString() {
         return new StringJoiner(", ", RouteNode.class.getSimpleName() + "[", "]").add("current=" + current)
-            .add("previous=" + previous).add("routeScore=" + routeScore).add("estimatedScore=" + estimatedScore)
+            .add("previous=" + previous).add("routeScore=" + pathCost).add("estimatedScore=" + estimatedScore)
             .toString();
     }
     

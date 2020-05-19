@@ -17,54 +17,55 @@ import java.util.Queue;
  * @author oliver
  */
 public class RouteFinder<T extends GraphNode> {
+
     private final Graph<T> graph;
     private final Scorer<T> pathCostScorer;
     private final Scorer<T> heuristicScorer;
-    
+
     public RouteFinder(Graph<T> graph, Scorer<T> pathCostScorer, Scorer<T> heuristicScorer) {
         this.graph = graph;
         this.pathCostScorer = pathCostScorer;
         this.heuristicScorer = heuristicScorer;
     }
- 
+
     public List<T> findRoute(T from, T goal) {
         Queue<RouteNode> fringe = new PriorityQueue<>();
         Map<T, RouteNode<T>> allNodes = new HashMap<>();
- 
+
         RouteNode<T> start = new RouteNode<>(from, null, 0d, heuristicScorer.computeCost(from, goal));
         fringe.add(start);
         allNodes.put(from, start);
-        
+
         while (!fringe.isEmpty()) {
-            
-            RouteNode<T> next = fringe.poll();
-            
-            if (next.getCurrent().equals(goal)) {
+
+            RouteNode<T> node = fringe.poll();
+
+            if (node.getCurrent().equals(goal)) {
                 List<T> route = new ArrayList<>();
-                RouteNode<T> current = next;
+                RouteNode<T> current = node;
                 do {
                     route.add(0, current.getCurrent());
                     current = allNodes.get(current.getPrevious());
                 } while (current != null);
-                
+
                 // System.out.println("Final Route: " + route);
                 return route;
             }
-            
-            graph.getConnections(next.getCurrent()).forEach(connection -> { 
-            RouteNode<T> nextNode = allNodes.getOrDefault(connection, new RouteNode<>(connection));
-            allNodes.put(connection, nextNode);
 
-            double newScore = next.getRouteScore() + pathCostScorer.computeCost(next.getCurrent(), connection);
-            if (newScore < nextNode.getRouteScore()) {
-                nextNode.setPrevious(next.getCurrent());
-                nextNode.setRouteScore(newScore);
-                nextNode.setEstimatedScore(newScore + heuristicScorer.computeCost(connection, goal));
-                fringe.add(nextNode);
-            }
-        });
+            graph.getConnections(node.getCurrent()).forEach(connection -> {
+                RouteNode<T> neighbor = allNodes.getOrDefault(connection, new RouteNode<>(connection));
+                allNodes.put(connection, neighbor);
+
+                double newPathCost = node.getPathCost() + pathCostScorer.computeCost(node.getCurrent(), connection);
+                if (newPathCost < neighbor.getPathCost()) {
+                    neighbor.setPrevious(node.getCurrent());
+                    neighbor.setPathCost(newPathCost);
+                    neighbor.setEstimatedScore(newPathCost + heuristicScorer.computeCost(connection, goal));
+                    fringe.add(neighbor);
+                }
+            });
         }
- 
-    throw new IllegalStateException("No route found");
-}
+
+        throw new IllegalStateException("No route found");
+    }
 }
