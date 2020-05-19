@@ -22,6 +22,7 @@ import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commontower.Tower;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -118,17 +119,35 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
                 Entity target = calculateClosestTower(world, enemy.getPositionPart());
 
                 if (target != null) {   // No towers check
-                    Tile towerTile = mapSPI.getTilesEntityIsOn(target).get(1);
-
-                    if (mapSPI.getTileInDirection(towerTile, Direction.LEFT).isWalkable()) {
-                        towerTile = mapSPI.getTileInDirection(towerTile, Direction.LEFT);
-                    } else if (mapSPI.getTileInDirection(towerTile, Direction.UP).isWalkable()) {
-                        towerTile = mapSPI.getTileInDirection(towerTile, Direction.UP);
-                    } else if (mapSPI.getTileInDirection(towerTile, Direction.RIGHT).isWalkable()) {
-                        towerTile = mapSPI.getTileInDirection(towerTile, Direction.RIGHT);
+                    Tile lowerLeft = mapSPI.getTilesEntityIsOn(target).get(0);
+                    Tile upperLeft = mapSPI.getTilesEntityIsOn(target).get(1);
+                    Tile lowerRight = mapSPI.getTilesEntityIsOn(target).get(2);
+                    Tile upperRight = mapSPI.getTilesEntityIsOn(target).get(3);
+                    
+                    System.out.println("This is lower left x pos: " + lowerLeft.getX() + " this is lower left Y pos: " + lowerLeft.getY());
+                    System.out.println("This is upper right x pos: " + upperRight.getX() + " this is upper right Y pos: " + upperRight.getY());
+                    System.out.println("This is upper left x pos: " + upperLeft.getX() + " this is uppper left Y pos: " + upperLeft.getY());
+                    System.out.println("This is lower right x pos: " + lowerRight.getX() + " this is lowerright Y pos: " + lowerRight.getY());
+                    
+                    float enemyX = enemy.getPositionPart().getX();
+                    float enemyY = enemy.getPositionPart().getY();
+                    float targetX = ((PositionPart) target.getPart(PositionPart.class)).getX();
+                    float targetY = ((PositionPart) target.getPart(PositionPart.class)).getY();
+                    int value = 0;
+                    
+                    if(enemyX > targetX) {
+                        value += 2;
+                        
                     }
-
-                    List<Tile> tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, mapSPI.getTileInDirection(towerTile, Direction.LEFT), mapHasChanged, changedTowers);
+                    if(enemyY > targetY) {
+                        value += 1;
+                    }
+                    System.out.println("Value = " + value);
+                    
+                    
+                    Tile towerTile = mapSPI.getTilesEntityIsOn(target).get(value);
+                    System.out.println("chosen tile Pos: " + towerTile.getX() + " " + towerTile.getY());
+                    List<Tile> tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, towerTile, true, new ArrayList(Arrays.asList(target)));
 
                     tileRoute.forEach((tile) -> {
                         enemyCommands.add(new EnemyCommand(tile, Command.WALK));
@@ -137,6 +156,7 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
                     enemyCommands.add(new EnemyCommand(target, Command.ATTACK));
 
                     gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
+
                 }
             } finally {
                 // Ensure that if map has changed at some point, connections is only calculated the first time.
@@ -153,12 +173,14 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
 
         for (Entity tower : world.getEntities(Tower.class)) {
             PositionPart towerPosPart = tower.getPart(PositionPart.class);
+            System.out.println("Tower pos: " + towerPosPart.getX() + " " + towerPosPart.getY());
             float distance = distance(enemyPosPart, towerPosPart);
             if (distance < currentMinDistance) {
                 currentMinDistance = distance;
                 closestTower = tower;
             }
         }
+        System.out.println("closest tower pos :" + ((PositionPart) closestTower.getPart(PositionPart.class)).getX() + " " + ((PositionPart) closestTower.getPart(PositionPart.class)).getY());
         return closestTower;
     }
 
