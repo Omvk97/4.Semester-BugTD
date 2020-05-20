@@ -4,5 +4,8 @@
     <service>
         <provide interface="dk.sdu.mmmi.cbse.common.services.IEntityProcessingService"/>
     </service>
+    <reference bind="setMapSPI" cardinality="0..1"
+        interface="dk.sdu.mmmi.commonmap.MapSPI"
+        name="MapSPI" policy="dynamic" unbind="removeMapSPI"/>
     
 </scr:component>

@@ -10,16 +10,19 @@ import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commonplayer.Player;
+import dk.sdu.mmmi.commonplayer.PlayerControlSystemSPI;
 import java.util.List;
 
-public class PlayerControlSystem implements IEntityProcessingService {
+public class PlayerControlSystem implements IEntityProcessingService, PlayerControlSystemSPI {
 
     private Player player;
     private float targetX;
     private float targetY;
     private int speed = 5;
+    private MapSPI map;
 
     @Override
     public void process(GameData gameData, World world) {
@@ -30,6 +33,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 return;
             }
             player = (Player) world.getEntities(Player.class).get(0);
+            map.fitEntityToMap(player);
         }
         
         // Listen for clicks
@@ -54,6 +58,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }
     }
 
+    @Override
     public void movePlayer(GameData gameData, World world) {
         PositionPart posPart = player.getPart(PositionPart.class);
 
@@ -91,11 +96,13 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }
     }
 
+    @Override
     public boolean isKeyPressed(GameData gameData) {
         return gameData.getKeys().isDown(GameKeys.DOWN) || gameData.getKeys().isDown(GameKeys.UP)
                 || gameData.getKeys().isDown(GameKeys.RIGHT) || gameData.getKeys().isDown(GameKeys.LEFT);
     }
 
+    @Override
     public int roundDown(double number, double place) {
         double result = number / place;
         result = Math.floor(result);
@@ -103,7 +110,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
         return (int) result;
     }
 
-    private void moveHorizontal(Entity e, float distance) {
+    @Override
+    public void moveHorizontal(Entity e, float distance) {
         PositionPart posPart = e.getPart(PositionPart.class);
         posPart.setX(posPart.getX() + distance);
 
@@ -114,9 +122,18 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }
     }
 
-    private void moveVertical(Entity e, float speed) {
+    @Override
+    public void moveVertical(Entity e, float speed) {
         PositionPart posPart = e.getPart(PositionPart.class);
         posPart.setY(posPart.getY() + speed);
         ((AnimationPart) e.getPart(AnimationPart.class)).setAtlasPath("texturesprites/player32/stand.atlas");
+    }
+    
+    public void setMapSPI(MapSPI spi){
+        this.map = spi;
+    }
+    
+    public void removeSPI(MapSPI spi){
+        this.map = null;
     }
 }
