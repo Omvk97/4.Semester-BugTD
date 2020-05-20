@@ -29,21 +29,21 @@ import java.util.List;
 import java.util.Set;
 
 public class AIProcessingService extends EventObserver implements IEntityProcessingService, AIProcessingServiceSPI {
-    
+
     private boolean mapHasChanged;
     private final List<Entity> changedTowers = new ArrayList<>();
     private boolean firstTimeRunning = true;
     Set<Enemy> enemiesToCalculate = new HashSet<>(); // Set to avoid duplicates if enemy is both spwaning and tower is placed at the same time
-    
+
     @Override
     public void process(GameData gameData, World world) {
-        
+
         if (firstTimeRunning) {
             this.setRemoveEvent(true); // Will make sure that after an event has been observed that it will automatically be removed and therefore not saved
             gameData.listenForEvent(this, EventType.EnemySpawnedEvent, EventType.MapChangedDuringRoundEvent);
             firstTimeRunning = false;
         }
-        
+
         MapSPI mapSPI = AIPlugin.getMapSPI();
         TileRouteFinder routeFinder = AIPlugin.getRouteFinder();
         if (mapSPI == null) {
@@ -58,13 +58,12 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
             mapHasChanged = true;
             AIPlugin.setNewGame(false);
         }
-        
+
 //        // Map changed event listener which should trigger re calibration of all enemies and re calibration of all connections between tiles
 //        for (Event mapChangedEvent : gameData.getEvents(MapChangedDuringRoundEvent.class)) {
 //            changedTowers.add(mapChangedEvent.getSource());
 //            gameData.removeEvents(MapChangedDuringRoundEvent.class);
 //        }
-
         if (!changedTowers.isEmpty()) {
             mapHasChanged = true;
             world.getEntities(Enemy.class).forEach((enemy) -> {
@@ -119,34 +118,19 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
                 Entity target = calculateClosestTower(world, enemy.getPositionPart());
 
                 if (target != null) {   // No towers check
-                    Tile lowerLeft = mapSPI.getTilesEntityIsOn(target).get(0);
-                    Tile upperLeft = mapSPI.getTilesEntityIsOn(target).get(1);
-                    Tile lowerRight = mapSPI.getTilesEntityIsOn(target).get(2);
-                    Tile upperRight = mapSPI.getTilesEntityIsOn(target).get(3);
-                    
-                    System.out.println("This is lower left x pos: " + lowerLeft.getX() + " this is lower left Y pos: " + lowerLeft.getY());
-                    System.out.println("This is upper right x pos: " + upperRight.getX() + " this is upper right Y pos: " + upperRight.getY());
-                    System.out.println("This is upper left x pos: " + upperLeft.getX() + " this is uppper left Y pos: " + upperLeft.getY());
-                    System.out.println("This is lower right x pos: " + lowerRight.getX() + " this is lowerright Y pos: " + lowerRight.getY());
-                    
                     float enemyX = enemy.getPositionPart().getX();
                     float enemyY = enemy.getPositionPart().getY();
                     float targetX = ((PositionPart) target.getPart(PositionPart.class)).getX();
                     float targetY = ((PositionPart) target.getPart(PositionPart.class)).getY();
-                    int value = 0;
-                    
-                    if(enemyX > targetX) {
-                        value += 2;
-                        
+
+                    int tileIndex = 0;
+                    if (enemyX > targetX) {
+                        tileIndex += 2;
                     }
-                    if(enemyY > targetY) {
-                        value += 1;
+                    if (enemyY > targetY) {
+                        tileIndex += 1;
                     }
-                    System.out.println("Value = " + value);
-                    
-                    
-                    Tile towerTile = mapSPI.getTilesEntityIsOn(target).get(value);
-                    System.out.println("chosen tile Pos: " + towerTile.getX() + " " + towerTile.getY());
+                    Tile towerTile = mapSPI.getTilesEntityIsOn(target).get(tileIndex);
                     List<Tile> tileRoute = routeFinder.findBestRouteForGroundEnemy(tiles, startTile, towerTile, true, new ArrayList(Arrays.asList(target)));
 
                     tileRoute.forEach((tile) -> {
@@ -206,7 +190,7 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
                 enemiesToCalculate.add((Enemy) enemySpawnedEvent.getEnemy());
                 break;
             case MapChangedDuringRoundEvent:
-                 changedTowers.add(e.getSource());
+                changedTowers.add(e.getSource());
                 break;
             default:
                 break;
