@@ -7,7 +7,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.CollisionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
@@ -19,6 +18,7 @@ import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commonplayer.Player;
 import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commontower.TowerPreview;
+import dk.sdu.mmmi.commonweapon.WeaponPart;
 import java.util.List;
 import dk.sdu.mmmi.commontower.TowerControlSystemSPI;
 
@@ -156,23 +156,23 @@ public class TowerControlSystem implements IEntityProcessingService, TowerContro
 
     @Override
     public void attackEnemies(GameData gameData, World world) {
-        for (Entity tower : world.getEntities(Tower.class)) {
-            // Remove dead towers
-            if (((LifePart) tower.getPart(LifePart.class)).isDead()) {
-                world.removeEntity(tower);
-                gameData.addEvent(new MapChangedDuringRoundEvent(tower));
-                continue;
-            }
-
-            Entity target = calculateClosestEnemy(world, tower);      // Or something
-            if (target != null) {
-                WeaponPart weapon = tower.getPart(WeaponPart.class);
-                weapon.setTarget(target);
-                weapon.setColor(WeaponPart.Color.YELLOW);
-                if (map.distance(tower, target) < weapon.getRange()) {
-                    weapon.process(gameData, tower);   // Dont really know what to use as arguments   
-                }
-            }
-        }
+//        for (Entity tower : world.getEntities(Tower.class)) {
+//            // Remove dead towers
+//            if (((LifePart) tower.getPart(LifePart.class)).isDead()) {
+//                world.removeEntity(tower);
+//                gameData.addEvent(new MapChangedDuringRoundEvent(tower));
+//                continue;
+//            }
+//
+//            Entity target = calculateClosestEnemy(world, tower);      // Or something
+//            if (target != null) {
+//                WeaponPart weapon = tower.getPart(WeaponPart.class);
+//                weapon.setTarget(target);
+//                weapon.setColor(WeaponPart.Color.YELLOW);
+//                if (map.distance(tower, target) < weapon.getRange()) {
+//                    weapon.process(gameData, tower);   
+//                }
+//            }
+//        }
     }
 }

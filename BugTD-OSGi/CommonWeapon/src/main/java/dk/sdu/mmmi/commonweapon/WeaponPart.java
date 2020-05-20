@@ -1,10 +1,14 @@
-package dk.sdu.mmmi.cbse.common.data.entityparts;
+package dk.sdu.mmmi.commonweapon;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
+import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.EntityPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 
 public class WeaponPart implements EntityPart {
 
@@ -19,6 +23,8 @@ public class WeaponPart implements EntityPart {
 
     float cooldown = 0;
     float attackflash = 0;
+    
+    public boolean inRange = false;
 
     public enum Color{
         WHITE,
@@ -40,6 +46,10 @@ public class WeaponPart implements EntityPart {
     
     public Entity getTarget(){
         return target;
+    }
+    
+    public void setInRange(boolean b){
+        this.inRange = b;
     }
     
     public void setColor(Color colorpart){
@@ -113,13 +123,14 @@ public class WeaponPart implements EntityPart {
     @Override
     public void process(GameData gameData, Entity source) {
         // Check whether the Weapon is ready to shoot or not
-        
-        if (cooldown <= 0) {
+        if(target != null && target.getPart(LifePart.class) != null){
+           if (cooldown <= 0) {
             cooldown = speed;   // Reset cooldown
             LifePart lp = target.getPart(LifePart.class);
             lp.setLife(lp.getLife() - damage);    // Damage entity
             attackflash = 0.15f;
             // System.out.println("Life: " + lp.getLife());
+        } 
         }
         
         //Checks if it should draw attack

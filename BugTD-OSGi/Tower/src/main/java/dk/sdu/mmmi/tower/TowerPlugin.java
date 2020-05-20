@@ -7,6 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.SpritePart;
 import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commontower.Tower;
+import dk.sdu.mmmi.commonweapon.WeaponPart;
 import dk.sdu.mmmi.commontower.TowerPreview;
 
 public class TowerPlugin implements IGamePluginService {

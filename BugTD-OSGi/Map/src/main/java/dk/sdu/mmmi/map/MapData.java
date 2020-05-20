@@ -7,6 +7,7 @@ import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commontower.Queen;
 import dk.sdu.mmmi.commontower.QueenStats;
+import dk.sdu.mmmi.commonweapon.WeaponPart;
 import dk.sdu.mmmi.osgienemyspawner.EnemySpawnPoint;
 
 import java.util.ArrayList;

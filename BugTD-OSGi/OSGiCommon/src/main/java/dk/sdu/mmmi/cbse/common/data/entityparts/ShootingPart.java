@@ -19,17 +19,17 @@ public class ShootingPart implements EntityPart {
     @Override
     public void process(GameData gameData, Entity entity) {
         PositionPart pPart1 = entity.getPart(PositionPart.class);
-        WeaponPart wPart = entity.getPart(WeaponPart.class);
-        if(wPart.getTarget() != null){
-            Entity target = wPart.getTarget();
-            PositionPart pPart2 = target.getPart(PositionPart.class);
-            float x1 = pPart1.getX();
-            float y1 = pPart1.getY();
-            float x2 = pPart2.getX();
-            float y2 = pPart2.getY();
-            drawAttack(x1, y1, x2, y2);
-            
-        }
+//        WeaponPart wPart = entity.getPart(WeaponPart.class);
+//        if(wPart.getTarget() != null){
+//            Entity target = wPart.getTarget();
+//            PositionPart pPart2 = target.getPart(PositionPart.class);
+//            float x1 = pPart1.getX();
+//            float y1 = pPart1.getY();
+//            float x2 = pPart2.getX();
+//            float y2 = pPart2.getY();
+//            drawAttack(x1, y1, x2, y2);
+//            
+//        }
         
         
         

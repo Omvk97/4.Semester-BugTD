@@ -7,7 +7,6 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovementInstruction;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovingPart;
-import dk.sdu.mmmi.cbse.common.data.entityparts.WeaponPart;
 import dk.sdu.mmmi.cbse.common.events.EnemyDiedEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
@@ -16,6 +15,7 @@ import dk.sdu.mmmi.commonai.events.EnemyCommand;
 import dk.sdu.mmmi.commonai.events.RouteCalculatedEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commontower.Tower;
+import dk.sdu.mmmi.commonweapon.WeaponPart;
 import java.awt.MouseInfo;
 import java.awt.Point;
 
@@ -83,7 +83,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
                 // Attack tower
                 weaponPart.setTarget(target);
                 weaponPart.setColor(WeaponPart.Color.RED);
-                weaponPart.process(gameData, enemy);
             } else {
                 // Move towards the next command when either enemy has to move again or the tower to attack is dead
                 enemy.incrementCommandIndex();

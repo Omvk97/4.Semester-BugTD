@@ -2,6 +2,7 @@ package dk.sdu.mmmi.map;
 
 import dk.sdu.mmmi.cbse.common.data.entityparts.*;
 import dk.sdu.mmmi.commontower.Queen;
+import dk.sdu.mmmi.commonweapon.WeaponPart;
 import org.junit.Before;
 import org.junit.Test;
 
