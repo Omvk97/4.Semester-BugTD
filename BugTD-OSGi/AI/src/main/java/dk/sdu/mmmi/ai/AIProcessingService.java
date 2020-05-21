@@ -157,14 +157,12 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
 
         for (Entity tower : world.getEntities(Tower.class)) {
             PositionPart towerPosPart = tower.getPart(PositionPart.class);
-            System.out.println("Tower pos: " + towerPosPart.getX() + " " + towerPosPart.getY());
             float distance = distance(enemyPosPart, towerPosPart);
             if (distance < currentMinDistance) {
                 currentMinDistance = distance;
                 closestTower = tower;
             }
         }
-        System.out.println("closest tower pos :" + ((PositionPart) closestTower.getPart(PositionPart.class)).getX() + " " + ((PositionPart) closestTower.getPart(PositionPart.class)).getY());
         return closestTower;
     }
 

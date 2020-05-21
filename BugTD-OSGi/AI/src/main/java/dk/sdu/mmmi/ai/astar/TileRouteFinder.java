@@ -5,11 +5,13 @@
  */
 package dk.sdu.mmmi.ai.astar;
 
+import com.sun.media.jfxmedia.events.PlayerStateEvent;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.Tile;
 import dk.sdu.mmmi.commonmap.Direction;
 import dk.sdu.mmmi.commonmap.MapSPI;
+import dk.sdu.mmmi.commonplayer.Player;
 import dk.sdu.mmmi.commontower.TowerPreview;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 public class TileRouteFinder<T extends Tile> {
 
     private final MapSPI map;
-    private final Class[] entitiesToIgnore = {Enemy.class, TowerPreview.class};
+    private final Class[] entitiesToIgnore = {Enemy.class, TowerPreview.class, Player.class};
     private Map<String, Set<String>> groundConnections = null;
     private Map<String, Set<String>> flyingConnections = null;
     private static TileRouteFinder instance = null;
@@ -88,6 +90,7 @@ public class TileRouteFinder<T extends Tile> {
                     for (Direction direction : Direction.values()) {
                         try {
                             Tile neighbor = map.getTileInDirection(adjacentTile, direction);
+                            
                             // Only add neighbor if it's walkable
                             if (neighbor.isWalkable()) {
                                 // Add neighbor if it is not occupied by anything else than an enemy or towerPreview
