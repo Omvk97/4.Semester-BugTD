@@ -5,24 +5,25 @@
  */
 package dk.sdu.mmmi.ai.astar;
 
+import dk.sdu.mmmi.commonmap.Tile;
 import java.util.StringJoiner;
 
 /**
  *
  * @author oliver
  */
-public class RouteNode<T extends GraphNode> implements Comparable<RouteNode> {
+public class RouteNode implements Comparable<RouteNode> {
 
-    private final T current;
-    private T previous;
+    private final Tile current;
+    private Tile previous;
     private double routeScore;
     private double estimatedScore;
 
-    RouteNode(T current) {
+    RouteNode(Tile current) {
         this(current, null, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
-    RouteNode(T current, T previous, double routeScore, double estimatedScore) {
+    RouteNode(Tile current, Tile previous, double routeScore, double estimatedScore) {
         this.current = current;
         this.previous = previous;
         this.routeScore = routeScore;
@@ -40,15 +41,15 @@ public class RouteNode<T extends GraphNode> implements Comparable<RouteNode> {
         }
     }
 
-    public T getCurrent() {
+    public Tile getCurrent() {
         return current;
     }
     
-    public T getPrevious() {
+    public Tile getPrevious() {
         return previous;
     }
 
-    public void setPrevious(T previous) {
+    public void setPrevious(Tile previous) {
         this.previous = previous;
     }
 
