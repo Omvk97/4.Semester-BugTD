@@ -75,6 +75,7 @@ public class Enemy extends Entity {
     }
 
     public Enemy(EnemyType type, WeaponPart weaponPart, AnimationPart animationPart, PositionPart positionPart, PreciseMovingPart movingPart, LifePart lifePart) {
+        super();
         this.type = type;
         this.weaponPart = weaponPart;
         add(weaponPart);
