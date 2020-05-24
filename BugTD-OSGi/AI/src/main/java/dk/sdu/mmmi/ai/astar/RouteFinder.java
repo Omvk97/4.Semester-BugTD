@@ -5,6 +5,10 @@
  */
 package dk.sdu.mmmi.ai.astar;
 
+import dk.sdu.mmmi.ai.astar.scorers.Scorer;
+import dk.sdu.mmmi.commonmap.Direction;
+import dk.sdu.mmmi.commonmap.MapSPI;
+import dk.sdu.mmmi.commonmap.Tile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,54 +20,60 @@ import java.util.Queue;
  *
  * @author oliver
  */
-public class RouteFinder<T extends GraphNode> {
+public class RouteFinder {
 
-    private final Graph<T> graph;
-    private final Scorer<T> pathCostScorer;
-    private final Scorer<T> heuristicScorer;
+    private final Scorer pathCostScorer;
+    private final Scorer heuristicScorer;
 
-    public RouteFinder(Graph<T> graph, Scorer<T> pathCostScorer, Scorer<T> heuristicScorer) {
-        this.graph = graph;
+    public RouteFinder(Scorer pathCostScorer, Scorer heuristicScorer) {
         this.pathCostScorer = pathCostScorer;
         this.heuristicScorer = heuristicScorer;
     }
 
-    public List<T> findRoute(T from, T goal) {
+    public List<Tile> findRoute(Tile from, Tile goal, MapSPI map) {
         Queue<RouteNode> fringe = new PriorityQueue<>();
-        Map<T, RouteNode<T>> allNodes = new HashMap<>();
+        Map<Tile, RouteNode> allNodes = new HashMap<>();
 
-        RouteNode<T> start = new RouteNode<>(from, null, 0d, heuristicScorer.computeCost(from, goal));
+        RouteNode start = new RouteNode(from, null, 0d, heuristicScorer.computeCost(from, goal, map));
         fringe.add(start);
         allNodes.put(from, start);
 
         while (!fringe.isEmpty()) {
 
-            RouteNode<T> node = fringe.poll();
+            RouteNode next = fringe.poll();
 
-            if (node.getCurrent().equals(goal)) {
-                List<T> route = new ArrayList<>();
-                RouteNode<T> current = node;
+            if (next.getCurrent().equals(goal)) {
+                List<Tile> route = new ArrayList<>();
+                RouteNode current = next;
                 do {
                     route.add(0, current.getCurrent());
                     current = allNodes.get(current.getPrevious());
                 } while (current != null);
 
-                // System.out.println("Final Route: " + route);
                 return route;
             }
 
-            graph.getConnections(node.getCurrent()).forEach(connection -> {
-                RouteNode<T> neighbor = allNodes.getOrDefault(connection, new RouteNode<>(connection));
-                allNodes.put(connection, neighbor);
+            for (Direction direction : Direction.values()) {
+                try {
+                    Tile neighbor = map.getTileInDirection(next.getCurrent(), direction);   // Throws ArrayIndexOutOfBoundsException if direction points out of map
+                    RouteNode neighborRouteNode = allNodes.getOrDefault(neighbor, new RouteNode(neighbor));
 
-                double newPathCost = node.getPathCost() + pathCostScorer.computeCost(node.getCurrent(), connection);
-                if (newPathCost < neighbor.getPathCost()) {
-                    neighbor.setPrevious(node.getCurrent());
-                    neighbor.setPathCost(newPathCost);
-                    neighbor.setEstimatedScore(newPathCost + heuristicScorer.computeCost(connection, goal));
-                    fringe.add(neighbor);
+                    double newPathScore = next.getRouteScore() + pathCostScorer.computeCost(next.getCurrent(), neighbor, map);
+                    if (neighbor.equals(goal)) {
+                        newPathScore = 0;
+                    }
+
+                    if (newPathScore < neighborRouteNode.getRouteScore()) {
+                        neighborRouteNode.setPrevious(next.getCurrent());
+                        neighborRouteNode.setRouteScore(newPathScore);
+                        neighborRouteNode.setEstimatedScore(newPathScore + heuristicScorer.computeCost(neighbor, goal, map));
+                        fringe.add(neighborRouteNode);
+                        allNodes.put(neighbor, neighborRouteNode);
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    // Do nothing
                 }
-            });
+            }
         }
 
         throw new IllegalStateException("No route found");
