@@ -92,14 +92,14 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
                 }
                 if (enemy.getType() == EnemyType.ATTACKING) {
                     List<EnemyCommand> enemyCommands = new ArrayList<>();
-                    enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy.getPositionPart()), Command.ATTACK));
+                    enemyCommands.add(new EnemyCommand(calculateClosestTower(world, enemy), Command.ATTACK));
                     gameData.addEvent(new RouteCalculatedEvent(enemy, enemyCommands));
                 }
 
             } catch (IllegalStateException ex) {     // No route found, therefore attack closest tower
                 List<EnemyCommand> enemyCommands = new ArrayList<>();
 
-                Entity target = calculateClosestTower(world, enemy.getPositionPart());
+                Entity target = calculateClosestTower(world, enemy);
 
                 if (target != null) {   // No towers check
                     float enemyX = enemy.getPositionPart().getX();
@@ -137,25 +137,19 @@ public class AIProcessingService extends EventObserver implements IEntityProcess
 
     }
 
-    public Entity calculateClosestTower(World world, PositionPart enemyPosPart) {
+    @Override
+    public Entity calculateClosestTower(World world, Entity enemy) {
         float currentMinDistance = Float.MAX_VALUE;
         Entity closestTower = null;
 
         for (Entity tower : world.getEntities(Tower.class)) {
-            PositionPart towerPosPart = tower.getPart(PositionPart.class);
-            float distance = distance(enemyPosPart, towerPosPart);
+            float distance = AIPlugin.getMapSPI().distance(enemy, tower);
             if (distance < currentMinDistance) {
                 currentMinDistance = distance;
                 closestTower = tower;
             }
         }
         return closestTower;
-    }
-
-    public float distance(PositionPart enemyPosPart, PositionPart towerPosPart) {
-        float dx = (float) enemyPosPart.getX() - (float) towerPosPart.getX();
-        float dy = (float) enemyPosPart.getY() - (float) towerPosPart.getY();
-        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
     public void setMapSPI(MapSPI mapSPI) {

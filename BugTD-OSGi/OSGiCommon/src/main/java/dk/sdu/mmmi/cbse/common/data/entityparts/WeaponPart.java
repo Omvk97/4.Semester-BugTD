@@ -101,7 +101,15 @@ public class WeaponPart implements EntityPart {
         sr.line(x1, y1, x2, y2);
         sr.end();
     }
-    
+
+    public float getDamage() {
+        return damage;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
     @Override
     public void process(GameData gameData, Entity source) {
         // Check whether the Weapon is ready to shoot or not
