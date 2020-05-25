@@ -42,15 +42,11 @@ public class QueenControlSystem implements IEntityProcessingService, QueenContro
     @Override
     public void attackEnemies(GameData gameData, World world) {
         // Attack enemies
-//        Entity target = calculateClosestEnemy(world);      // Or something
-//        if (target != null) {
-//            WeaponPart weapon = queen.getPart(WeaponPart.class);
-//            weapon.setTarget(target);
-//            weapon.setColor(WeaponPart.Color.BLUE);
-//            if (map.distance(queen, target) < weapon.getRange()) {
-//                weapon.process(gameData, queen);
-//            }
-//        }
+        Entity target = calculateClosestEnemy(world);      // Or something
+        if (target != null) {
+            WeaponPart weapon = queen.getPart(WeaponPart.class);
+            weapon.setTarget(target);
+        }
     }
 
     @Override

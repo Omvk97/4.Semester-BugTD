@@ -25,7 +25,8 @@ public class WeaponPlugin implements IGamePluginService {
     public void stop(GameData gameData, World world) {
         for(Entity e: world.getEntities()){
             if(e.getPart(WeaponPart.class) != null){
-                e.remove(WeaponPart.class);
+                WeaponPart weapon = e.getPart(WeaponPart.class);
+                weapon.setTarget(null);
             }
         }
     }

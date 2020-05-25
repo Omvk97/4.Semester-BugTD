@@ -82,30 +82,11 @@ public class EnemyControlSystem implements IEntityProcessingService {
             if (!targetLifePart.isDead()) {
                 // Attack tower
                 weaponPart.setTarget(target);
-                weaponPart.setColor(WeaponPart.Color.RED);
             } else {
                 // Move towards the next command when either enemy has to move again or the tower to attack is dead
                 enemy.incrementCommandIndex();
             }
         }
-    }
-
-
-
-    private Entity calculateClosestTower(World world, PositionPart towerPosPart) {
-        float currentMinDistance = Float.MAX_VALUE;
-        Entity closestEnemy = null;
-
-        for (Entity enemy : world.getEntities(Tower.class
-        )) {
-            PositionPart enemyPosPart = enemy.getPart(PositionPart.class);
-            float distance = distance(towerPosPart, enemyPosPart);
-            if (distance < currentMinDistance) {
-                currentMinDistance = distance;
-                closestEnemy = enemy;
-            }
-        }
-        return closestEnemy;
     }
 
     private float distance(PositionPart enemyPosPart, PositionPart towerPosPart) {

@@ -9,6 +9,7 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.commonai.events.MapChangedDuringRoundEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
@@ -28,54 +29,11 @@ public class WeaponControlSystem implements IEntityProcessingService {
         for(Entity e: world.getEntities()){
             if(e.getPart(WeaponPart.class) != null){
                 WeaponPart weapon = e.getPart(WeaponPart.class);
-                if(e instanceof Enemy){
-                }else{
-                    weapon.setTarget(calculateClosestEnemy(world, e));
-                    weapon.setColor(WeaponPart.Color.YELLOW);
-                    if(weapon.getTarget() != null && map.distance(e, weapon.getTarget()) < weapon.getRange()){
-                        weapon.process(gameData, e); 
-                }                    
-                }
-
-                
-            }
-            
-        }
-    }
-    
-    public void attack(GameData gameData, World world, Entity e) {
-        for (Entity tower : world.getEntities(Tower.class)) {
-            // Remove dead towers
-            if (((LifePart) tower.getPart(LifePart.class)).isDead()) {
-                world.removeEntity(tower);
-                gameData.addEvent(new MapChangedDuringRoundEvent(tower));
-                continue;
-            }
-
-            Entity target = calculateClosestEnemy(world, tower);      // Or something
-            if (target != null) {
-                WeaponPart weapon = tower.getPart(WeaponPart.class);
-                weapon.setTarget(target);
-                weapon.setColor(WeaponPart.Color.YELLOW);
-                if (map.distance(tower, target) < weapon.getRange()) {
-                    weapon.process(gameData, tower);   // Dont really know what to use as arguments   
+                if(weapon.getTarget() != null && map.distance(e, weapon.getTarget()) <= weapon.getRange()){
+                    weapon.process(gameData, e);
                 }
             }
         }
-    }
-    
-    public Entity calculateClosestEnemy(World world, Entity tower) {
-        float currentMinDistance = Float.MAX_VALUE;
-        Entity closestEnemy = null;
-
-        for (Entity enemy : world.getEntities(Enemy.class)) {
-            float distance = map.distance(tower, enemy);
-            if (distance < currentMinDistance) {
-                currentMinDistance = distance;
-                closestEnemy = enemy;
-            }
-        }
-        return closestEnemy;
     }
     
     public void setMapSPI(MapSPI spi) {

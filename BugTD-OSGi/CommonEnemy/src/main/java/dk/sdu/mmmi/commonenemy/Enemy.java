@@ -9,6 +9,7 @@ import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovementInstruction;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PreciseMovingPart;
 import dk.sdu.mmmi.commonai.events.EnemyCommand;
 import dk.sdu.mmmi.commonweapon.WeaponPart;
+import dk.sdu.mmmi.commonweapon.WeaponPart.Color;
 import java.util.List;
 
 public class Enemy extends Entity {
@@ -29,9 +30,10 @@ public class Enemy extends Entity {
         float weaponSpeed = 0.5f;
         float speedPerMovement = 8;
         float radians = 3.1415f / 2;
+        Color c = WeaponPart.Color.RED;
 
         Entity gEnemy = new Enemy(EnemyType.GROUND,
-                new WeaponPart(weaponDamage, weaponRange, weaponSpeed),
+                new WeaponPart(weaponDamage, weaponRange, weaponSpeed, c),
                 new AnimationPart("texturesprites/enemy/enemyup.atlas", 16, 16, 0),
                 new PositionPart(x, y, radians),
                 new PreciseMovingPart(speedPerMovement),

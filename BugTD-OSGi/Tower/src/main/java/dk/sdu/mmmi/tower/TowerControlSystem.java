@@ -21,6 +21,7 @@ import dk.sdu.mmmi.commontower.TowerPreview;
 import dk.sdu.mmmi.commonweapon.WeaponPart;
 import java.util.List;
 import dk.sdu.mmmi.commontower.TowerControlSystemSPI;
+import dk.sdu.mmmi.commonweapon.WeaponPart.Color;
 
 public class TowerControlSystem implements IEntityProcessingService, TowerControlSystemSPI {
 
@@ -109,7 +110,8 @@ public class TowerControlSystem implements IEntityProcessingService, TowerContro
         float damage = 10;
         float range = 200;
         float speed = 1;
-        WeaponPart wpn = new WeaponPart(damage, range, speed);
+        Color c = WeaponPart.Color.YELLOW;
+        WeaponPart wpn = new WeaponPart(damage, range, speed, c);
 
         int width = 32;
         int height = 32;
@@ -156,23 +158,23 @@ public class TowerControlSystem implements IEntityProcessingService, TowerContro
 
     @Override
     public void attackEnemies(GameData gameData, World world) {
-//        for (Entity tower : world.getEntities(Tower.class)) {
-//            // Remove dead towers
-//            if (((LifePart) tower.getPart(LifePart.class)).isDead()) {
-//                world.removeEntity(tower);
-//                gameData.addEvent(new MapChangedDuringRoundEvent(tower));
-//                continue;
-//            }
-//
-//            Entity target = calculateClosestEnemy(world, tower);      // Or something
-//            if (target != null) {
-//                WeaponPart weapon = tower.getPart(WeaponPart.class);
-//                weapon.setTarget(target);
-//                weapon.setColor(WeaponPart.Color.YELLOW);
+        for (Entity tower : world.getEntities(Tower.class)) {
+            // Remove dead towers
+            if (((LifePart) tower.getPart(LifePart.class)).isDead()) {
+                world.removeEntity(tower);
+                gameData.addEvent(new MapChangedDuringRoundEvent(tower));
+                continue;
+            }
+
+            Entity target = calculateClosestEnemy(world, tower);      // Or something
+            if (target != null && (LifePart) target.getPart(LifePart.class) != null) {
+                WeaponPart weapon = tower.getPart(WeaponPart.class);
+                weapon.setTarget(target);
+                weapon.setColor(WeaponPart.Color.YELLOW);
 //                if (map.distance(tower, target) < weapon.getRange()) {
 //                    weapon.process(gameData, tower);   
 //                }
-//            }
-//        }
+            }
+        }
     }
 }

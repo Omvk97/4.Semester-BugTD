@@ -12,6 +12,7 @@ import dk.sdu.mmmi.osgienemyspawner.EnemySpawnPoint;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import javafx.scene.paint.Color;
 
 public class MapData {
     private Tile[][] tiles;
@@ -246,7 +247,7 @@ public class MapData {
         PositionPart pos = new PositionPart(stats.x, stats.y, 0);
         LifePart life = new LifePart(stats.life);
         CollisionPart collision = new CollisionPart(3* TileSizes.GRASS_WIDTH, 3*TileSizes.GRASS_HEIGHT);
-        WeaponPart weapon = new WeaponPart(stats.damage, stats.range, stats.attackSpeed);
+        WeaponPart weapon = new WeaponPart(stats.damage, stats.range, stats.attackSpeed, WeaponPart.Color.BLUE);
         SpritePart sprite = new SpritePart("towers/queen.png", 3*TileSizes.GRASS_WIDTH, 3*TileSizes.GRASS_HEIGHT, 1);
         this.queen = new Queen(pos, life, collision, weapon, sprite);
     }

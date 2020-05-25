@@ -1,5 +1,7 @@
 package dk.sdu.mmmi.commontower;
 
+import dk.sdu.mmmi.commonweapon.WeaponPart.Color;
+
 public class QueenStats {
     public float x;
     public float y;
@@ -7,6 +9,7 @@ public class QueenStats {
     public float damage;
     public float range;
     public float attackSpeed;
+    public Color weaponColor;
 
     @Override
     public String toString() {
@@ -17,6 +20,7 @@ public class QueenStats {
                 ", damage=" + damage +
                 ", range=" + range +
                 ", attackSpeed=" + attackSpeed +
+                ", weaponColor=" + weaponColor +
                 '}';
     }
 }
