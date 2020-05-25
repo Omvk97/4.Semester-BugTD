@@ -16,14 +16,10 @@ import dk.sdu.mmmi.cbse.common.data.World;
 public interface PlayerControlSystemSPI {
     
     void movePlayer(GameData gameData, World world);
+
+    Entity calculateClosestEnemy(World world, Entity entity);
     
-    boolean isKeyPressed(GameData gameData);
-    
-    int roundDown(double number, double place);
-    
-    void moveHorizontal(Entity e, float distance);
-    
-    void moveVertical(Entity e, float speed);
+    void attackEnemies(GameData gameData, World world); 
     
     
     

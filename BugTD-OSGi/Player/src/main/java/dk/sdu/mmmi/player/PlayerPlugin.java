@@ -10,6 +10,9 @@ import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.commonplayer.Player;
+import dk.sdu.mmmi.commonweapon.WeaponPart;
+import dk.sdu.mmmi.commonweapon.WeaponPart.Color;
+
 
 public class PlayerPlugin implements IGamePluginService {
 
@@ -27,20 +30,24 @@ public class PlayerPlugin implements IGamePluginService {
         float x = gameData.getDisplayWidth() / 3;
         float y = gameData.getDisplayWidth() / 2;
         float radians = 3.1415f / 2;
+        
+        float damage = 10; 
+        float range = 200;
+        float speed = 1;
+        Color color = WeaponPart.Color.YELLOW;
+        
 
         // parts 
-        //AnimationPart animation = new AnimationPart("texturesprites/player64/stand_left_64.atlas", 32, 32);
         AnimationPart animation = new AnimationPart("texturesprites/player32/stand.atlas", 32, 32);
-        aPlayer.add(animation);
-
         MovingPart moving = new MovingPart(deacceleration, acceleration, maxSpeed, rotation);
-        aPlayer.add(moving);
         PositionPart position = new PositionPart(x, y, radians);
-        aPlayer.add(position);
+        WeaponPart wp = new WeaponPart(damage, range, speed, color);
+        
+         aPlayer.add(animation);
+         aPlayer.add(moving);
+         aPlayer.add(position);
+         aPlayer.add(wp);
 
-//         aPlayer.add(animation);
-//         aPlayer.add(moving);
-//         aPlayer.add(position);
         world.addEntity(aPlayer);
     }
 

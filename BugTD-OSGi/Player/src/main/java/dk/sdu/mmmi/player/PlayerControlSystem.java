@@ -5,15 +5,18 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.AnimationPart;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
 import dk.sdu.mmmi.cbse.common.events.ClickEvent;
 import dk.sdu.mmmi.cbse.common.events.Event;
 import dk.sdu.mmmi.cbse.common.events.PlayerArrivedEvent;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.commonenemy.Enemy;
 import dk.sdu.mmmi.commonmap.MapSPI;
 import dk.sdu.mmmi.commonmap.TileSizes;
 import dk.sdu.mmmi.commonplayer.Player;
 import dk.sdu.mmmi.commonplayer.PlayerControlSystemSPI;
+import dk.sdu.mmmi.commonweapon.WeaponPart;
 import java.util.List;
 
 public class PlayerControlSystem implements IEntityProcessingService, PlayerControlSystemSPI {
@@ -47,6 +50,7 @@ public class PlayerControlSystem implements IEntityProcessingService, PlayerCont
         }
 
         movePlayer(gameData, world);
+        attackEnemies(gameData, world);
 
         // Player has arrived and a tower can be placed
         PositionPart posPart = player.getPart(PositionPart.class);
@@ -95,14 +99,40 @@ public class PlayerControlSystem implements IEntityProcessingService, PlayerCont
             }
         }
     }
+    
+    public Entity calculateClosestEnemy(World world, Entity player) {
+        float currentMinDistance = Float.MAX_VALUE;
+        Entity closestEnemy = null;
+
+        for (Entity enemy : world.getEntities(Enemy.class)) {
+            float distance = map.distance(player, enemy);
+            if (distance < currentMinDistance) {
+                currentMinDistance = distance;
+                closestEnemy = enemy;
+            }
+        }
+        return closestEnemy;
+    }
 
     @Override
+    public void attackEnemies(GameData gameData, World world){
+
+        Entity target = calculateClosestEnemy(world, player);
+        if (target != null && (LifePart) target.getPart(LifePart.class) != null ){
+            WeaponPart weapon = player.getPart(WeaponPart.class);
+            weapon.setTarget(target);
+            weapon.setColor(WeaponPart.Color.YELLOW);
+        }
+
+    }
+    
+
     public boolean isKeyPressed(GameData gameData) {
         return gameData.getKeys().isDown(GameKeys.DOWN) || gameData.getKeys().isDown(GameKeys.UP)
                 || gameData.getKeys().isDown(GameKeys.RIGHT) || gameData.getKeys().isDown(GameKeys.LEFT);
     }
 
-    @Override
+
     public int roundDown(double number, double place) {
         double result = number / place;
         result = Math.floor(result);
@@ -110,7 +140,7 @@ public class PlayerControlSystem implements IEntityProcessingService, PlayerCont
         return (int) result;
     }
 
-    @Override
+
     public void moveHorizontal(Entity e, float distance) {
         PositionPart posPart = e.getPart(PositionPart.class);
         posPart.setX(posPart.getX() + distance);
@@ -122,7 +152,7 @@ public class PlayerControlSystem implements IEntityProcessingService, PlayerCont
         }
     }
 
-    @Override
+
     public void moveVertical(Entity e, float speed) {
         PositionPart posPart = e.getPart(PositionPart.class);
         posPart.setY(posPart.getY() + speed);
