@@ -169,11 +169,11 @@ public class TowerControlSystem implements IEntityProcessingService, TowerContro
             Entity target = calculateClosestEnemy(world, tower);      // Or something
             if (target != null && (LifePart) target.getPart(LifePart.class) != null) {
                 WeaponPart weapon = tower.getPart(WeaponPart.class);
-                weapon.setTarget(target);
+                if (!target.equals(weapon.getTarget())) {
+                    weapon.setTarget(target);
+                    weapon.setIsNewTarget(true);
+                }
                 weapon.setColor(WeaponPart.Color.YELLOW);
-//                if (map.distance(tower, target) < weapon.getRange()) {
-//                    weapon.process(gameData, tower);   
-//                }
             }
         }
     }

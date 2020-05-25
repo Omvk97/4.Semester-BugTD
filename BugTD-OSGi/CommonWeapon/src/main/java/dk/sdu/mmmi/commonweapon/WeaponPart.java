@@ -17,6 +17,7 @@ public class WeaponPart implements EntityPart {
     private float range;
     private float speed;
     private boolean isAttacking = false;
+    private boolean isNewTarget = false;
     public ShapeRenderer sr;
     private int color[] = {1, 1, 1, 1};
     // TODO: private Damagetype dt
@@ -112,15 +113,6 @@ public class WeaponPart implements EntityPart {
         return this.isAttacking;
     }
 
-    public void drawAttack(float x1, float y1, float x2, float y2) {
-        sr = new ShapeRenderer();
-        sr.setColor(color[0], color[1], color[2], color[3]);
-        Gdx.gl.glLineWidth(2);
-        sr.begin(ShapeRenderer.ShapeType.Line);
-        sr.line(x1, y1, x2, y2);
-        sr.end();
-    }
-
     public float getDamage() {
         return damage;
     }
@@ -129,14 +121,31 @@ public class WeaponPart implements EntityPart {
         return speed;
     }
 
+    public void setIsNewTarget(boolean newTarget) {
+        this.isNewTarget = newTarget;
+    }
+
     @Override
     public void process(GameData gameData, Entity source) {
-        // Check whether the Weapon is ready to shoot or not
-        if (target != null && target.getPart(LifePart.class) != null) {
-            LifePart lp = target.getPart(LifePart.class);
-            if (lp.getLife() <= 0) {
+        LifePart targetLife = target.getPart(LifePart.class);
+        if (targetLife != null) {
+
+            // Prevents it from showing attackflash from previous target on new target
+            if (isNewTarget) {
+                isNewTarget = false;
+                attackflash = 0;
+            }
+
+            if (targetLife.getLife() <= 0) {
                 target = null;
             } else {
+                // Check whether the Weapon is ready to shoot or not
+                if (cooldown <= 0) {
+                    cooldown = speed;   // Reset cooldown
+                    targetLife.setLife(targetLife.getLife() - damage);    // Damage entity
+                    attackflash = 0.15f;
+                }
+
                 if (attackflash > 0) {
                     PositionPart pPart1 = source.getPart(PositionPart.class);
                     PositionPart pPart2 = target.getPart(PositionPart.class);
@@ -152,17 +161,19 @@ public class WeaponPart implements EntityPart {
                     float y2 = pPart2.getY() + (sPart2 == null ? (aPart2.getHeight() / 2) : (sPart2.getHeight() / 2));
 
                     drawAttack(x1, y1, x2, y2);
-                    attackflash -= gameData.getDelta();
-                }
-                if (cooldown <= 0) {
-                    cooldown = speed;   // Reset cooldown
-                    lp.setLife(lp.getLife() - damage);    // Damage entity
-                    attackflash = 0.15f;
-                    // System.out.println("Life: " + lp.getLife());
                 }
             }
         }
         cooldown -= gameData.getDelta();    // Slowly decreasing the cooldown
+        attackflash -= gameData.getDelta();
+    }
 
+    public void drawAttack(float x1, float y1, float x2, float y2) {
+        sr = new ShapeRenderer();
+        sr.setColor(color[0], color[1], color[2], color[3]);
+        Gdx.gl.glLineWidth(2);
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.line(x1, y1, x2, y2);
+        sr.end();
     }
 }
