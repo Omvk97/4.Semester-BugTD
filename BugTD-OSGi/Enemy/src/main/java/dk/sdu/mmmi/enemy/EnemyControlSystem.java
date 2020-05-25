@@ -14,10 +14,7 @@ import dk.sdu.mmmi.commonai.events.Command;
 import dk.sdu.mmmi.commonai.events.EnemyCommand;
 import dk.sdu.mmmi.commonai.events.RouteCalculatedEvent;
 import dk.sdu.mmmi.commonenemy.Enemy;
-import dk.sdu.mmmi.commontower.Tower;
 import dk.sdu.mmmi.commonweapon.WeaponPart;
-import java.awt.MouseInfo;
-import java.awt.Point;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
@@ -87,11 +84,5 @@ public class EnemyControlSystem implements IEntityProcessingService {
                 enemy.incrementCommandIndex();
             }
         }
-    }
-
-    private float distance(PositionPart enemyPosPart, PositionPart towerPosPart) {
-        float dx = (float) enemyPosPart.getX() - (float) towerPosPart.getX();
-        float dy = (float) enemyPosPart.getY() - (float) towerPosPart.getY();
-        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 }
