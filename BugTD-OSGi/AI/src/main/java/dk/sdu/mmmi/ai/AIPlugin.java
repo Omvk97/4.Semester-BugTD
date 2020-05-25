@@ -1,6 +1,5 @@
 package dk.sdu.mmmi.ai;
 
-import dk.sdu.mmmi.ai.astar.TileRouteFinder;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
@@ -10,7 +9,6 @@ public class AIPlugin implements IGamePluginService {
 
     private static boolean newGame;
     private static MapSPI mapSPI;
-    private static TileRouteFinder routeFinder;
     
     @Override
     public void start(GameData gameData, World world) {
@@ -19,8 +17,6 @@ public class AIPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world) {
-        TileRouteFinder.resetInstance();
-        routeFinder = null;
         AIPlugin.setNewGame(true);
     }
 
@@ -40,11 +36,4 @@ public class AIPlugin implements IGamePluginService {
         AIPlugin.mapSPI = mapSPI;
     }
 
-    public static TileRouteFinder getRouteFinder() {
-        return routeFinder;
-    }
-
-    public static void setRouteFinder(TileRouteFinder routeFinder) {
-        AIPlugin.routeFinder = routeFinder;
-    }
 }

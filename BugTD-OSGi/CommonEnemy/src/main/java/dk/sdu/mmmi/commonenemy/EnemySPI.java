@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dk.sdu.mmmi.ai.astar;
+package dk.sdu.mmmi.commonenemy;
 
 /**
  *
  * @author oliver
  */
-public interface GraphNode {
-    String getId();
+public interface EnemySPI {
 }

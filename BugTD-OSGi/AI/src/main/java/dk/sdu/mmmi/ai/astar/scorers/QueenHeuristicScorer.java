@@ -3,20 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dk.sdu.mmmi.ai.astar;
+package dk.sdu.mmmi.ai.astar.scorers;
+
+import dk.sdu.mmmi.commonmap.MapSPI;
+import dk.sdu.mmmi.commonmap.Tile;
 
 /**
  *
  * @author oliver
  */
-public class QueenHeuristicScorer implements Scorer<MapTile>{
+public class QueenHeuristicScorer implements Scorer {
 
     @Override
-    public double computeCost(MapTile from, MapTile queenTile) {
+    public double computeCost(Tile from, Tile queenTile, MapSPI map) {
         double ac = Math.abs(queenTile.getY() - from.getY());
         double cb = Math.abs(queenTile.getX() - from.getX());
-        
-        return 3 * Math.hypot(ac, cb);
+
+        return 5 * Math.hypot(ac, cb);
     }
-    
+
 }

@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dk.sdu.mmmi.ai.astar;
+package dk.sdu.mmmi.ai.astar.scorers;
+
+import dk.sdu.mmmi.commonmap.MapSPI;
+import dk.sdu.mmmi.commonmap.Tile;
 
 /**
  *
  * @author oliver
  */
-public interface Scorer<T extends GraphNode> {
-    double computeCost(T from, T goal);
+public interface Scorer {
+    double computeCost(Tile from, Tile goal, MapSPI map);
 }
