@@ -1,6 +1,5 @@
 package dk.sdu.mmmi.osgienemyspawner;
 
-
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
@@ -22,7 +21,9 @@ public class EnemySpawnerProcessingService implements IEntityProcessingService {
 
         // Find and set EnemySpawner entitiy in world
         List<Entity> entities = world.getEntities(EnemySpawner.class);
-        if (entities.size() < 1) return;
+        if (entities.size() < 1) {
+            return;
+        }
         EnemySpawner enemySpawner = (EnemySpawner) entities.get(0);
 
         if (enemySpawner.getWaves().isEmpty()) {
@@ -34,20 +35,22 @@ public class EnemySpawnerProcessingService implements IEntityProcessingService {
         enemySpawner.calculateCurrentRound(gameData);
         enemySpawner.incrementLastSpawn(gameData.getDelta());
 
-        if (enemySpawner.getEnemiesLeftToSpawn() > 0) {
-            if (enemySpawner.getLastSpawn() > enemySpawner.getSpawnTime()) {
-                // System.out.println("Spawning enemy");
-                if ("Ground".equals(enemySpawner.getEnemyType())) {
-                    Entity enemy = Enemy.createGroundEnemy(mapSPI.getEnemySpawnX(), mapSPI.getEnemySpawnY(), enemySpawner.getCurrentWave().getEnemyLife());
-                    world.addEntity(enemy);
-                    gameData.addEvent(new EnemySpawnedEvent(enemy));
-                } else if ("Flying".equals(enemySpawner.getEnemyType())) {
-                    Entity enemy = Enemy.createFlyingEnemy(mapSPI.getEnemySpawnX(), mapSPI.getEnemySpawnY(), enemySpawner.getCurrentWave().getEnemyLife());
-                    world.addEntity(enemy);
-                    gameData.addEvent(new EnemySpawnedEvent(enemy));
-                }
+        if (!Enemy.enemyRemovedFromGame) {
+            if (enemySpawner.getEnemiesLeftToSpawn() > 0) {
+                if (enemySpawner.getLastSpawn() > enemySpawner.getSpawnTime()) {
+                    // System.out.println("Spawning enemy");
+                    if ("Ground".equals(enemySpawner.getEnemyType())) {
+                        Entity enemy = Enemy.createGroundEnemy(mapSPI.getEnemySpawnX(), mapSPI.getEnemySpawnY(), enemySpawner.getCurrentWave().getEnemyLife());
+                        world.addEntity(enemy);
+                        gameData.addEvent(new EnemySpawnedEvent(enemy));
+                    } else if ("Flying".equals(enemySpawner.getEnemyType())) {
+                        Entity enemy = Enemy.createFlyingEnemy(mapSPI.getEnemySpawnX(), mapSPI.getEnemySpawnY(), enemySpawner.getCurrentWave().getEnemyLife());
+                        world.addEntity(enemy);
+                        gameData.addEvent(new EnemySpawnedEvent(enemy));
+                    }
 
-                enemySpawner.resetLastSpawn();
+                    enemySpawner.resetLastSpawn();
+                }
             }
         }
     }

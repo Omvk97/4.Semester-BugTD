@@ -12,7 +12,6 @@ import dk.sdu.mmmi.osgienemyspawner.EnemySpawnPoint;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import javafx.scene.paint.Color;
 
 public class MapData {
     private Tile[][] tiles;

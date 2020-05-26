@@ -22,6 +22,7 @@ public class Enemy extends Entity {
     private PositionPart positionPart;
     private PreciseMovingPart movingPart;
     private LifePart lifePart;
+    public static boolean enemyRemovedFromGame = false;
 
     public static Entity createGroundEnemy(float x, float y, int life) {
         //attributes
