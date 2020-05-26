@@ -163,7 +163,7 @@ public class PlayerControlSystem implements IEntityProcessingService, PlayerCont
         this.map = spi;
     }
     
-    public void removeSPI(MapSPI spi){
+    public void removeMapSPI(MapSPI spi){
         this.map = null;
     }
 }

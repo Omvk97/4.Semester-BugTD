@@ -34,7 +34,6 @@ public class EnemySpawnerProcessingService implements IEntityProcessingService {
         enemySpawner.getEnemyAmountInWorld(world, gameData);
         enemySpawner.calculateCurrentRound(gameData);
         enemySpawner.incrementLastSpawn(gameData.getDelta());
-
         if (!Enemy.enemyRemovedFromGame) {
             if (enemySpawner.getEnemiesLeftToSpawn() > 0) {
                 if (enemySpawner.getLastSpawn() > enemySpawner.getSpawnTime()) {
